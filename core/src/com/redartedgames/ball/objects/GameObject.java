@@ -19,6 +19,7 @@ public class GameObject {
 		int objectViewPriority;
 		protected Hitbox hitbox;
 		public ArrayList<GameObject> collidableObjects;
+		public boolean isReversed;
 		
 		public Hitbox getHitbox() {
 			return hitbox;
@@ -28,6 +29,7 @@ public class GameObject {
 		
 		
 		public GameObject(float x, float y, int id, GameObject parent) {
+			isReversed = false;
 			this.id = id;
 			this.parent = parent;
 			objectViewPriority = 1;
@@ -75,6 +77,8 @@ public class GameObject {
 		
 		
 		public void updateBefore(float delta, float vx, float vy) {
+			if(isReversed)
+			delta = -delta;
 			if (delta >= 0) {
 				delta2 = new BigDecimal("0.01");
 			}
@@ -89,7 +93,8 @@ public class GameObject {
 		}
 		public void updateAfter(float delta, float vx, float vy) {
 			
-
+			if(isReversed)
+			delta = -delta;
 			
 			if (delta >= 0) {
 				

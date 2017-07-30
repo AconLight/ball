@@ -32,7 +32,11 @@ public class InputHandler implements InputProcessor{
 			break;
 		}
 		case Keys.SPACE: {
-			world.t = -world.t;
+			world.ball.isReversed = true;
+			break;
+		}
+		case Keys.F: {
+			world.rect.move();
 			break;
 		}
 		}

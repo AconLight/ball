@@ -20,7 +20,7 @@ public class Hitbox {
 	public BehaviorMode bMode;
 	private Circle circle;
 	private Polygon polygon;
-	private Rectangle rectangle;
+	public Rectangle rectangle;
 	private float colRadius;
 	private Vector2 position, oldPosition;
 	private BigDecimal positionX, positionY, circleR;
@@ -88,7 +88,7 @@ public class Hitbox {
 		c.disY = BigDecimal.ZERO;
 		c.isTrue = true;
 		float v;
-		float dr, dx, dy;
+		float dr2, dr, dx, dy;
 		boolean flaga = true;
 		
 		if ((circle.x > rectangle.x && circle.x < rectangle.x+rectangle.width) || (circle.y > rectangle.y && circle.y < rectangle.y+rectangle.height)) {
@@ -114,42 +114,46 @@ public class Hitbox {
 				
 				dx = circle.x - rectangle.x;
 				dy = circle.y - rectangle.y;
-				dr = dx*dx + dy*dy;
-				if (dr < circle.radius*circle.radius) {
-					c.disX = c.disX.add(new BigDecimal("" + (k*dx)));
-					c.disY = c.disY.add(new BigDecimal("" + (k*dy)));
+				dr2 = dx*dx + dy*dy;
+				dr = (float) Math.sqrt(dr2);
+				if (dr2 < circle.radius*circle.radius) {
+					c.disX = c.disX.add(new BigDecimal("" + (-k*(dr-circle.radius)*dx/dr)));
+					c.disY = c.disY.add(new BigDecimal("" + (-k*(dr-circle.radius)*dy/dr)));
 					flaga = false;
 				}
 				
 				dx = circle.x - (rectangle.x + rectangle.width);
 				dy = circle.y - rectangle.y;
-				dr = dx*dx + dy*dy;
-				if (dr < circle.radius*circle.radius) {
-					c.disX = c.disX.add(new BigDecimal("" + (k*dx)));
-					c.disY = c.disY.add(new BigDecimal("" + (k*dy)));
+				dr2 = dx*dx + dy*dy;
+				dr = (float) Math.sqrt(dr2);
+				if (dr2 < circle.radius*circle.radius) {
+					c.disX = c.disX.add(new BigDecimal("" + (-k*(dr-circle.radius)*dx/dr)));
+					c.disY = c.disY.add(new BigDecimal("" + (-k*(dr-circle.radius)*dy/dr)));
 					flaga = false;
 				}
 				
 				dx = circle.x - (rectangle.x + rectangle.width);
 				dy = circle.y - (rectangle.y + rectangle.height);
-				dr = dx*dx + dy*dy;
+				dr2 = dx*dx + dy*dy;
+				dr = (float) Math.sqrt(dr2);
 				//Gdx.app.log("Hitbox", "" + dx + ", " + dy);
 				//Gdx.app.log("Hitbox, circle", "" + circle.x + ", " + circle.y);
 				//Gdx.app.log("Hitbox, rect", "" + (rectangle.x+rectangle.width) + ", " + (rectangle.y+rectangle.height));
-				if (dr < circle.radius*circle.radius) {
+				if (dr2 < circle.radius*circle.radius) {
 					//Gdx.app.log("Hitbox", "" + dx + ", " + dy);
-					c.disX = c.disX.add(new BigDecimal("" + (k*dx)));
-					c.disY = c.disY.add(new BigDecimal("" + (k*dy)));
+					c.disX = c.disX.add(new BigDecimal("" + (-k*(dr-circle.radius)*dx/dr)));
+					c.disY = c.disY.add(new BigDecimal("" + (-k*(dr-circle.radius)*dy/dr)));
 					flaga = false;
 				}
 				
 				dx = circle.x - rectangle.x;
 				dy = circle.y - (rectangle.y + rectangle.height);
-				dr = dx*dx + dy*dy;
+				dr2 = dx*dx + dy*dy;
+				dr = (float) Math.sqrt(dr2);
 				
-				if (dr < circle.radius*circle.radius) {
-					c.disX = c.disX.add(new BigDecimal("" + (k*dx)));
-					c.disY = c.disY.add(new BigDecimal("" + (k*dy)));
+				if (dr2 < circle.radius*circle.radius) {
+					c.disX = c.disX.add(new BigDecimal("" + (-k*(dr-circle.radius)*dx/dr)));
+					c.disY = c.disY.add(new BigDecimal("" + (-k*(dr-circle.radius)*dy/dr)));
 					flaga = false;
 				}
 				
@@ -186,6 +190,7 @@ public class Hitbox {
 		CollisionHandle c = new CollisionHandle();
 		c.disX = BigDecimal.ZERO;
 		c.disY = BigDecimal.ZERO;
+		c.isTrue = true;
 		
 		if (rect.y + rect.height/2 > intersection.y ) {
 			if (rect.x + rect.width/2 > intersection.x ) {
@@ -253,14 +258,18 @@ public class Hitbox {
 						Rectangle intersection = new Rectangle();
 						if (Intersector.intersectRectangles(rectangle, hitbox.rectangle, intersection)) {
 							c = rectRect(rectangle, hitbox.rectangle, intersection);
-							Gdx.app.log("" + intersection, "asd");
 						}
 						break;
 					}
 					case Circle: {
 						if (Intersector.overlaps(hitbox.circle, rectangle)) {
 							c = circleRect(hitbox.circle, rectangle);
+							c.disX = new BigDecimal("" + (-c.disX.floatValue()));
+							c.disY = new BigDecimal("" + (-c.disY.floatValue()));
 							c.isTrue = true;
+						}
+						else {
+							c.isTrue = false;
 						}
 						break;
 					}
@@ -278,6 +287,8 @@ public class Hitbox {
 					case Rectangle: {
 						if (Intersector.overlaps(circle, hitbox.rectangle)) {
 							c = circleRect(circle, hitbox.rectangle);
+							c.disX = new BigDecimal("" + (c.disX.floatValue()));
+							c.disY = new BigDecimal("" + (c.disY.floatValue()));
 							c.isTrue = true;
 						}
 						else {

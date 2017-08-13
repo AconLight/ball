@@ -3,23 +3,32 @@ package com.redartedgames.ball.objects;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.redartedgames.ball.editor.EditorOptionInterface;
+import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 
 public class GameObject {
 		public static int priorities = 1;
 		private int id;
+		protected Movement movement;
 		protected Vector2 position, velocity, acceleration, oldAcc, oldVel, collisionAcc;
-		public BigDecimal delta2, positionX, velocityX, accelerationX, collisionAccX, positionY, dragK, delta21,
+		public BigDecimal delta2, positionX, velocityX, accelerationX, collisionAccX, positionY, dragK, dragK2, delta21,
 		velocityY, accelerationY, collisionAccY, oldAccX, oldAccY, gX, gY;
 		private ArrayList<GameObject> gameObjects;
 		int objectViewPriority;
 		protected Hitbox hitbox;
 		public ArrayList<GameObject> collidableObjects;
+		protected ArrayList<EditorOptionInterface> editorOptions;
 		public boolean isReversed;
+		public boolean isStopped;
+		public boolean isMarked;
+		public int reversingI;
 		
 		public Hitbox getHitbox() {
 			return hitbox;
@@ -29,6 +38,8 @@ public class GameObject {
 		
 		
 		public GameObject(float x, float y, int id, GameObject parent) {
+			reversingI = 0;
+			movement = new Movement(new Vector2(x, y));			
 			isReversed = false;
 			this.id = id;
 			this.parent = parent;
@@ -48,7 +59,8 @@ public class GameObject {
 			gY = new BigDecimal("0");
 			delta2 = new BigDecimal("0.01");
 			delta21 = new BigDecimal("100");
-			dragK = new BigDecimal("1");
+			dragK = new BigDecimal("1");//18.08");
+			dragK2 = new BigDecimal("1");//-0.01220703125");
 			velocity = new Vector2();
 			acceleration = new Vector2();
 			oldAcc = new Vector2();
@@ -77,62 +89,17 @@ public class GameObject {
 		
 		
 		public void updateBefore(float delta, float vx, float vy) {
-			if(isReversed)
-			delta = -delta;
-			if (delta >= 0) {
-				delta2 = new BigDecimal("0.01");
-			}
-			else {
-				//delta2 = new BigDecimal("-0.01");
-					
-								
-				
-				
-				
-			}
+			movement.updateBefore(delta);
+			hitbox.update(new BigDecimal("" + position.x), new BigDecimal("" + position.y));
+			movement.setColToZero();
 		}
+		
+
 		public void updateAfter(float delta, float vx, float vy) {
-			
-			if(isReversed)
-			delta = -delta;
-			
-			if (delta >= 0) {
-				
-				hitbox.update(positionX, positionY);
-				applyPhysicsToAcceleration();
-				
-				accelerationX = accelerationX.subtract(velocityX.multiply(dragK));
-				accelerationY = accelerationY.subtract(velocityY.multiply(dragK));
-				
-				velocityX = velocityX.add(accelerationX.multiply(delta2));
-				velocityY = velocityY.add(accelerationY.multiply(delta2));				
-				
-				positionX = positionX.add(velocityX.multiply(delta2));
-				positionY = positionY.add(velocityY.multiply(delta2));
-				
-			}
-			else {
-				
-				positionX = positionX.subtract(velocityX.multiply(delta2));
-				positionY = positionY.subtract(velocityY.multiply(delta2));
-				
-				hitbox.update(positionX, positionY);
-				applyPhysicsToAcceleration();
-				
-				velocityX = accelerationX.subtract(velocityX.multiply(delta21)).divide(dragK.subtract(delta21), RoundingMode.HALF_UP);
-				velocityY = accelerationY.subtract(velocityY.multiply(delta21)).divide(dragK.subtract(delta21), RoundingMode.HALF_UP);
-
-			}
-			
-			position.set(positionX.floatValue(), positionY.floatValue());
-			oldAccX = collisionAccX;
-			oldAccY = collisionAccY;
-			
-			
-			for(int i=0; i<gameObjects.size();i++)
-				gameObjects.get(i).updateAfter(delta, velocity.x, velocity.y);
-			velocity.sub(vx, vy);
-
+			movement.setAccToG();
+			movement.addColToAcc();			
+			movement.updateAfter(delta);
+			position.set(movement.position);
 		}
 		
 		public void updateLast(float delta, float vx, float vy) {
@@ -150,18 +117,17 @@ public class GameObject {
 		}
 		
 		public void applyPhysicsToAcceleration() {
-			collisionAccX = BigDecimal.ZERO;
-			collisionAccY = BigDecimal.ZERO;
-			
-			for(int i = 0; i < collidableObjects.size(); i++) {
-				collide(collidableObjects.get(i));
+			if (hitbox.bMode == BehaviorMode.dynamic) {
+				
+
+				collisionAccX = BigDecimal.ZERO;
+				collisionAccY = BigDecimal.ZERO;
+				
+				for(int i = 0; i < collidableObjects.size(); i++) {
+					collide(collidableObjects.get(i));
+				}
+
 			}
-			
-			accelerationX = gX;
-			accelerationY = gY;
-			
-			accelerationX = accelerationX.add((collisionAccX));
-			accelerationY = accelerationY.add((collisionAccY));
 		}
 		
 		public Vector2 getVelocity() {

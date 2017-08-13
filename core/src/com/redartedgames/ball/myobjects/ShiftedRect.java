@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.redartedgames.ball.objects.GameObject;
+import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 
 public class ShiftedRect extends Rect{
 	
@@ -19,7 +20,7 @@ public class ShiftedRect extends Rect{
 	private boolean isFloating, isFirst;
 
 	public ShiftedRect(float x, float y, float width, float height, float x2, float y2, float width2, float height2, GameObject parent, int id) {
-		super(x, y, width, height, parent, id);
+		super(x, y, width, height, BehaviorMode.kinematic, parent, id);
 		firstPos = new Vector2(x, y);
 		secondPos = new Vector2(x2, y2);
 		isFirst = true;

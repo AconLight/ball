@@ -1,7 +1,13 @@
 package com.redartedgames.ball.game;
 
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.redartedgames.ball.objects.GameObject;
+import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
+import com.redartedgames.ball.objects.ReversableObject;
+import com.redartedgames.ball.screen.Consts;
 import com.redartedgames.ball.screen.World;
 
 public class InputHandler implements InputProcessor{
@@ -15,24 +21,19 @@ public class InputHandler implements InputProcessor{
 	public boolean keyDown(int keycode) {
 		
 		switch(keycode) {
-		case Keys.D: {
-			world.ball.getVelocity().add(50, 0);
-			break;
-		}
+		
 		case Keys.A: {
-			world.ball.getVelocity().add(-50, 0);
+			world.player.addXAxis(-300);
 			break;
 		}
-		case Keys.W: {
-			world.ball.getVelocity().add(0, 50);
-			break;
-		}
-		case Keys.S: {
-			world.ball.getVelocity().add(0, -50);
+		case Keys.D: {
+			world.player.addXAxis(300);
 			break;
 		}
 		case Keys.SPACE: {
-			world.ball.isReversed = true;
+			for (ReversableObject obj : world.reversableObjects) {
+				obj.setIsForward(false);
+			}
 			break;
 		}
 		case Keys.F: {
@@ -45,7 +46,23 @@ public class InputHandler implements InputProcessor{
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
+
+		switch(keycode) {
+		case Keys.A: {
+			world.player.addXAxis(300);
+			break;
+		}
+		case Keys.D: {
+			world.player.addXAxis(-300);
+			break;
+		}
+		case Keys.SPACE: {
+			for (ReversableObject obj : world.reversableObjects) {
+				obj.setIsForward(true);
+			}
+			break;
+		}
+		}
 		return false;
 	}
 
@@ -57,7 +74,7 @@ public class InputHandler implements InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 

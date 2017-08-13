@@ -29,6 +29,7 @@ public class Hitbox {
 	
 	public Hitbox() {
 		sMode = ShapeMode.none;
+		bMode = BehaviorMode.kinematic;
 	}
 	public Hitbox(BigDecimal positionX, BigDecimal positionY, float radius, BehaviorMode mode){
 		sMode = ShapeMode.Circle;
@@ -94,19 +95,19 @@ public class Hitbox {
 		if ((circle.x > rectangle.x && circle.x < rectangle.x+rectangle.width) || (circle.y > rectangle.y && circle.y < rectangle.y+rectangle.height)) {
 			if (circle.x + circle.radius > rectangle.x && circle.x < rectangle.x) {
 				dx = circle.x + circle.radius - rectangle.x;
-				c.disX = new BigDecimal("" + (-dx*k));
+				c.disX = new BigDecimal("" + (int)(-dx*k));
 			}
 			else if (circle.x > rectangle.x + rectangle.width && circle.x - circle.radius < rectangle.x + rectangle.width) {
 				dx = (circle.x - circle.radius) - (rectangle.x + rectangle.width);
-				c.disX = new BigDecimal("" + (-dx*k));
+				c.disX = new BigDecimal("" + (int)(-dx*k));
 			}
 			else if (circle.y + circle.radius > rectangle.y && circle.y < rectangle.y) {
 				dy = circle.y + circle.radius - rectangle.y;
-				c.disY = new BigDecimal("" + (-dy*k));
+				c.disY = new BigDecimal("" + (int)(-dy*k));
 			}
 			else if (circle.y > rectangle.y + rectangle.height && circle.y - circle.radius < rectangle.y + rectangle.height) {
 				dy = (circle.y - circle.radius) - (rectangle.y + rectangle.height);
-				c.disY = new BigDecimal("" + (-dy*k));
+				c.disY = new BigDecimal("" + (int)(-dy*k));
 			}
 		}
 			else {
@@ -117,8 +118,8 @@ public class Hitbox {
 				dr2 = dx*dx + dy*dy;
 				dr = (float) Math.sqrt(dr2);
 				if (dr2 < circle.radius*circle.radius) {
-					c.disX = c.disX.add(new BigDecimal("" + (-k*(dr-circle.radius)*dx/dr)));
-					c.disY = c.disY.add(new BigDecimal("" + (-k*(dr-circle.radius)*dy/dr)));
+					c.disX = c.disX.add(new BigDecimal("" + (int)(-k*(dr-circle.radius)*dx/dr)));
+					c.disY = c.disY.add(new BigDecimal("" + (int)(-k*(dr-circle.radius)*dy/dr)));
 					flaga = false;
 				}
 				
@@ -127,8 +128,8 @@ public class Hitbox {
 				dr2 = dx*dx + dy*dy;
 				dr = (float) Math.sqrt(dr2);
 				if (dr2 < circle.radius*circle.radius) {
-					c.disX = c.disX.add(new BigDecimal("" + (-k*(dr-circle.radius)*dx/dr)));
-					c.disY = c.disY.add(new BigDecimal("" + (-k*(dr-circle.radius)*dy/dr)));
+					c.disX = c.disX.add(new BigDecimal("" + (int)(-k*(dr-circle.radius)*dx/dr)));
+					c.disY = c.disY.add(new BigDecimal("" + (int)(-k*(dr-circle.radius)*dy/dr)));
 					flaga = false;
 				}
 				
@@ -141,8 +142,8 @@ public class Hitbox {
 				//Gdx.app.log("Hitbox, rect", "" + (rectangle.x+rectangle.width) + ", " + (rectangle.y+rectangle.height));
 				if (dr2 < circle.radius*circle.radius) {
 					//Gdx.app.log("Hitbox", "" + dx + ", " + dy);
-					c.disX = c.disX.add(new BigDecimal("" + (-k*(dr-circle.radius)*dx/dr)));
-					c.disY = c.disY.add(new BigDecimal("" + (-k*(dr-circle.radius)*dy/dr)));
+					c.disX = c.disX.add(new BigDecimal("" + (int)(-k*(dr-circle.radius)*dx/dr)));
+					c.disY = c.disY.add(new BigDecimal("" + (int)(-k*(dr-circle.radius)*dy/dr)));
 					flaga = false;
 				}
 				
@@ -152,8 +153,8 @@ public class Hitbox {
 				dr = (float) Math.sqrt(dr2);
 				
 				if (dr2 < circle.radius*circle.radius) {
-					c.disX = c.disX.add(new BigDecimal("" + (-k*(dr-circle.radius)*dx/dr)));
-					c.disY = c.disY.add(new BigDecimal("" + (-k*(dr-circle.radius)*dy/dr)));
+					c.disX = c.disX.add(new BigDecimal("" + (int)(-k*(dr-circle.radius)*dx/dr)));
+					c.disY = c.disY.add(new BigDecimal("" + (int)(-k*(dr-circle.radius)*dy/dr)));
 					flaga = false;
 				}
 				
@@ -171,7 +172,7 @@ public class Hitbox {
 		BigDecimal dx = circleX.subtract(circle2X);
 		BigDecimal dy = circleY.subtract(circle2Y);
 		BigDecimal dr2 = dx.multiply(dx).add(dy.multiply(dy));
-		BigDecimal dr = sqrt(dr2, 50);
+		BigDecimal dr = sqrt(dr2, 5);
 		BigDecimal d = circleR.add(circle2R).subtract(dr);
 		
 		if (d.floatValue() > 0) {
@@ -195,36 +196,36 @@ public class Hitbox {
 		if (rect.y + rect.height/2 > intersection.y ) {
 			if (rect.x + rect.width/2 > intersection.x ) {
 				if (intersection.width > intersection.height) {
-					c.disY = new BigDecimal("" + (intersection.height*k));
+					c.disY = new BigDecimal("" + (int)(intersection.height*k));
 				}
 				else {
-					c.disX = new BigDecimal("" + (intersection.width*k));
+					c.disX = new BigDecimal("" + (int)(intersection.width*k));
 				}
 			}
 			else {
 				if (intersection.width > intersection.height) {
-					c.disY = new BigDecimal("" + (intersection.height*k));
+					c.disY = new BigDecimal("" + (int)(intersection.height*k));
 				}
 				else {
-					c.disX = new BigDecimal("" + (-intersection.width*k));
+					c.disX = new BigDecimal("" + (int)(-intersection.width*k));
 				}
 			}
 		}
 		else {
 			if (rect.x + rect.width/2 > intersection.x ) {
 				if (intersection.width > intersection.height) {
-					c.disY = new BigDecimal("" + (-intersection.height*k));
+					c.disY = new BigDecimal("" + (int)(-intersection.height*k));
 				}
 				else {
-					c.disX = new BigDecimal("" + (intersection.width*k));
+					c.disX = new BigDecimal("" + (int)(intersection.width*k));
 				}
 			}
 			else {
 				if (intersection.width > intersection.height) {
-					c.disY = new BigDecimal("" + (-intersection.height*k));
+					c.disY = new BigDecimal("" + (int)(-intersection.height*k));
 				}
 				else {
-					c.disX = new BigDecimal("" + (-intersection.width*k));
+					c.disX = new BigDecimal("" + (int)(-intersection.width*k));
 				}
 			}
 		}
@@ -245,6 +246,11 @@ public class Hitbox {
 
 	    }
 	    return x1;
+	}
+	public boolean isClicked(float x, float y) {
+		Hitbox hit = new Hitbox(new BigDecimal("" + x), new BigDecimal("" + y), 1, 1, BehaviorMode.kinematic);
+		CollisionHandle c = checkCol(hit);
+		return c.isTrue;
 	}
 	public CollisionHandle checkCol(Hitbox hitbox) {
 		CollisionHandle c = new CollisionHandle();

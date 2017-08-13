@@ -17,7 +17,7 @@ public class BallGame extends Game{
 	public void create () {
 		gameScreen = new GameScreen(Consts.screenWidth, Consts.screenHeight);
 		Gdx.input.setInputProcessor(new InputHandler((GameWorld)gameScreen.getWorld()));
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(240f/256, 240f/256, 240f/256, 1);
 		
 	}
 

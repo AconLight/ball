@@ -130,6 +130,10 @@ public class GameObject {
 			}
 		}
 		
+		public Movement getMovement() {
+			return movement;
+		}
+		
 		public Vector2 getVelocity() {
 			return velocity;
 		}

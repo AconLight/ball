@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.redartedgames.ball.consts.Physic;
+import com.redartedgames.ball.consts.PhysicConsts;
 
 public class ReversableMovement extends Movement
 {
@@ -37,8 +37,8 @@ public class ReversableMovement extends Movement
 		gX = new BigDecimal("0");
 		gY = new BigDecimal("0");
 		delta21 = new BigDecimal("100");
-		float dragX = Physic.DRAG_X;
-		float dragY = Physic.DRAG_Y;
+		float dragX = PhysicConsts.DRAG_X;
+		float dragY = PhysicConsts.DRAG_Y;
 		dragKX = new BigDecimal("" + dragX);//18.08");
 		dragKX2 = new BigDecimal("" + (-(100-dragX)));//-0.01220703125");
 		dragKY = new BigDecimal("" + dragY);//18.08");
@@ -58,19 +58,19 @@ public class ReversableMovement extends Movement
 		velocityY = new BigDecimal("" + velocityY.floatValue());
 		accelerationX = new BigDecimal("" + accelerationX.floatValue());
 		accelerationY = new BigDecimal("" + accelerationY.floatValue());
-		Gdx.app.log("ReversableMovement", "add");
+		//Gdx.app.log("ReversableMovement", "add");
 	}
 	
 	private void replaceMovement() {
-		Gdx.app.log("ReversableMovement", "rep try");
+		//Gdx.app.log("ReversableMovement", "rep try");
 		ReversableMovement r = prevMoves.get(prevMoves.size()-1);
 		BigDecimal positionX2 = new BigDecimal("" + r.positionX.floatValue());
 		BigDecimal positionY2 = new BigDecimal("" + r.positionY.floatValue());
 		BigDecimal positionX1 = new BigDecimal("" + positionX.floatValue());
 		BigDecimal positionY1 = new BigDecimal("" + positionY.floatValue());
 		//if(positionX2.equals(positionX1) && positionY2.equals(positionY1)) {
-		if ((r.positionX.floatValue()-positionX.floatValue()) * (r.positionX.floatValue()-positionX.floatValue()) < 0.1f &&
-				(r.positionY.floatValue()-positionY.floatValue()) * (r.positionY.floatValue()-positionY.floatValue()) < 0.1f) {
+		if ((r.positionX.floatValue()-positionX.floatValue()) * (r.positionX.floatValue()-positionX.floatValue()) < 0.6f &&
+				(r.positionY.floatValue()-positionY.floatValue()) * (r.positionY.floatValue()-positionY.floatValue()) < 0.6f) {
 			Gdx.app.log("ReversableMovement", "rep suc");
 			positionX = r.positionX;
 			positionY = r.positionY;
@@ -82,41 +82,45 @@ public class ReversableMovement extends Movement
 	
 	public void updateBefore(float delta) {
 		isForward = isForwardTransaction;
-		if(isForward) {
-			framesI++;
-			if (framesI == framesI/10*10) {
-				addMovement();
+		isStopped = isStoppedTransation;
+		if (!isStopped) {
+			if(isForward) {
+				framesI++;
+				if (framesI == framesI/5*5) {
+					addMovement();
+				}
 			}
-		}
-		else {
-			framesI--;     
-			if (framesI == framesI/10*10 && framesI >0) {
-				replaceMovement();
+			else {
+				framesI--;     
+				if (framesI == framesI/5*5 && framesI >0) {
+					replaceMovement();
+				}
+				positionX = positionX.subtract(velocityX.multiply(delta2));
+				positionY = positionY.subtract(velocityY.multiply(delta2));	
+				position.set(positionX.floatValue(), positionY.floatValue());
 			}
-			positionX = positionX.subtract(velocityX.multiply(delta2));
-			positionY = positionY.subtract(velocityY.multiply(delta2));	
-			position.set(positionX.floatValue(), positionY.floatValue());
 		}
 	}
 	public void updateAfter(float delta) {
-		if(isForward) {
-			accelerationX = accelerationX.subtract(velocityX.multiply(dragKX));
-			accelerationY = accelerationY.subtract(velocityY.multiply(dragKY));
-			
-			velocityX = velocityX.add(accelerationX.multiply(delta2));
-			velocityY = velocityY.add(accelerationY.multiply(delta2));				
-			
-			positionX = positionX.add(velocityX.multiply(delta2));
-			positionY = positionY.add(velocityY.multiply(delta2));
-			position.set(positionX.floatValue(), positionY.floatValue());
+		if(!isStopped) {
+			if(isForward) {
+				accelerationX = accelerationX.subtract(velocityX.multiply(dragKX));
+				accelerationY = accelerationY.subtract(velocityY.multiply(dragKY));
+				
+				velocityX = velocityX.add(accelerationX.multiply(delta2));
+				velocityY = velocityY.add(accelerationY.multiply(delta2));				
+				
+				positionX = positionX.add(velocityX.multiply(delta2));
+				positionY = positionY.add(velocityY.multiply(delta2));
+				position.set(positionX.floatValue(), positionY.floatValue());
+			}
+			else {
+				velocityX = accelerationX.subtract(velocityX.multiply(delta21)).divide(dragKX2, RoundingMode.HALF_DOWN);
+				velocityY = accelerationY.subtract(velocityY.multiply(delta21)).divide(dragKY2, RoundingMode.HALF_DOWN);
+				//velocityX = accelerationX.subtract(velocityX.multiply(delta21)).multiply(dragKX2);
+				//velocityY = accelerationY.subtract(velocityY.multiply(delta21)).multiply(dragKY2);
+			}
 		}
-		else {
-			velocityX = accelerationX.subtract(velocityX.multiply(delta21)).divide(dragKX2, RoundingMode.HALF_DOWN);
-			velocityY = accelerationY.subtract(velocityY.multiply(delta21)).divide(dragKY2, RoundingMode.HALF_DOWN);
-			//velocityX = accelerationX.subtract(velocityX.multiply(delta21)).multiply(dragKX2);
-			//velocityY = accelerationY.subtract(velocityY.multiply(delta21)).multiply(dragKY2);
-		}
-			
 		
 	}
 	

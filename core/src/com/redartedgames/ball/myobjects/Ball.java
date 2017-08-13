@@ -3,7 +3,7 @@ package com.redartedgames.ball.myobjects;
 import java.math.BigDecimal;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.redartedgames.ball.consts.Physic;
+import com.redartedgames.ball.consts.PhysicConsts;
 import com.redartedgames.ball.objects.ColSpriteObject;
 import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.Hitbox;
@@ -13,7 +13,7 @@ import com.redartedgames.ball.objects.ReversableObject;
 
 public class Ball extends ReversableObject{
 
-	private float radius;
+	protected float radius;
 	private float m;
 	
 	public Ball(float x, float y, float radius, float m, BehaviorMode bMode, GameObject parent, int id) {
@@ -23,7 +23,7 @@ public class Ball extends ReversableObject{
 		setHitbox(new Hitbox(((ReversableMovement) movement).getPositionX(), ((ReversableMovement) movement).getPositionY(), radius, bMode));
 		if (bMode == BehaviorMode.dynamic) {
 			gY = new BigDecimal("-200");
-			((ReversableMovement) movement).setGY(new BigDecimal("" + Physic.G));
+			((ReversableMovement) movement).setGY(new BigDecimal("" + PhysicConsts.G));
 		}
 	}
 	

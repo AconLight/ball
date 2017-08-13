@@ -41,4 +41,8 @@ public class ReversableObject extends ColSpriteObject{
 			((ReversableMovement) movement).setIsForward(isForward);
 		}
 		
+		public void setIsStopped(boolean isStopped) {
+			((ReversableMovement) movement).setIsStopped(isStopped);
+		}
+		
 }

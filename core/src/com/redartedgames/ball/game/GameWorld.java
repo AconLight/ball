@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.redartedgames.ball.myobjects.Ball;
 import com.redartedgames.ball.myobjects.ButtonRect;
+import com.redartedgames.ball.myobjects.ImpsCollection;
 import com.redartedgames.ball.myobjects.LavaRect;
 import com.redartedgames.ball.myobjects.Player;
 import com.redartedgames.ball.myobjects.Rect;
@@ -26,16 +27,22 @@ public class GameWorld extends World{
 	public boolean isPaused;
 	public Player player;
 	public ArrayList <ReversableObject> reversableObjects;
+	private boolean isForward;
+	public ImpsCollection impsCollection;
+	
+	
 	public GameWorld() {
 		super();
+		impsCollection = new ImpsCollection();
+		impsCollection.addStaticImp();
 		time = 0;
 		t = 1;
 		i = 0;
 		reversableObjects = new ArrayList<ReversableObject>();
-
+		isForward = true;
 		
-		player = new Player(70, 600, 50, 1f, BehaviorMode.dynamic, null, 10);
-		reversableObjects.add(player);
+		player = new Player(70, 350, 1f, null, 10);
+		
 		reversableObjects.add(new LavaRect(465, 0, 350, 50, null, 0));
 		reversableObjects.add(new Rect(100, 130, 200, 300, BehaviorMode.kinematic, null, 1));
 		reversableObjects.add(new Rect(100, 600, 300, 400, BehaviorMode.kinematic, null, 2));
@@ -46,8 +53,10 @@ public class GameWorld extends World{
 		reversableObjects.add(new Rect(600, 250, 100, 100, BehaviorMode.kinematic, null, 7));
 		reversableObjects.add(new Rect(1180, 250, 200, 400, BehaviorMode.kinematic, null, 8));
 		reversableObjects.add(new Rect(860, 600, 50, 150, BehaviorMode.dynamic, null, 8));
+		reversableObjects.add(new Rect(360, 600, 50, 150, BehaviorMode.dynamic, null, 8));
 		reversableObjects.add(new Ball(670, 600, 50, 1f, BehaviorMode.dynamic, null, 9));
-
+		reversableObjects.addAll(impsCollection.getImps());
+		reversableObjects.add(player);
 		gameObjects.addAll(reversableObjects);
 		
 		for (GameObject obj : gameObjects) {
@@ -57,7 +66,10 @@ public class GameWorld extends World{
 				}
 			}
 		}
-		
+		player.collidableObjects.removeAll(impsCollection.getImps());
+		for (GameObject obj : impsCollection.getImps()) {
+			obj.collidableObjects.remove(player);
+		}
 		
 		
 		
@@ -74,6 +86,17 @@ public class GameWorld extends World{
 	
 	@Override
 	public void update(float delta) {
-		if (!isPaused) super.update(delta);		
+			
+		
+		for(ReversableObject r : reversableObjects) {
+			r.setIsForward(isForward);
+		}
+		
+		if (!isPaused) super.update(delta);	
+		
+	}
+	
+	public void setIsForward(boolean isForward) {
+		this.isForward = isForward;
 	}
 }

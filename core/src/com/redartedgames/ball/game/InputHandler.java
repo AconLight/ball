@@ -31,9 +31,8 @@ public class InputHandler implements InputProcessor{
 			break;
 		}
 		case Keys.SPACE: {
-			for (ReversableObject obj : world.reversableObjects) {
-				obj.setIsForward(false);
-			}
+			world.setIsForward(false);
+			world.impsCollection.spawnNextImpPressDown(world.player.getMovement());
 			break;
 		}
 		case Keys.F: {
@@ -57,9 +56,7 @@ public class InputHandler implements InputProcessor{
 			break;
 		}
 		case Keys.SPACE: {
-			for (ReversableObject obj : world.reversableObjects) {
-				obj.setIsForward(true);
-			}
+			world.setIsForward(true);
 			break;
 		}
 		}

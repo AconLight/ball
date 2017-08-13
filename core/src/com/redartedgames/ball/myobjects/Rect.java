@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.redartedgames.ball.consts.Physic;
+import com.redartedgames.ball.consts.PhysicConsts;
 import com.redartedgames.ball.objects.ColSpriteObject;
 import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.Hitbox;
@@ -26,7 +26,7 @@ public class Rect extends ReversableObject{
 		setHitbox(new Hitbox(positionX, positionY, width, height, bMode));
 		if (bMode == BehaviorMode.dynamic) {
 			gY = new BigDecimal("-200");
-			((ReversableMovement) movement).setGY(new BigDecimal("" + Physic.G));
+			((ReversableMovement) movement).setGY(new BigDecimal("" + PhysicConsts.G));
 		}
 	}
 	

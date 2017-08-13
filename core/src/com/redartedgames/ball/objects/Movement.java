@@ -7,10 +7,12 @@ import com.badlogic.gdx.math.Vector2;
 public class Movement {
 	
 	protected Vector2 position;
-
+	
 	private Vector2 velocity, acceleration;
 	
 	private Vector2 collisionAcc, g;
+	
+	protected boolean isStopped, isStoppedTransation;
 
 	public Movement(Vector2 position) {
 		this.position = position;
@@ -18,21 +20,34 @@ public class Movement {
 		acceleration = new Vector2();
 		g = new Vector2();
 		collisionAcc = new Vector2();
+		isStopped = false;
+		isStoppedTransation = false;
 	}
 	
 	public void updateBefore(float delta) {
-		
+		isStopped = isStoppedTransation;
+		if (!isStopped) {
+			
+		}
 	}
 	public void updateAfter(float delta) {
-		velocity.add(acceleration.scl(delta));
-		position.add(velocity.scl(delta));
+		if (!isStopped) {
+			velocity.add(acceleration.scl(delta));
+			position.add(velocity.scl(delta));
+		}
 	}
 	
 	public void addCollisionAcc(Vector2 q) {
-		collisionAcc.add(q);
+		if (!isStopped) {
+			collisionAcc.add(q);
+		}
 	}
 	
 	//getters & setters
+	
+	public void setIsStopped(boolean isStopped) {
+		isStoppedTransation = isStopped;
+	}
 	
 	public void setAccToG() {
 		acceleration.set(g);

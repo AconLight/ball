@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.redartedgames.ball.consts.Physic;
 
 public class ReversableMovement extends Movement
 {
@@ -36,10 +37,12 @@ public class ReversableMovement extends Movement
 		gX = new BigDecimal("0");
 		gY = new BigDecimal("0");
 		delta21 = new BigDecimal("100");
-		dragKX = new BigDecimal("1");//18.08");
-		dragKX2 = new BigDecimal("-99");//-0.01220703125");
-		dragKY = new BigDecimal("4");//18.08");
-		dragKY2 = new BigDecimal("-96");//-0.01220703125");
+		float dragX = Physic.DRAG_X;
+		float dragY = Physic.DRAG_Y;
+		dragKX = new BigDecimal("" + dragX);//18.08");
+		dragKX2 = new BigDecimal("" + (-(100-dragX)));//-0.01220703125");
+		dragKY = new BigDecimal("" + dragY);//18.08");
+		dragKY2 = new BigDecimal("" + (-(100-dragY)));//-0.01220703125");
 	}
 	
 	private void addMovement() {
@@ -81,13 +84,13 @@ public class ReversableMovement extends Movement
 		isForward = isForwardTransaction;
 		if(isForward) {
 			framesI++;
-			if (framesI == framesI/100*100) {
+			if (framesI == framesI/50*50) {
 				addMovement();
 			}
 		}
 		else {
 			framesI--;     
-			if (framesI == framesI/100*100 && framesI >0) {
+			if (framesI == framesI/50*50 && framesI >0) {
 				replaceMovement();
 			}
 			positionX = positionX.subtract(velocityX.multiply(delta2));

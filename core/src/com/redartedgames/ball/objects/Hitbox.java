@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.redartedgames.ball.consts.Physic;
 
 public class Hitbox {
 	public enum ShapeMode { Circle, Polygon, Rectangle, none };
@@ -25,7 +26,7 @@ public class Hitbox {
 	private Vector2 position, oldPosition;
 	private BigDecimal positionX, positionY, circleR;
 	
-	private static final float k = 100;
+	private static final float k = Physic.HITBOX_K;
 	
 	public Hitbox() {
 		sMode = ShapeMode.none;

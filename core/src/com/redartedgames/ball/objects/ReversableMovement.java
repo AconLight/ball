@@ -69,8 +69,8 @@ public class ReversableMovement extends Movement
 		BigDecimal positionX1 = new BigDecimal("" + positionX.floatValue());
 		BigDecimal positionY1 = new BigDecimal("" + positionY.floatValue());
 		//if(positionX2.equals(positionX1) && positionY2.equals(positionY1)) {
-		if ((r.positionX.floatValue()-positionX.floatValue()) * (r.positionX.floatValue()-positionX.floatValue()) < 0.01f &&
-				(r.positionY.floatValue()-positionY.floatValue()) * (r.positionY.floatValue()-positionY.floatValue()) < 0.01f) {
+		if ((r.positionX.floatValue()-positionX.floatValue()) * (r.positionX.floatValue()-positionX.floatValue()) < 0.1f &&
+				(r.positionY.floatValue()-positionY.floatValue()) * (r.positionY.floatValue()-positionY.floatValue()) < 0.1f) {
 			Gdx.app.log("ReversableMovement", "rep suc");
 			positionX = r.positionX;
 			positionY = r.positionY;
@@ -84,13 +84,13 @@ public class ReversableMovement extends Movement
 		isForward = isForwardTransaction;
 		if(isForward) {
 			framesI++;
-			if (framesI == framesI/50*50) {
+			if (framesI == framesI/10*10) {
 				addMovement();
 			}
 		}
 		else {
 			framesI--;     
-			if (framesI == framesI/50*50 && framesI >0) {
+			if (framesI == framesI/10*10 && framesI >0) {
 				replaceMovement();
 			}
 			positionX = positionX.subtract(velocityX.multiply(delta2));

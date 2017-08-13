@@ -25,7 +25,7 @@ public class Rect extends ReversableObject{
 		setHitbox(new Hitbox(positionX, positionY, width, height, bMode));
 		if (bMode == BehaviorMode.dynamic) {
 			gY = new BigDecimal("-200");
-			((ReversableMovement) movement).setGY(new BigDecimal("-200"));
+			((ReversableMovement) movement).setGY(new BigDecimal("-600"));
 		}
 	}
 	

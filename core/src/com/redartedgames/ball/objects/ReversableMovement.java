@@ -38,8 +38,8 @@ public class ReversableMovement extends Movement
 		delta21 = new BigDecimal("100");
 		dragKX = new BigDecimal("1");//18.08");
 		dragKX2 = new BigDecimal("-99");//-0.01220703125");
-		dragKY = new BigDecimal("1");//18.08");
-		dragKY2 = new BigDecimal("-99");//-0.01220703125");
+		dragKY = new BigDecimal("4");//18.08");
+		dragKY2 = new BigDecimal("-96");//-0.01220703125");
 	}
 	
 	private void addMovement() {

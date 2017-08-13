@@ -22,7 +22,7 @@ public class Ball extends ReversableObject{
 		setHitbox(new Hitbox(((ReversableMovement) movement).getPositionX(), ((ReversableMovement) movement).getPositionY(), radius, bMode));
 		if (bMode == BehaviorMode.dynamic) {
 			gY = new BigDecimal("-200");
-			((ReversableMovement) movement).setGY(new BigDecimal("-200"));
+			((ReversableMovement) movement).setGY(new BigDecimal("-600"));
 		}
 	}
 	

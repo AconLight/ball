@@ -16,12 +16,13 @@ public class ReversableMovement extends Movement
 	private BigDecimal delta2, positionX, velocityX, accelerationX, collisionAccX, positionY, dragKX, dragKX2, dragKY, dragKY2, delta21,
 	velocityY, accelerationY, collisionAccY, gX, gY;
 	
-	private boolean isForward;
+	private boolean isForward, isForwardTransaction;
 	
 	public ReversableMovement(Vector2 position) {
 		super(position);
 		framesI = 0;
 		prevMoves = new ArrayList<ReversableMovement>();
+		isForwardTransaction = true;
 		isForward = true;
 		delta2 = new BigDecimal("0.01");
 		positionX = new BigDecimal("" + position.x);
@@ -77,6 +78,7 @@ public class ReversableMovement extends Movement
 	}
 	
 	public void updateBefore(float delta) {
+		isForward = isForwardTransaction;
 		if(isForward) {
 			framesI++;
 			if (framesI == framesI/100*100) {
@@ -85,7 +87,7 @@ public class ReversableMovement extends Movement
 		}
 		else {
 			framesI--;     
-			if (framesI == framesI/100*100) {
+			if (framesI == framesI/100*100 && framesI >0) {
 				replaceMovement();
 			}
 			positionX = positionX.subtract(velocityX.multiply(delta2));
@@ -172,7 +174,7 @@ public class ReversableMovement extends Movement
 	}
 	
 	public void setIsForward(boolean isForward) {
-		this.isForward = isForward;
+		this.isForwardTransaction = isForward;
 	}
 
 }

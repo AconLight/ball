@@ -71,7 +71,7 @@ public class ReversableMovement extends Movement
 		//if(positionX2.equals(positionX1) && positionY2.equals(positionY1)) {
 		if ((r.positionX.floatValue()-positionX.floatValue()) * (r.positionX.floatValue()-positionX.floatValue()) < 0.6f &&
 				(r.positionY.floatValue()-positionY.floatValue()) * (r.positionY.floatValue()-positionY.floatValue()) < 0.6f) {
-			Gdx.app.log("ReversableMovement", "rep suc");
+			//Gdx.app.log("ReversableMovement", "rep suc");
 			positionX = r.positionX;
 			positionY = r.positionY;
 			velocityX = r.velocityX;
@@ -172,6 +172,22 @@ public class ReversableMovement extends Movement
 		this.velocityY = velocityY;
 	}
 	
+	public void setAccelerationX(BigDecimal accelerationX) {
+		this.accelerationX = accelerationX;
+	}
+
+	public void setAccelerationY(BigDecimal accelerationY) {
+		this.accelerationY = accelerationY;
+	}
+	
+	public void setPositionX(BigDecimal positionX) {
+		this.positionX = positionX;
+	}
+
+	public void setPositionY(BigDecimal positionY) {
+		this.positionY = positionY;
+	}
+	
 	public BigDecimal getPositionX() {
 		return positionX;
 	}
@@ -180,8 +196,37 @@ public class ReversableMovement extends Movement
 		return positionY;
 	}
 	
+	public BigDecimal getVelocityX() {
+		return velocityX;
+	}
+	
+	public BigDecimal getVelocityY() {
+		return velocityY;
+	}
+	
+	public BigDecimal getAccelerationX() {
+		return positionX;
+	}
+	
+	public BigDecimal getAccelerationY() {
+		return positionY;
+	}
+	
 	public void setIsForward(boolean isForward) {
 		this.isForwardTransaction = isForward;
+	}
+	
+	public void set(ReversableMovement movement) {
+		setPositionX(movement.getPositionX());
+		setVelocityX(movement.getVelocityX());
+		setPositionX(movement.getAccelerationX());
+		setPositionY(movement.getPositionY());
+		setVelocityY(movement.getVelocityY());
+		setPositionY(movement.getAccelerationY());
+	}
+	
+	public boolean getIsForward() {
+		return isForward;
 	}
 
 }

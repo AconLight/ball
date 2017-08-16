@@ -7,7 +7,17 @@ import java.util.List;
 public class Gunwo {
 
 	public static void main(String[] args) {
-
+		
+		BigDecimal a = new BigDecimal("123");
+		BigDecimal b = a;
+		
+		
+		
+		a = new BigDecimal("3456");
+		
+		System.out.println(a);
+		System.out.println(b);
+		
 		ArrayList<Person> persons = new ArrayList<Person>();
 		persons.add(new Person(4));
 		persons.add(new Person(5));

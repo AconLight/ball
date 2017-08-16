@@ -13,25 +13,49 @@ public class Player extends Ball{
 
 	private int xAxis;
 	
+	private float fuel;
+	
+	private boolean isJumping;
+	
+	private static float jumpBlockTime = PlayerConsts.JUMP_BLOCK_TIME;
+	private float jumpBlockTimer;
+	
 	public Player(float x, float y, float m, GameObject parent, int id) {
 		super(x, y, PlayerConsts.PLAYER_HITBOX_R, m, BehaviorMode.dynamic, parent, id);
 		xAxis = 0;
+		isJumping = false;
+		jumpBlockTimer = 0;
 	}
 	
 	public void addXAxis(float x) {
 		xAxis += x;
 	}
 	
+	public void updateBefore(float delta, float vx, float vy) {
+		super.updateBefore(delta, vx, vy);
+		if (isJumping) fuel -= 0.02f;
+	}
+	
 	public void applyPhysicsToAcceleration() {
 		super.applyPhysicsToAcceleration();
 		((ReversableMovement) movement).addCollisionAcc(new BigDecimal("" + xAxis), BigDecimal.ZERO);
+		if(isJumping && fuel > 0) ((ReversableMovement)movement).addCollisionAcc(BigDecimal.ZERO, PlayerConsts.JUMP_ACC);
 		accelerationX = accelerationX.add(new BigDecimal("" + xAxis));
 	}
 	
 	@Override
 	public void collide(GameObject obj) {
 		super.collide(obj);
-		((ReversableObject) obj).setIsStopped(c.isTrue);
+		if (c.isTrue) {
+			((ReversableObject) obj).setShouldBeStopped(true);
+			if (c.disY.abs().floatValue() > c.disX.abs().floatValue()) fuel = 1;
+			else fuel = 0.05f;			
+		}
+		
+	}
+	
+	public void setIsJumping(boolean isJumping) {
+		this.isJumping = isJumping;
 	}
 	
 	

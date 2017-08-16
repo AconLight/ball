@@ -179,11 +179,15 @@ public class Hitbox {
 		if (d.floatValue() > 0) {
 			c.disX = dx.divide(dr, 5, RoundingMode.HALF_UP).multiply(d).multiply(new BigDecimal("" + k));
 			c.disY = dy.divide(dr, 5, RoundingMode.HALF_UP).multiply(d).multiply(new BigDecimal("" + k));
+			c.isTrue = true;
 		}
 		else {
 			c.disX = BigDecimal.ZERO;
 			c.disY = BigDecimal.ZERO;
+			c.isTrue = false;
 		}
+		
+		
 		//Gdx.app.log("HdisX"+disX, "HdisY"+disY);
 		return c;
 	}
@@ -305,8 +309,6 @@ public class Hitbox {
 					}
 					case Circle: {						
 							c = circleCircle(positionX, positionY, circleR, hitbox.positionX, hitbox.positionY, hitbox.circleR);
-							c.isTrue = true;
-						
 						break;
 					}
 					case Polygon: {

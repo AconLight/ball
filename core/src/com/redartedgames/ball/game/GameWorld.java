@@ -3,6 +3,7 @@ package com.redartedgames.ball.game;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.redartedgames.ball.myobjects.Ball;
 import com.redartedgames.ball.myobjects.ButtonRect;
 import com.redartedgames.ball.myobjects.ImpsCollection;
@@ -55,8 +56,9 @@ public class GameWorld extends World{
 		reversableObjects.add(new Rect(860, 600, 50, 150, BehaviorMode.dynamic, null, 8));
 		reversableObjects.add(new Rect(360, 600, 50, 150, BehaviorMode.dynamic, null, 8));
 		reversableObjects.add(new Ball(670, 600, 50, 1f, BehaviorMode.dynamic, null, 9));
-		reversableObjects.addAll(impsCollection.getImps());
+		
 		reversableObjects.add(player);
+		reversableObjects.addAll(impsCollection.getImps());
 		gameObjects.addAll(reversableObjects);
 		
 		for (GameObject obj : gameObjects) {
@@ -70,6 +72,7 @@ public class GameWorld extends World{
 		for (GameObject obj : impsCollection.getImps()) {
 			obj.collidableObjects.remove(player);
 		}
+		
 		
 		
 		
@@ -91,6 +94,10 @@ public class GameWorld extends World{
 		for(ReversableObject r : reversableObjects) {
 			r.setIsForward(isForward);
 		}
+		
+		
+		
+		
 		
 		if (!isPaused) super.update(delta);	
 		

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
+import com.redartedgames.ball.consts.PlayerConsts;
 import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 import com.redartedgames.ball.objects.Movement;
@@ -26,11 +27,11 @@ public class InputHandler implements InputProcessor{
 		switch(keycode) {
 		
 		case Keys.A: {
-			world.player.addXAxis(-300);
+			world.player.addXAxis(-PlayerConsts.MOVE_X);
 			break;
 		}
 		case Keys.D: {
-			world.player.addXAxis(300);
+			world.player.addXAxis(PlayerConsts.MOVE_X);
 			break;
 		}
 		case Keys.W: {
@@ -55,11 +56,11 @@ public class InputHandler implements InputProcessor{
 
 		switch(keycode) {
 		case Keys.A: {
-			world.player.addXAxis(300);
+			world.player.addXAxis(PlayerConsts.MOVE_X);
 			break;
 		}
 		case Keys.D: {
-			world.player.addXAxis(-300);
+			world.player.addXAxis(-PlayerConsts.MOVE_X);
 			break;
 		}
 		case Keys.W: {

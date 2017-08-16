@@ -22,10 +22,13 @@ public class ImpsCollection {
 	}
 	
 	public void spawnNextImpPressDown(Movement movement) {
-		for(Imp imp : imps)
-		if(imp.type == Imp.STATIC_TYPE && !imp.isSpawned) {
-			imps.get(imps.size()-1).spawn(movement);
-			Gdx.app.log("ImpsCollection", "message");
+		boolean flaga = true;
+		for(Imp imp : imps) {
+		if(imp.type == Imp.STATIC_TYPE && !imp.isSpawned && flaga) {
+			imp.spawn(movement);
+			flaga = false;
+		}
+			imp.deactivate();
 		}
 	}
 	
@@ -46,10 +49,13 @@ public class ImpsCollection {
 	}
 	
 	public void spawnNextImpPressUp(Movement movement) {
-		if(imps.size() > 0 && imps.get(imps.size()-1).type == Imp.ACTIVE_TYPE) {
-			//TODO
-			imps.get(imps.size()-1).spawn(movement);
-			imps.remove(imps.size()-1);
+		boolean flaga = true;
+		for(Imp imp : imps) {
+		if(imp.type == Imp.ACTIVE_TYPE && !imp.isSpawned && flaga) {
+			imp.spawn(movement);
+			flaga = false;
+		}
+			imp.activate();
 		}
 	}
 	

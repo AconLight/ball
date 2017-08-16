@@ -21,7 +21,6 @@ public class StaticImp extends Imp{
 	
 	public void spawn(Movement movement) {
 		super.spawn(movement);
-		deactivate();
 	}
 	
 	public void activate() {

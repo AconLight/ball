@@ -117,7 +117,7 @@ public class GameObject {
 		}
 		
 		public void applyPhysicsToAcceleration() {
-			if (hitbox.bMode == BehaviorMode.dynamic) {
+			if (hitbox.bMode == BehaviorMode.dynamic || hitbox.bMode == BehaviorMode.kinematic) {
 				
 
 				collisionAccX = BigDecimal.ZERO;

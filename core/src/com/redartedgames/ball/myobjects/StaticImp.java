@@ -36,6 +36,6 @@ public class StaticImp extends Imp{
 	@Override
 	public void collide(GameObject obj) {
 		super.collide(obj);
-		if(isSpawned && ((ReversableMovement) movement).getIsForward() &&c.isTrue) shouldBeStopped = true;
+		if(isSpawned && (((ReversableMovement) movement).getIsForward() || isStopped) &&c.isTrue) shouldBeStopped = true;
 	}
 }

@@ -17,11 +17,14 @@ public class Player extends Ball{
 	
 	private boolean isJumping;
 	
+	private MovesData movesData;
+	
 	private static float jumpBlockTime = PlayerConsts.JUMP_BLOCK_TIME;
 	private float jumpBlockTimer;
 	
 	public Player(float x, float y, float m, GameObject parent, int id) {
 		super(x, y, PlayerConsts.PLAYER_HITBOX_R, m, BehaviorMode.dynamic, parent, id);
+		movesData = new MovesData();
 		xAxis = 0;
 		isJumping = false;
 		jumpBlockTimer = 0;
@@ -38,9 +41,32 @@ public class Player extends Ball{
 	
 	public void applyPhysicsToAcceleration() {
 		super.applyPhysicsToAcceleration();
-		((ReversableMovement) movement).addCollisionAcc(new BigDecimal("" + xAxis), BigDecimal.ZERO);
-		if(isJumping && fuel > 0) ((ReversableMovement)movement).addCollisionAcc(BigDecimal.ZERO, PlayerConsts.JUMP_ACC);
-		accelerationX = accelerationX.add(new BigDecimal("" + xAxis));
+		
+			
+			if (((ReversableMovement)movement).getIsForward()) {
+				if(isJumping && fuel > 0)  {
+					movesData.addMove(new BigDecimal("" + xAxis), PlayerConsts.JUMP_ACC);
+					((ReversableMovement) movement).addCollisionAcc(movesData.getLastAccX(), movesData.getLastAccY());
+				}
+				else {
+					movesData.addMove(new BigDecimal("" + xAxis), BigDecimal.ZERO);
+					((ReversableMovement) movement).addCollisionAcc(movesData.getLastAccX(), movesData.getLastAccY());
+				}
+				//Gdx.app.log("Player Y", "" + movesData.getLastAccY());
+				//Gdx.app.log("Player X", "" + movesData.getLastAccX());           
+			}
+			else {
+				/*for(int i =  movesData.accelerationsX.size(); i >= 0 ; i--  ) {
+					Gdx.app.log("Player Y R", "" + movesData.accelerationsX.get(i-1));
+					Gdx.app.log("Player X R", "" + movesData.accelerationsY.get(i-1));
+				}*/
+				BigDecimal accX = movesData.getLastAccX();
+				BigDecimal accY = movesData.getLastAccY();
+				((ReversableMovement) movement).addCollisionAcc(accX, accY);
+				movesData.removeMove();
+				
+			}
+		//accelerationX = accelerationX.add(new BigDecimal("" + xAxis));
 	}
 	
 	@Override
@@ -48,7 +74,7 @@ public class Player extends Ball{
 		super.collide(obj);
 		if (c.isTrue) {
 			((ReversableObject) obj).setShouldBeStopped(true);
-			if (c.disY.abs().floatValue() > c.disX.abs().floatValue()) fuel = 1;
+			if (c.disY.floatValue() >= 0 && c.disY.abs().floatValue() > c.disX.abs().floatValue()) fuel = 1;
 			else fuel = 0.05f;			
 		}
 		

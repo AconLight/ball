@@ -2,6 +2,7 @@ package com.redartedgames.ball.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 
 public class ColSpriteObject extends SpriteObject{
 
@@ -18,6 +19,7 @@ public class ColSpriteObject extends SpriteObject{
 		collisionAccX = collisionAccX.add(c.disX);
 		collisionAccY = collisionAccY.add(c.disY);
 		//Gdx.app.log("ColSpriteObject", "collide - col: " + collisionAccY );
-		movement.addCollisionAcc(new Vector2(c.disX.floatValue(), c.disY.floatValue()));
+		if (getHitbox().bMode == BehaviorMode.dynamic)
+			movement.addCollisionAcc(new Vector2(c.disX.floatValue(), c.disY.floatValue()));
 	}
 }

@@ -1,6 +1,7 @@
 package com.redartedgames.ball.objects;
 
 import com.badlogic.gdx.math.Vector2;
+import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 
 public class ReversableObject extends ColSpriteObject{
 		
@@ -44,8 +45,8 @@ public class ReversableObject extends ColSpriteObject{
 		@Override
 		public void collide(GameObject obj) {
 			super.collide(obj);
-			//Gdx.app.log("ReversableObject", "updateAfter - col: " + collisionAccY );
-			((ReversableMovement) movement).addCollisionAcc(c.disX, c.disY);
+			if (getHitbox().bMode == BehaviorMode.dynamic)
+				((ReversableMovement) movement).addCollisionAcc(c.disX, c.disY);
 		}
 		
 		public void setIsForward(boolean isForward) {

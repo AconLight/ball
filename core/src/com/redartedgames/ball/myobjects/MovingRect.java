@@ -34,10 +34,12 @@ public class MovingRect extends Rect{
 		rY = lastPositionY.subtract(centerPositionY);
 		if (!isLeft) {
 			((ReversableMovement) movement).setPositionX(centerPositionX.subtract(rX));
+			((ReversableMovement) movement).setPositionY(centerPositionY.subtract(rY));
 			isMovingToLast = true;
 		}	
 		else {
 			((ReversableMovement) movement).setPositionX(centerPositionX.add(rX));
+			((ReversableMovement) movement).setPositionY(centerPositionY.add(rY));
 			isMovingToLast = false;
 		}
 			
@@ -68,7 +70,7 @@ public class MovingRect extends Rect{
 	
 	public void applyPhysicsToAcceleration() {
 		super.applyPhysicsToAcceleration();
-		if(((ReversableMovement) movement).getIsForward())
+		
 			if (isMovingToLast) {
 				movingX = movingX.add(vX);
 				movingY = movingY.add(vY);	
@@ -77,16 +79,7 @@ public class MovingRect extends Rect{
 				movingX = movingX.subtract(vX);
 				movingY = movingY.subtract(vY);
 			}
-		else {
-			if (isMovingToLast) {
-				movingX = movingX.subtract(vX);
-				movingY = movingY.subtract(vY);	
-			}
-			else {
-				movingX = movingX.add(vX);
-				movingY = movingY.add(vY);
-			}
-		}
+
 		
 		if (movingX.floatValue() > lastPositionX.subtract(centerPositionX).floatValue()) { 
 			//	movingX.floatValue() > firstPositionX.subtract(lastPositionX).floatValue()) {
@@ -102,11 +95,18 @@ public class MovingRect extends Rect{
 			movingX = rX.negate();
 		}
 		
-		if (movingY.floatValue() < lastPositionY.subtract(centerPositionY).floatValue()) {
+		if (movingY.floatValue() > lastPositionY.subtract(centerPositionY).floatValue()) { 
 			//	movingY.floatValue() > firstPositionY.subtract(lastPositionY).floatValue()) {
 			((ReversableMovement) movement).addCollisionAcc(
 					BigDecimal.ZERO, 
-					movingY.add(centerPositionY).subtract(((ReversableMovement) movement).getPositionY()));
+					lastPositionY.subtract(((ReversableMovement) movement).getPositionY()));
+			movingY = rY;
+		}
+		else if (movingY.floatValue() < centerPositionY.subtract(lastPositionY).floatValue()){
+			((ReversableMovement) movement).addCollisionAcc(
+					BigDecimal.ZERO, 
+					centerPositionY.subtract(rY).subtract(((ReversableMovement) movement).getPositionY()));
+			movingY = rY.negate();
 		}
 		
 	}

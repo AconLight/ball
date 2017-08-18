@@ -1,6 +1,7 @@
 package com.redartedgames.ball.myobjects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 
@@ -30,6 +31,14 @@ public class StaticButton extends Rect{
 			isOn = true;
 			//Gdx.app.log("StaticButton", "col tru");
 		}
+	}
+	
+	public void render(ShapeRenderer sr, int priority) {
+
+		sr.setColor(50/256f, 200/256f, 50/256f, 1f);	
+		sr.rect((position.x - width/2+0.5f), position.y - height/2+0.5f, width+0.5f, height+0.5f);
+		
+		
 	}
 	
 	

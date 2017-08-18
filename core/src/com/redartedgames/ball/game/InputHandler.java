@@ -72,7 +72,7 @@ public class InputHandler implements InputProcessor{
 			world.impsCollection.activate();
 			break;
 		}
-		}
+		} 
 		return false;
 	}
 

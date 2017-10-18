@@ -39,8 +39,13 @@ public class InputHandler implements InputProcessor{
 			break;
 		}
 		case Keys.SPACE: {
-			world.setIsForward(false);
-			world.impsCollection.spawnNextImpPressDown(world.player.getMovement());
+			//world.setIsForward(false);
+			//world.impsCollection.spawnNextImpPressDown(world.player.getMovement());
+			world.timeAcc = -1f;
+			
+			world.timeVel = 2f;
+			
+			world.timeBar = 1f;
 			break;
 		}
 		case Keys.F: {

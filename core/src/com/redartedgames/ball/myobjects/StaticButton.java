@@ -21,7 +21,7 @@ public class StaticButton extends Rect{
 		isOn = false;
 		super.applyPhysicsToAcceleration();
 		movingRect.start(isOn);
-		Gdx.app.log("StaticButton", "col tru" + isOn);
+		
 	}
 
 	@Override

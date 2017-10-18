@@ -34,15 +34,17 @@ public class GameWorld extends World{
 	public ArrayList <ReversableObject> reversableObjects;
 	private boolean isForward;
 	public ImpsCollection impsCollection;
-	
+	 
+	public float timeTime, timeBar, timeVel, timeAcc;
 	
 	public GameWorld() {
 		super();
 		impsCollection = new ImpsCollection();
 		impsCollection.addStaticImp();
 		impsCollection.addStaticImp();
-		
-
+		timeBar = 0.1f;
+		timeVel = 0f;
+		timeTime = 0;
 		time = 0;
 		t = 1;
 		i = 0;
@@ -69,7 +71,7 @@ public class GameWorld extends World{
 		r2.setV(0, 50f);
 		
 		//StaticButton b = new StaticButton(250, 100, 40, 20, r2, null, 9);
-		StaticButton b = new StaticButton(300, 500, 40, 20, r, null, 9);
+		StaticButton b = new StaticButton(300, 510, 40, 20, r, null, 9);
 		//reversableObjects.add(new Ball(250, 150, 15, 1f, BehaviorMode.dynamic, null, 9));
 		StaticButton b2 = new StaticButton(700, 40, 40, 20, r, null, 9);
 		reversableObjects.add(r);
@@ -120,17 +122,41 @@ public class GameWorld extends World{
 	@Override
 	public void update(float delta) {
 			
+		timeVel += timeAcc*delta;
+
+		//if (!isForward && timeVel < 0.9f) timeVel = 0.9f;
 		
-		for(ReversableObject r : reversableObjects) {
-			r.setIsForward(isForward);
+		timeBar += timeVel*delta;
+		
+		timeTime += delta*10;
+		
+		Gdx.app.log("gameworld", "timeBar -> " + timeBar);
+		if (timeBar > 2) { 
+			timeBar = 2; 
+			if (isForward) { 
+				isForward = false; 
+				impsCollection.spawnNextImpPressDown(player.getMovement());
+			}
+			
+			
 		}
+		if (timeBar < 0.1f) timeBar = 0.1f;
+		
+		if (timeTime > timeBar) {
+			timeTime -= timeBar;
 		
 		
+			for(ReversableObject r : reversableObjects) {
+				r.setIsForward(isForward);
+			}
+			
+			
+			
+			
+			
+			if (!isPaused) super.update(0.01f);	
 		
-		
-		
-		if (!isPaused) super.update(delta);	
-		
+		}
 	}
 	
 	public void setIsForward(boolean isForward) {

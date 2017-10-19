@@ -39,17 +39,16 @@ public class InputHandler implements InputProcessor{
 			break;
 		}
 		case Keys.SPACE: {
-			//world.setIsForward(false);
-			//world.impsCollection.spawnNextImpPressDown(world.player.getMovement());
-			world.timeAcc = -1f;
-			
-			world.timeVel = 2f;
-			
-			world.timeBar = 1f;
+			world.setIsForward(false);
+			world.impsCollection.spawnNextImpPressDown(world.player);
 			break;
 		}
 		case Keys.F: {
 			world.rect.move();
+			break;
+		}
+		case Keys.ENTER: {
+			world.isPaused = !world.isPaused;
 			break;
 		}
 		}
@@ -74,7 +73,7 @@ public class InputHandler implements InputProcessor{
 		}
 		case Keys.SPACE: {
 			world.setIsForward(true);
-			world.impsCollection.activate();
+			world.impsCollection.spawnNextImpPressUp((world.player));
 			break;
 		}
 		} 

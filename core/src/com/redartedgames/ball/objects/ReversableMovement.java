@@ -19,6 +19,9 @@ public class ReversableMovement extends Movement
 	
 	private boolean isForward, isForwardTransaction;
 	
+	private static int replacementI = 3;
+	private static float dokladnosc = 0.20f;
+	
 	public ReversableMovement(Vector2 position) {
 		super(position);
 		framesI = 0;
@@ -69,8 +72,8 @@ public class ReversableMovement extends Movement
 		BigDecimal positionX1 = new BigDecimal("" + positionX.floatValue());
 		BigDecimal positionY1 = new BigDecimal("" + positionY.floatValue());
 		//if(positionX2.equals(positionX1) && positionY2.equals(positionY1)) {
-		if ((r.positionX.floatValue()-positionX.floatValue()) * (r.positionX.floatValue()-positionX.floatValue()) < 0.25f &&
-				(r.positionY.floatValue()-positionY.floatValue()) * (r.positionY.floatValue()-positionY.floatValue()) < 0.25f) {
+		if ((r.positionX.floatValue()-positionX.floatValue()) * (r.positionX.floatValue()-positionX.floatValue()) < dokladnosc &&
+				(r.positionY.floatValue()-positionY.floatValue()) * (r.positionY.floatValue()-positionY.floatValue()) < dokladnosc) {
 			//Gdx.app.log("ReversableMovement", "rep suc");
 			positionX = r.positionX;
 			positionY = r.positionY;
@@ -86,13 +89,13 @@ public class ReversableMovement extends Movement
 		if (!isStopped) {
 			if(isForward) {
 				framesI++; 
-				if (framesI == framesI/3*3) {
+				if (framesI == framesI/replacementI*replacementI) {
 					addMovement();
 				}
 			}
 			else {
 				framesI--;     
-				if (framesI == framesI/3*3 && framesI >0) {
+				if (framesI == framesI/replacementI*replacementI && framesI >0) {
 					replaceMovement();
 				}
 				positionX = positionX.subtract(velocityX.multiply(delta2));

@@ -40,8 +40,16 @@ public class GameWorld extends World{
 	public GameWorld() {
 		super();
 		impsCollection = new ImpsCollection();
-		impsCollection.addStaticImp();
-		impsCollection.addStaticImp();
+		//impsCollection.addStaticImp();
+		//impsCollection.addStaticImp();
+		impsCollection.addActiveImp();
+		impsCollection.addActiveImp();
+		impsCollection.addActiveImp();
+		impsCollection.addActiveImp();
+		impsCollection.addActiveImp();
+		//impsCollection.addStaticImp();
+		//impsCollection.addStaticImp();
+		//impsCollection.addStaticImp();
 		timeBar = 0.1f;
 		timeVel = 0f;
 		timeTime = 0;
@@ -90,7 +98,7 @@ public class GameWorld extends World{
 		reversableObjects.add(player);
 		reversableObjects.addAll(impsCollection.getImps());
 		
-		impsCollection.spawnNextImpPressDown(new ReversableMovement(new Vector2(245, 500)));
+		//impsCollection.spawnNextImpPressDown(new ReversableMovement(new Vector2(245, 500)));
 		gameObjects.addAll(reversableObjects);
 		
 		for (GameObject obj : gameObjects) {
@@ -121,42 +129,15 @@ public class GameWorld extends World{
 	
 	@Override
 	public void update(float delta) {
+		for(ReversableObject r : reversableObjects) {
+			r.setIsForward(isForward);
+		}
+		super.update(0.01f);
 			
-		timeVel += timeAcc*delta;
 
-		//if (!isForward && timeVel < 0.9f) timeVel = 0.9f;
-		
-		timeBar += timeVel*delta;
-		
-		timeTime += delta*10;
-		
-		Gdx.app.log("gameworld", "timeBar -> " + timeBar);
-		if (timeBar > 2) { 
-			timeBar = 2; 
-			if (isForward) { 
-				isForward = false; 
-				impsCollection.spawnNextImpPressDown(player.getMovement());
-			}
 			
 			
-		}
-		if (timeBar < 0.1f) timeBar = 0.1f;
-		
-		if (timeTime > timeBar) {
-			timeTime -= timeBar;
-		
-		
-			for(ReversableObject r : reversableObjects) {
-				r.setIsForward(isForward);
-			}
-			
-			
-			
-			
-			
-			if (!isPaused) super.update(0.01f);	
-		
-		}
+	
 	}
 	
 	public void setIsForward(boolean isForward) {

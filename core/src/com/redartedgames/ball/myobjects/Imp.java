@@ -8,9 +8,11 @@ import com.redartedgames.ball.objects.ReversableObject;
 
 public class Imp extends Player{
 	
-	protected boolean isSpawned;
+	protected boolean isSpawned, isUsed;
 	
-	public static int type;
+	protected MovesData playerMovesData;
+	
+	public int type;
 	
 	public static int STATIC_TYPE = 1;
 	
@@ -19,7 +21,9 @@ public class Imp extends Player{
 	public Imp(float x, float y, float m, GameObject parent, int id) {
 		super(x, y, 1, parent, id);
 		isSpawned = false;
+		isUsed = false;
 		type = 0;
+		playerMovesData = new MovesData();
 	} 
 	
 	public void spawn(Movement movement) {

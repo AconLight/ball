@@ -56,4 +56,27 @@ public class MovesData {
 		accelerationsY.remove(getLastAccY());
 		accelerationsY.add(temp);
 	}
+	
+	public void pastePlayerMoves(MovesData movesData) {
+		accelerationsX = new ArrayList<BigDecimal>();
+		for(BigDecimal accX : movesData.accelerationsX) {
+			accelerationsX.add(accX);
+		}
+		
+		accelerationsY = new ArrayList<BigDecimal>();
+		for(BigDecimal accY : movesData.accelerationsY) {
+			accelerationsY.add(accY);
+		}
+	}
+	
+	public void shortenMovesDataToNumb(int numb) {
+		int size = accelerationsX.size();
+		for (int i = 0 ; i < size - numb; i++) {
+			accelerationsX.remove(0);
+		}
+		size = accelerationsY.size();
+		for (int i = 0 ; i < size - numb; i++) {
+			accelerationsY.remove(0);
+		}
+	}
 }

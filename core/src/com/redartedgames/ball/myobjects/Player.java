@@ -13,6 +13,8 @@ public class Player extends Ball{
 
 	private int xAxis;
 	
+	private int reversedMovesNumb;
+	
 	private float fuel;
 	
 	private boolean isJumping;
@@ -28,6 +30,11 @@ public class Player extends Ball{
 		xAxis = 0;
 		isJumping = false;
 		jumpBlockTimer = 0;
+		reversedMovesNumb = 0;
+	}
+	
+	public int getReversedMovesNumb() {
+		return reversedMovesNumb;
 	}
 	
 	public void addXAxis(float x) {
@@ -44,6 +51,7 @@ public class Player extends Ball{
 		
 			
 			if (((ReversableMovement)movement).getIsForward()) {
+				reversedMovesNumb = 0;
 				if(isJumping && fuel > 0)  {
 					movesData.addMove(new BigDecimal("" + xAxis), PlayerConsts.JUMP_ACC);
 					((ReversableMovement) movement).addCollisionAcc(movesData.getLastAccX(), movesData.getLastAccY());
@@ -64,6 +72,7 @@ public class Player extends Ball{
 				BigDecimal accY = movesData.getLastAccY();
 				((ReversableMovement) movement).addCollisionAcc(accX, accY);
 				movesData.removeMove();
+				reversedMovesNumb++;
 				
 			}
 		//accelerationX = accelerationX.add(new BigDecimal("" + xAxis));
@@ -82,6 +91,14 @@ public class Player extends Ball{
 	
 	public void setIsJumping(boolean isJumping) {
 		this.isJumping = isJumping;
+	}
+	
+	public MovesData getMovesData() {
+		return movesData;
+	}
+	
+	public void setReversedMovesNumb(int x) {
+		reversedMovesNumb = x;
 	}
 	
 	

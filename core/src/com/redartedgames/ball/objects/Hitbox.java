@@ -176,7 +176,7 @@ public class Hitbox {
 		BigDecimal dr = sqrt(dr2, 5);
 		BigDecimal d = circleR.add(circle2R).subtract(dr);
 		
-		if (d.floatValue() > 0) {
+		if (d.floatValue() > 0 && dr.floatValue() > 0) {
 			c.disX = dx.divide(dr, 5, RoundingMode.HALF_UP).multiply(d).multiply(new BigDecimal("" + k));
 			c.disY = dy.divide(dr, 5, RoundingMode.HALF_UP).multiply(d).multiply(new BigDecimal("" + k));
 			c.isTrue = true;

@@ -9,14 +9,57 @@ public class Gunwo {
 	public static void main(String[] args) {
 		
 		BigDecimal a = new BigDecimal("123");
-		BigDecimal b = a;
+		BigDecimal b = new BigDecimal("123");
+		float aa = a.floatValue();
+		float bb = b.floatValue();
 		
 		
 		
-		a = new BigDecimal("3456");
 		
-		System.out.println(a);
-		System.out.println(b);
+		//System.out.println(a);
+		//System.out.println(b);
+		
+		float c = 0,d = 0;
+		
+		for (int i = 0; i < 10000; i++) {
+			aa = a.floatValue();
+			bb = b.floatValue();
+			
+			c = (aa+bb*2)/(2*aa+bb);
+			d = (2*aa+bb)/(aa+2*bb);
+			
+			a = a.add(new BigDecimal("" + c));
+			
+			b = b.add(new BigDecimal("" + d));
+			
+		}
+		
+		float cc = c;
+		float dd = d;
+		
+		for (int i = 0; i < 10000; i++) {
+			
+			
+			a = a.subtract(new BigDecimal("" + cc));
+			
+			b = b.subtract(new BigDecimal("" + dd));
+			
+			
+			
+			
+			cc = (aa+bb*2)/(2*aa+bb);
+			dd = (2*aa+bb)/(aa+2*bb);
+			
+			aa = a.floatValue();
+			bb = b.floatValue();
+			
+		}
+		
+		System.out.println(aa);
+		System.out.println(bb);
+		System.out.println("asd");
+		
+		
 		
 		ArrayList<Person> persons = new ArrayList<Person>();
 		persons.add(new Person(4));

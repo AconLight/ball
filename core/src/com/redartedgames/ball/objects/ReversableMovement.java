@@ -19,8 +19,9 @@ public class ReversableMovement extends Movement
 	
 	private boolean isForward, isForwardTransaction;
 	
-	private static int replacementI = 3;
-	private static float dokladnosc = 0.20f;
+	private static int replacementI = 10000000;
+	private static float dokladnosc = 0.01f;
+	private static float v = 1000, j = 4; // do funkcji sigmoid
 	
 	public ReversableMovement(Vector2 position) {
 		super(position);
@@ -72,15 +73,15 @@ public class ReversableMovement extends Movement
 		BigDecimal positionX1 = new BigDecimal("" + positionX.floatValue());
 		BigDecimal positionY1 = new BigDecimal("" + positionY.floatValue());
 		//if(positionX2.equals(positionX1) && positionY2.equals(positionY1)) {
-		if ((r.positionX.floatValue()-positionX.floatValue()) * (r.positionX.floatValue()-positionX.floatValue()) < dokladnosc &&
-				(r.positionY.floatValue()-positionY.floatValue()) * (r.positionY.floatValue()-positionY.floatValue()) < dokladnosc) {
+		if (r.positionX.subtract(positionX).multiply(r.positionX.subtract(positionX)).floatValue() < dokladnosc &&
+				r.positionY.subtract(positionY).multiply(r.positionY.subtract(positionY)).floatValue() < dokladnosc) {
 			//Gdx.app.log("ReversableMovement", "rep suc");
 			positionX = r.positionX;
 			positionY = r.positionY;
 			velocityX = r.velocityX;
 			velocityY = r.velocityY;
 		}
-		prevMoves.remove(r);
+		if (!prevMoves.isEmpty())prevMoves.remove(r);
 	}
 	
 	public void updateBefore(float delta) {
@@ -91,6 +92,7 @@ public class ReversableMovement extends Movement
 				framesI++; 
 				if (framesI == framesI/replacementI*replacementI) {
 					addMovement();
+					Gdx.app.log("rev mov", "replacement!!!");
 				}
 			}
 			else {
@@ -98,11 +100,15 @@ public class ReversableMovement extends Movement
 				if (framesI == framesI/replacementI*replacementI && framesI >0) {
 					replaceMovement();
 				}
-				positionX = positionX.subtract(velocityX.multiply(delta2));
-				positionY = positionY.subtract(velocityY.multiply(delta2));	
+				positionX = positionX.subtract(sigmoid(velocityX, v).multiply(delta2));
+				positionY = positionY.subtract(sigmoid(velocityY, v).multiply(delta2));	
 				position.set(positionX.floatValue(), positionY.floatValue());
 			}
 		}
+	}
+	
+	private BigDecimal sigmoid(BigDecimal x, float k) {
+		return new BigDecimal("" + k*(1.0/(1.0 + Math.pow(Math.E, -x.floatValue()/k*j)) -0.5));
 	}
 	public void updateAfter(float delta) {
 		if(!isStopped) {
@@ -113,8 +119,8 @@ public class ReversableMovement extends Movement
 				velocityX = velocityX.add(accelerationX.multiply(delta2));
 				velocityY = velocityY.add(accelerationY.multiply(delta2));				
 				
-				positionX = positionX.add(velocityX.multiply(delta2));
-				positionY = positionY.add(velocityY.multiply(delta2));
+				positionX = positionX.add(sigmoid(velocityX, v).multiply(delta2));
+				positionY = positionY.add(sigmoid(velocityY, v).multiply(delta2));
 				position.set(positionX.floatValue(), positionY.floatValue());
 			}
 			else {

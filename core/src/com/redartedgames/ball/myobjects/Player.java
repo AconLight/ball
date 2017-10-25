@@ -73,7 +73,7 @@ public class Player extends Ball{
 				((ReversableMovement) movement).addCollisionAcc(accX, accY);
 				movesData.removeMove();
 				reversedMovesNumb++;
-				
+				  
 			}
 		//accelerationX = accelerationX.add(new BigDecimal("" + xAxis));
 	}
@@ -82,9 +82,10 @@ public class Player extends Ball{
 	public void collide(GameObject obj) {
 		super.collide(obj);
 		if (c.isTrue) {
+			//Gdx.app.log("Player", "" + c.disY);
 			((ReversableObject) obj).setShouldBeStopped(true);
-			if (c.disY.floatValue() >= 0 && c.disY.abs().floatValue() > c.disX.abs().floatValue()) fuel = 1;
-			else fuel = 0.05f;			
+			if (c.disY.floatValue() >= 0 && c.disY.abs().floatValue() > c.disX.abs().floatValue()) fuel = PlayerConsts.JUMP_BLOCK_TIME;
+			else ;//fuel = 0;			
 		}
 		
 	}

@@ -42,12 +42,9 @@ public class GameWorld extends World{
 		impsCollection = new ImpsCollection();
 		//impsCollection.addStaticImp();
 		//impsCollection.addStaticImp();
-		impsCollection.addActiveImp();
-		impsCollection.addActiveImp();
-		impsCollection.addActiveImp();
-		impsCollection.addActiveImp();
-		impsCollection.addActiveImp();
-		//impsCollection.addStaticImp();
+		//impsCollection.addActiveImp();
+		
+		impsCollection.addStaticImp();
 		//impsCollection.addStaticImp();
 		//impsCollection.addStaticImp();
 		timeBar = 0.1f;
@@ -93,6 +90,13 @@ public class GameWorld extends World{
 		
 		reversableObjects.add(new Ball(670, 600, 45, 1f, BehaviorMode.dynamic, null, 9));
 		reversableObjects.add(new Ball(770, 600, 45, 1f, BehaviorMode.dynamic, null, 9));
+		//reversableObjects.add(new Ball(630, 400, 45, 1f, BehaviorMode.kinematic, null, 9));
+		
+		//reversableObjects.add(new Ball(650, -400, 600, 1f, BehaviorMode.kinematic, null, 9));
+		
+		//reversableObjects.add(new Ball(650 + 600, 100, 300, 1f, BehaviorMode.kinematic, null, 9));
+		
+
 		reversableObjects.add(new Rect(550, 250, 180, 80, BehaviorMode.kinematic, null, 6));
 		
 		reversableObjects.add(player);

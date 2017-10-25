@@ -46,7 +46,7 @@ public class ReversableObject extends ColSpriteObject{
 		public void collide(GameObject obj) {
 			super.collide(obj);
 			if (getHitbox().bMode == BehaviorMode.dynamic)
-				((ReversableMovement) movement).addCollisionAcc(c.disX, c.disY);
+				((ReversableMovement) movement).addCollisionAcc(c.disX.pow(5), c.disY.pow(5));
 		}
 		
 		public void setIsForward(boolean isForward) {

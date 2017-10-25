@@ -89,8 +89,8 @@ public class Hitbox {
 		c.disX = BigDecimal.ZERO;
 		c.disY = BigDecimal.ZERO;
 		c.isTrue = true;
-		float v;
-		float dr2, dr, dx, dy;
+		double v;
+		double dr2, dr, dx, dy;
 		boolean flaga = true;
 		
 		if ((circle.x > rectangle.x && circle.x < rectangle.x+rectangle.width) || (circle.y > rectangle.y && circle.y < rectangle.y+rectangle.height)) {
@@ -117,7 +117,7 @@ public class Hitbox {
 				dx = circle.x - rectangle.x;
 				dy = circle.y - rectangle.y;
 				dr2 = dx*dx + dy*dy;
-				dr = (float) Math.sqrt(dr2);
+				dr = Math.sqrt(dr2);
 				if (dr2 < circle.radius*circle.radius) {
 					c.disX = c.disX.add(new BigDecimal("" + (int)(-k*(dr-circle.radius)*dx/dr)));
 					c.disY = c.disY.add(new BigDecimal("" + (int)(-k*(dr-circle.radius)*dy/dr)));
@@ -127,7 +127,7 @@ public class Hitbox {
 				dx = circle.x - (rectangle.x + rectangle.width);
 				dy = circle.y - rectangle.y;
 				dr2 = dx*dx + dy*dy;
-				dr = (float) Math.sqrt(dr2);
+				dr = Math.sqrt(dr2);
 				if (dr2 < circle.radius*circle.radius) {
 					c.disX = c.disX.add(new BigDecimal("" + (int)(-k*(dr-circle.radius)*dx/dr)));
 					c.disY = c.disY.add(new BigDecimal("" + (int)(-k*(dr-circle.radius)*dy/dr)));
@@ -137,7 +137,7 @@ public class Hitbox {
 				dx = circle.x - (rectangle.x + rectangle.width);
 				dy = circle.y - (rectangle.y + rectangle.height);
 				dr2 = dx*dx + dy*dy;
-				dr = (float) Math.sqrt(dr2);
+				dr = Math.sqrt(dr2);
 				//Gdx.app.log("Hitbox", "" + dx + ", " + dy);
 				//Gdx.app.log("Hitbox, circle", "" + circle.x + ", " + circle.y);
 				//Gdx.app.log("Hitbox, rect", "" + (rectangle.x+rectangle.width) + ", " + (rectangle.y+rectangle.height));
@@ -151,7 +151,7 @@ public class Hitbox {
 				dx = circle.x - rectangle.x;
 				dy = circle.y - (rectangle.y + rectangle.height);
 				dr2 = dx*dx + dy*dy;
-				dr = (float) Math.sqrt(dr2);
+				dr = Math.sqrt(dr2);
 				
 				if (dr2 < circle.radius*circle.radius) {
 					c.disX = c.disX.add(new BigDecimal("" + (int)(-k*(dr-circle.radius)*dx/dr)));

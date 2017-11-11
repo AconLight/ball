@@ -8,6 +8,8 @@ public class ReversableObject extends ColSpriteObject{
 		protected boolean shouldBeStopped; // collisions
 		protected boolean shouldBeStopped2; // spawn imp
 		
+		protected boolean isFrozening; // player will be frozening
+		
 		public ReversableObject(float x, float y, GameObject parent, int id) {
 			super(x, y, parent, id);
 			movement = new ReversableMovement(new Vector2(x, y));
@@ -16,9 +18,12 @@ public class ReversableObject extends ColSpriteObject{
 		}		
 		
 		public void updateBefore(float delta, float vx, float vy) {
-			if(shouldBeStopped || shouldBeStopped2) setIsStopped(true);
-			else setIsStopped(false);
-			shouldBeStopped = false;
+			//if (((ReversableMovement)movement).getIsForward()) {
+				if(shouldBeStopped || shouldBeStopped2) setIsStopped(true);
+				else setIsStopped(false);
+				shouldBeStopped = false;
+			//}
+
 			movement.updateBefore(delta);
 			hitbox.update(((ReversableMovement) movement).getPositionX(), ((ReversableMovement) movement).getPositionY());
 			movement.setColToZero();
@@ -36,6 +41,7 @@ public class ReversableObject extends ColSpriteObject{
 			movement.addColToAcc();			
 			movement.updateAfter(delta);
 			position.set(movement.position);
+			
 		}
 		
 		public void updateLast(float delta, float vx, float vy) {
@@ -45,8 +51,18 @@ public class ReversableObject extends ColSpriteObject{
 		@Override
 		public void collide(GameObject obj) {
 			super.collide(obj);
-			if (getHitbox().bMode == BehaviorMode.dynamic)
-				((ReversableMovement) movement).addCollisionAcc(c.disX.pow(5), c.disY.pow(5));
+			if (getHitbox().bMode == BehaviorMode.dynamic) {
+				if (!((ReversableObject)obj).isFrozening) {
+					((ReversableMovement) movement).addCollisionAcc(c.disX.pow(5), c.disY.pow(5));
+				}
+				else {
+					if (c.isTrue) {
+						//setShouldBeStopped(true);
+					}
+				}
+				
+			
+			}
 		}
 		
 		public void setIsForward(boolean isForward) {

@@ -14,6 +14,7 @@ import com.redartedgames.ball.myobjects.Player;
 import com.redartedgames.ball.myobjects.Rect;
 import com.redartedgames.ball.myobjects.ShiftedRect;
 import com.redartedgames.ball.myobjects.StaticButton;
+import com.redartedgames.ball.myobjects.StaticImp;
 import com.redartedgames.ball.objects.ColSpriteObject;
 import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.Hitbox;
@@ -28,6 +29,7 @@ public class GameWorld extends World{
 	public Ball ball, ball1, ball2;
 	public ShiftedRect rect;
 	private float time;
+	private float timeNum, timeNumNormal = 0.15f;
 	public int t, i;
 	public boolean isPaused;
 	public Player player;
@@ -39,9 +41,13 @@ public class GameWorld extends World{
 	
 	public GameWorld() {
 		super();
+		
+		time = 0;
+		timeNum = timeNumNormal;
+		
 		impsCollection = new ImpsCollection();
-		//impsCollection.addStaticImp();
-		//impsCollection.addStaticImp();
+		impsCollection.addStaticImp();
+		impsCollection.addActiveImp();
 		//impsCollection.addActiveImp();
 		
 		//impsCollection.addStaticImp();
@@ -67,7 +73,7 @@ public class GameWorld extends World{
 		reversableObjects.add(new Rect(640, 720, 1480, 100, BehaviorMode.kinematic, null, 6));
 		
 		reversableObjects.add(new Rect(130 + 75, 460, 350, 20, BehaviorMode.kinematic, null, 6));
-		reversableObjects.add(new Rect(290 + 95, 490, 40, 80, BehaviorMode.kinematic, null, 6));
+		//reversableObjects.add(new Rect(290 + 95, 490, 40, 80, BehaviorMode.kinematic, null, 6));
 		//reversableObjects.add(new Rect(500, 350, 100, 100, BehaviorMode.kinematic, null, 7));
 		MovingRect r = new MovingRect(1050, 300, 1200, 300, 80, 80, true, BehaviorMode.kinematic, null, 7);
 		r.setV(50f, 0);
@@ -90,14 +96,16 @@ public class GameWorld extends World{
 		
 		reversableObjects.add(new Ball(670, 600, 45, 1f, BehaviorMode.dynamic, null, 9));
 		reversableObjects.add(new Ball(770, 600, 45, 1f, BehaviorMode.dynamic, null, 9));
-		reversableObjects.add(new Ball(770, 450, 45, 1f, BehaviorMode.dynamic, null, 9));
+		//reversableObjects.add(new Ball(770, 450, 45, 1f, BehaviorMode.dynamic, null, 9));
 		//reversableObjects.add(new Ball(630, 400, 45, 1f, BehaviorMode.kinematic, null, 9));
 		
 		//reversableObjects.add(new Ball(650, -400, 600, 1f, BehaviorMode.kinematic, null, 9));
 		
 		//reversableObjects.add(new Ball(650 + 600, 100, 300, 1f, BehaviorMode.kinematic, null, 9));
 		
-
+		//StaticImp si = new StaticImp(280, 470, 1f, null, 9);
+		//reversableObjects.add(si);
+		//si.spawn();
 		reversableObjects.add(new Rect(550, 250, 180, 80, BehaviorMode.kinematic, null, 6));
 		
 		reversableObjects.add(player);
@@ -114,6 +122,7 @@ public class GameWorld extends World{
 			}
 		}
 		player.collidableObjects.removeAll(impsCollection.getImps());
+		//player.collidableObjects.remove(si);
 		for (GameObject obj : impsCollection.getImps()) {
 			obj.collidableObjects.remove(player);
 		}
@@ -134,10 +143,9 @@ public class GameWorld extends World{
 	
 	@Override
 	public void update(float delta) {
-		for(ReversableObject r : reversableObjects) {
-			r.setIsForward(isForward);
-		}
-		super.update(0.01f);
+		timeManagerUpdate(delta);
+		
+		
 			
 
 			
@@ -145,7 +153,30 @@ public class GameWorld extends World{
 	
 	}
 	
+	private void timeManagerUpdate(float delta) {
+		for(ReversableObject r : reversableObjects) {
+			r.setIsForward(isForward);
+		}
+		time += delta;
+		//Gdx.app.log("gameWorld", time + "");
+		
+		
+		
+		if (!isForward)  {
+			timeNum -= timeNumNormal*delta/4;
+			if (timeNum < timeNumNormal*2) timeNum = timeNumNormal*2;
+		}
+		else {
+			timeNum = timeNumNormal;
+		}
+		if (time >= timeNum) {
+			time -= timeNum;
+			super.update(0.01f);
+		}
+	}
+	
 	public void setIsForward(boolean isForward) {
 		this.isForward = isForward;
+		if (!isForward) timeNum = timeNumNormal*8;
 	}
 }

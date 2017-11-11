@@ -1,9 +1,11 @@
 package com.redartedgames.ball.myobjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.Movement;
 import com.redartedgames.ball.objects.ReversableMovement;
+import com.redartedgames.ball.objects.ReversableObject;
 
 public class StaticImp extends Imp{
 
@@ -36,6 +38,10 @@ public class StaticImp extends Imp{
 	@Override
 	public void collide(GameObject obj) {
 		super.collide(obj);
-		if(isSpawned && (((ReversableMovement) movement).getIsForward() || isStopped) &&c.isTrue) shouldBeStopped = true;
+		if(isSpawned && c.isTrue)  {
+			shouldBeStopped = true;
+			((ReversableObject)obj).setShouldBeStopped(true);
+			Gdx.app.log("StaticImp", "cath ya");
+		}
 	}
 }

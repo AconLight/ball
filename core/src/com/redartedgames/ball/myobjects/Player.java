@@ -3,6 +3,7 @@ package com.redartedgames.ball.myobjects;
 import java.math.BigDecimal;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.redartedgames.ball.consts.PlayerConsts;
 import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
@@ -26,6 +27,7 @@ public class Player extends Ball{
 	
 	public Player(float x, float y, float m, GameObject parent, int id) {
 		super(x, y, PlayerConsts.PLAYER_HITBOX_R, m, BehaviorMode.dynamic, parent, id);
+		isFrozening = true;
 		movesData = new MovesData();
 		xAxis = 0;
 		isJumping = false;
@@ -83,7 +85,7 @@ public class Player extends Ball{
 		super.collide(obj);
 		if (c.isTrue) {
 			//Gdx.app.log("Player", "" + c.disY);
-			//((ReversableObject) obj).setShouldBeStopped(true);
+			
 			if (c.disY.floatValue() >= 0 && c.disY.abs().floatValue() > c.disX.abs().floatValue()) fuel = PlayerConsts.JUMP_BLOCK_TIME;
 			else ;//fuel = 0;			
 		}

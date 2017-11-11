@@ -34,6 +34,10 @@ public class Imp extends Player{
 		isSpawned = true;
 	}
 	
+	public void spawn() {
+		isSpawned = true;
+	}
+	
 	public void activate() {
 		
 	}

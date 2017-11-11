@@ -3,6 +3,7 @@ package com.redartedgames.ball.myobjects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.redartedgames.ball.objects.GameObject;
+import com.redartedgames.ball.objects.ReversableObject;
 import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 
 public class StaticButton extends Rect{
@@ -29,6 +30,7 @@ public class StaticButton extends Rect{
 		super.collide(obj);
 		if(c.isTrue) {
 			isOn = true;
+			((ReversableObject)obj).setShouldBeStopped(true);
 			//Gdx.app.log("StaticButton", "col tru");
 		}
 	}

@@ -24,11 +24,9 @@ public class BallGame extends Game{
 	@Override
 	public void render () {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		gameScreen.update(Gdx.graphics.getDeltaTime()/4);
-		gameScreen.update(Gdx.graphics.getDeltaTime()/4);
-
-
-
+		for(int i = 0; i < 20; i++)
+		gameScreen.update(Gdx.graphics.getDeltaTime());
+		
 		gameScreen.render();
 	}
 	

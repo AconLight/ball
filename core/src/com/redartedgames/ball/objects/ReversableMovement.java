@@ -71,7 +71,7 @@ public class ReversableMovement extends Movement
 		//if(positionX2.equals(positionX1) && positionY2.equals(positionY1)) {
 		if (r.positionX.subtract(positionX).multiply(r.positionX.subtract(positionX)).floatValue() < dokladnosc &&
 				r.positionY.subtract(positionY).multiply(r.positionY.subtract(positionY)).floatValue() < dokladnosc) {
-			Gdx.app.log("ReversableMovement", "rep suc");
+			//Gdx.app.log("ReversableMovement", "rep suc");
 			positionX = r.positionX.add(BigDecimal.ZERO);
 			positionY = r.positionY.add(BigDecimal.ZERO);
 			velocityX = r.velocityX.add(BigDecimal.ZERO);
@@ -88,7 +88,7 @@ public class ReversableMovement extends Movement
 				framesI++; 
 				if (framesI == framesI/replacementI*replacementI) {
 					addMovement();
-					Gdx.app.log("rev mov", "add move!!!");
+					//Gdx.app.log("rev mov", "add move!!!");
 				}
 			}
 			else {
@@ -129,7 +129,7 @@ public class ReversableMovement extends Movement
 				
 				if (framesI == framesI/replacementI*replacementI && framesI >0) {
 					replaceMovement();
-					Gdx.app.log("rev mov", "replacement!!!");
+					//Gdx.app.log("rev mov", "replacement!!!");
 				}
 				framesI--;
 			}

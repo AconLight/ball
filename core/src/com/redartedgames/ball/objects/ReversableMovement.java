@@ -19,7 +19,7 @@ public class ReversableMovement extends Movement
 	
 	private boolean isForward, isForwardTransaction;
 	
-	private static int replacementI = 10000000;
+	private static int replacementI = 20;
 	private static float dokladnosc = 0.01f;
 	private static float v = 1000, j = 4; // do funkcji sigmoid
 	
@@ -51,35 +51,31 @@ public class ReversableMovement extends Movement
 	
 	private void addMovement() {
 		ReversableMovement r = new ReversableMovement(position);
-		r.positionX = positionX;
-		r.positionY = positionY;
-		r.velocityX = velocityX;
-		r.velocityY = velocityY;
+		r.positionX = positionX.add(BigDecimal.ZERO);
+		r.positionY = positionY.add(BigDecimal.ZERO);
+		r.velocityX = velocityX.add(BigDecimal.ZERO);
+		r.velocityY = velocityY.add(BigDecimal.ZERO);
 		prevMoves.add(r);
-		positionX = new BigDecimal("" + positionX.floatValue());
-		positionY = new BigDecimal("" + positionY.floatValue());
-		velocityX = new BigDecimal("" + velocityX.floatValue());
-		velocityY = new BigDecimal("" + velocityY.floatValue());
-		accelerationX = new BigDecimal("" + accelerationX.floatValue());
-		accelerationY = new BigDecimal("" + accelerationY.floatValue());
+		positionX = new BigDecimal("" + positionX.doubleValue());
+		positionY = new BigDecimal("" + positionY.doubleValue());
+		velocityX = new BigDecimal("" + velocityX.doubleValue());
+		velocityY = new BigDecimal("" + velocityY.doubleValue());
+		accelerationX = new BigDecimal("" + accelerationX.doubleValue());
+		accelerationY = new BigDecimal("" + accelerationY.doubleValue());
 		//Gdx.app.log("ReversableMovement", "add");
 	}
 	
 	private void replaceMovement() {
 		//Gdx.app.log("ReversableMovement", "rep try");
 		ReversableMovement r = prevMoves.get(prevMoves.size()-1);
-		BigDecimal positionX2 = new BigDecimal("" + r.positionX.floatValue());
-		BigDecimal positionY2 = new BigDecimal("" + r.positionY.floatValue());
-		BigDecimal positionX1 = new BigDecimal("" + positionX.floatValue());
-		BigDecimal positionY1 = new BigDecimal("" + positionY.floatValue());
 		//if(positionX2.equals(positionX1) && positionY2.equals(positionY1)) {
 		if (r.positionX.subtract(positionX).multiply(r.positionX.subtract(positionX)).floatValue() < dokladnosc &&
 				r.positionY.subtract(positionY).multiply(r.positionY.subtract(positionY)).floatValue() < dokladnosc) {
-			//Gdx.app.log("ReversableMovement", "rep suc");
-			positionX = r.positionX;
-			positionY = r.positionY;
-			velocityX = r.velocityX;
-			velocityY = r.velocityY;
+			Gdx.app.log("ReversableMovement", "rep suc");
+			positionX = r.positionX.add(BigDecimal.ZERO);
+			positionY = r.positionY.add(BigDecimal.ZERO);
+			velocityX = r.velocityX.add(BigDecimal.ZERO);
+			velocityY = r.velocityY.add(BigDecimal.ZERO);
 		}
 		if (!prevMoves.isEmpty())prevMoves.remove(r);
 	}
@@ -92,17 +88,17 @@ public class ReversableMovement extends Movement
 				framesI++; 
 				if (framesI == framesI/replacementI*replacementI) {
 					addMovement();
-					Gdx.app.log("rev mov", "replacement!!!");
+					Gdx.app.log("rev mov", "add move!!!");
 				}
 			}
 			else {
-				framesI--;     
-				if (framesI == framesI/replacementI*replacementI && framesI >0) {
-					replaceMovement();
-				}
+				   
+				  
 				positionX = positionX.subtract(sigmoid(velocityX, v).multiply(delta2));
 				positionY = positionY.subtract(sigmoid(velocityY, v).multiply(delta2));	
 				position.set(positionX.floatValue(), positionY.floatValue());
+				
+				
 			}
 		}
 	}
@@ -124,10 +120,18 @@ public class ReversableMovement extends Movement
 				position.set(positionX.floatValue(), positionY.floatValue());
 			}
 			else {
+				
+				
 				velocityX = accelerationX.subtract(velocityX.multiply(delta21)).divide(dragKX2, RoundingMode.HALF_DOWN);
 				velocityY = accelerationY.subtract(velocityY.multiply(delta21)).divide(dragKY2, RoundingMode.HALF_DOWN);
 				//velocityX = accelerationX.subtract(velocityX.multiply(delta21)).multiply(dragKX2);
-				//velocityY = accelerationY.subtract(velocityY.multiply(delta21)).multiply(dragKY2);
+				//velocityY = accelerationY.subtract(velocityY.multiply(delta21)).multiply(dragKY2);\
+				
+				if (framesI == framesI/replacementI*replacementI && framesI >0) {
+					replaceMovement();
+					Gdx.app.log("rev mov", "replacement!!!");
+				}
+				framesI--;
 			}
 		}
 		

@@ -122,5 +122,10 @@ public class ShiftedRect extends Rect{
 		super.updateAfter(delta, vx, vy);
 	}
 	
+	@Override
+	public void setSpot(int i) {
+		secondPos.set(position);
+	}
+	
 
 }

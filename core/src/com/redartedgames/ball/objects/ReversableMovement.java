@@ -49,6 +49,12 @@ public class ReversableMovement extends Movement
 		dragKY2 = new BigDecimal("" + (-(100-dragY)));//-0.01220703125");
 	}
 	
+	public void transform(int x, int y) {
+		positionX.add(new BigDecimal("" + x));
+		positionY.add(new BigDecimal("" + y));
+		position.set(positionX.floatValue(), positionY.floatValue());
+	}
+	
 	private void addMovement() {
 		ReversableMovement r = new ReversableMovement(position);
 		r.positionX = positionX.add(BigDecimal.ZERO);
@@ -199,6 +205,14 @@ public class ReversableMovement extends Movement
 
 	public void setPositionY(BigDecimal positionY) {
 		this.positionY = positionY;
+	}
+	
+	public void addPositionX(BigDecimal positionX) {
+		this.positionX = this.positionX.add(positionX);
+	}
+
+	public void addPositionY(BigDecimal positionY) {
+		this.positionY = this.positionY.add(positionY);
 	}
 	
 	public BigDecimal getPositionX() {

@@ -2,6 +2,7 @@ package com.redartedgames.ball.myobjects;
 
 import java.math.BigDecimal;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.redartedgames.ball.consts.PhysicConsts;
 import com.redartedgames.ball.objects.ColSpriteObject;
@@ -29,22 +30,41 @@ public class Ball extends ReversableObject{
 	
 	public void render(ShapeRenderer sr, int priority) {
 
-		if (hitbox.bMode == BehaviorMode.kinematic) {
-			sr.setColor(20/256f, 20/256f, 20/256f, 1f);
-		}
-		else if (hitbox.bMode == BehaviorMode.dynamic) {
-			sr.setColor(60/256f, 60/256f, 60/256f, 1f);
-		}
-		else {
-			sr.setColor(100/256f, 100/256f, 100/256f, 1f);
-		}
-		
+		sr.setColor(20/256f, 20/256f, 20/256f, 1f);
 		sr.circle(position.x, position.y, radius);
-		
-		
-		if (isMarked) {
-			sr.setColor(10/256f, 10/256f, 200/256f, 1f);
-			sr.circle(position.x, position.y, 5);
-		}
+	}
+	
+	@Override
+	public void addSize(int a, int b) {
+		radius += a;
+	}
+	
+	@Override
+	public void moveBig(int x, int y) {
+		transform(x*25, y*25);
+		Gdx.app.log("Game Object", "moveBig");
+	}
+	
+	@Override
+	public void moveSmall(int x, int y) {
+		transform(x, y);
+		Gdx.app.log("Game Object", "moveBig");
+	}
+
+	
+	@Override
+	public GameObject createCopy() {
+		return new Ball(position.x, position.y, radius, m, hitbox.bMode, parent, 0);
+	}
+	
+	@Override
+	public String label() {
+		// TODO Auto-generated method stub
+		return "Ball " + id;
+	}
+	
+	@Override
+	public String newObjectToString() {
+		return "new Ball(" + (int)position.x + ", " + (int)position.y + ", " + (int)radius + ", " + (int)m + ", BehaviorMode." + hitbox.bMode + ", " + parent + ", " + 0 + ")";
 	}
 }

@@ -19,12 +19,14 @@ public class SpriteObject extends GameObject {
 	private boolean isLeft;
 	private float alfa;
 	private boolean isVisible;
+	public float visibility, R = 1, G = 1, B = 1;
 	
 	public GameObject parent;
 	
 	public SpriteObject(float x, float y, GameObject parent, int id){
 		super(x, y, id, parent);
 		isVisible = true;
+		visibility = 1;
 		alfa = 0;
 		regionList = new ArrayList<TextureRegion>();
 		frameNum=0;
@@ -98,6 +100,7 @@ public class SpriteObject extends GameObject {
 	public void render(SpriteBatch batch, int priority) {
 		//batch.draw(regionList.get(frameNum), position.x - regionList.get(frameNum).getRegionWidth()/2,
 				//position.y - regionList.get(frameNum).getRegionHeight()/2);
+		batch.setColor(R, G, B, visibility);
 		if (isVisible && regionList.size() != 0) {
 			batch.draw(regionList.get(frameNum), position.x - regionList.get(frameNum).getRegionWidth()/2,
 		

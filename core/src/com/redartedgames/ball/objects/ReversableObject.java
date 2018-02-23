@@ -77,4 +77,10 @@ public class ReversableObject extends ColSpriteObject{
 			this.shouldBeStopped = shouldBeStopped;
 		}
 		
+		@Override
+		public void moveBig(int x, int y) {
+			movement.
+			transform(x, y);
+		}
+		
 }

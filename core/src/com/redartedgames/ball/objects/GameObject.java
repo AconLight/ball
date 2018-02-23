@@ -10,12 +10,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.redartedgames.ball.editor.EditorOptionInterface;
+import com.redartedgames.ball.editor.Editorable;
 import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 
-public class GameObject {
+public class GameObject implements Editorable{
 		public static int priorities = 1;
-		private int id;
+		public int id;
 		protected Movement movement;
 		protected Vector2 position, velocity, acceleration, oldAcc, oldVel, collisionAcc;
 		public BigDecimal delta2, positionX, velocityX, accelerationX, collisionAccX, positionY, dragK, dragK2, delta21,
@@ -24,7 +24,6 @@ public class GameObject {
 		int objectViewPriority;
 		protected Hitbox hitbox;
 		public ArrayList<GameObject> collidableObjects;
-		protected ArrayList<EditorOptionInterface> editorOptions;
 		public boolean isReversed;
 		public boolean isStopped;
 		public boolean isMarked;
@@ -85,6 +84,8 @@ public class GameObject {
 		public void transform(float x, float y) {
 			position.x += x;
 			position.y += y;
+			movement.transform(x, y);
+			hitbox.update(new BigDecimal("" + position.x), new BigDecimal("" + position.y));
 		}
 		
 		
@@ -181,5 +182,55 @@ public class GameObject {
 		public void dispose(){
 			for(int i=0; i<gameObjects.size();i++)
 				gameObjects.get(i).dispose();
+		}
+
+		@Override
+		public void moveBig(int x, int y) {
+			transform(x, y);
+			Gdx.app.log("Game Object", "moveBig");
+		}
+		
+		@Override
+		public void addSize(int a, int b) {
+			
+		}
+
+		@Override
+		public void setSpot(int i) {
+			
+		}
+
+		@Override
+		public void escape() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void enter() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public GameObject createCopy() {
+			return new GameObject(position.x, position.y, id, parent);
+		}
+
+		@Override
+		public String label() {
+			// TODO Auto-generated method stub
+			return "GameObject " + id;
+		}
+
+		@Override
+		public void moveSmall(int x, int y) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public String newObjectToString() {
+			return "new GameObject(" + position.x + ", " + position.y + ", " + id + ", " + parent + ")";
 		}
 }

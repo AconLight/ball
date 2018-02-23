@@ -1,18 +1,15 @@
 package com.redartedgames.ball.editor;
 
-import com.redartedgames.ball.objects.GameObject;
-
-public class EditorOption {
-
-	private EditorOptionInterface editorOptionInterface;
-	private String name;
+public abstract class EditorOption implements Editorable {
+	protected EditorNode editorNode;
 	
-	public EditorOption(String name, EditorOptionInterface editorOptionInterface) {
-		this.name = name;
-		this.editorOptionInterface = editorOptionInterface;
+	EditorOption(EditorNode editorNode) {
+		this.editorNode = editorNode;
+	}
+
+	@Override
+	public void escape() {
+		editorNode.currentEditorable = editorNode.escapeEditorable;
 	}
 	
-	public void execute(GameObject obj) {
-		editorOptionInterface.execute(obj);
-	}
 }

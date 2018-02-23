@@ -9,13 +9,13 @@ import com.redartedgames.ball.objects.GameObject;
 
 public class ScreenRenderer {
 	
-	private World world;
+	protected World world;
 	public World getWorld() {
 		return world;
 	}
 
-	private SpriteBatch batch;
-	private ShapeRenderer sr;
+	public SpriteBatch batch;
+	public ShapeRenderer sr;
 	private OrthographicCamera camera;
 	
 	public ScreenRenderer(World world, OrthographicCamera camera) {
@@ -25,6 +25,7 @@ public class ScreenRenderer {
 		batch.setProjectionMatrix(camera.combined);
 		sr = new ShapeRenderer();
 		sr.setProjectionMatrix(camera.combined);
+		batch.enableBlending();
 	}
 	
 	public void render() {

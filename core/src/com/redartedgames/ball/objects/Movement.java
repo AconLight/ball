@@ -24,6 +24,11 @@ public class Movement {
 		isStoppedTransation = false;
 	}
 	
+	public void transform(float x, float y) {
+		position.x += x;
+		position.y += y;
+	}
+	
 	public void updateBefore(float delta) {
 		isStopped = isStoppedTransation;
 		if (!isStopped) {

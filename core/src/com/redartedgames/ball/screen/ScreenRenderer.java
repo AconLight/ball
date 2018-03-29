@@ -40,4 +40,7 @@ public class ScreenRenderer {
 		batch.end();
 		sr.end();
 	}
+	public void dispose() {
+		
+	}
 }

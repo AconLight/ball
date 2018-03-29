@@ -19,7 +19,11 @@ import com.redartedgames.ball.editor.ObjectPick;
 import com.redartedgames.ball.game.GameScreen;
 import com.redartedgames.ball.game.GameWorld;
 import com.redartedgames.ball.myobjects.Ball;
+import com.redartedgames.ball.myobjects.ButtonRect;
+import com.redartedgames.ball.myobjects.LavaRect;
+import com.redartedgames.ball.myobjects.MovingRect;
 import com.redartedgames.ball.myobjects.Rect;
+import com.redartedgames.ball.myobjects.StaticButton;
 import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 import com.redartedgames.ball.screen.Consts;
@@ -121,6 +125,30 @@ public class EditorGame extends Game {
 				editorNode.currentEditorable.addSize(0, 10);
 				break;
 			}
+			case 'k' : {
+				editorNode.currentEditorable.addSize(-1, 0);
+				break;
+			}
+			case 'l' : {
+				editorNode.currentEditorable.addSize(0, -1);
+				break;
+			}
+			case 'K' : {
+				editorNode.currentEditorable.addSize(-10, 0);
+				break;
+			}
+			case 'L' : {
+				editorNode.currentEditorable.addSize(0, -10);
+				break;
+			}
+			case 'n' : {
+				editorNode.currentEditorable.setSpot(1);
+				break;
+			}
+			case 'm' : {
+				editorNode.currentEditorable.setSpot(2);
+				break;
+			}
 			}
 			return false;
 		}
@@ -145,6 +173,9 @@ public class EditorGame extends Game {
 		
 		levelItemCreator = new EditorPicker(editorNode, Consts.editorScreenWidth-200 + 20,Consts.editorScreenHeight-300, 200, 15*5, 15);
 		levelItemCreator.add(new ObjectPick(editorNode, "Kinematic Rectangle", new Rect(400, 130, 50, 50, BehaviorMode.kinematic, null, 1))); 
+		levelItemCreator.add(new ObjectPick(editorNode, "Lava Rectangle", new LavaRect(400, 130, 50, 50, null, 1))); 
+		levelItemCreator.add(new ObjectPick(editorNode, "Button", new StaticButton(400, 130, null, null, 1))); 
+		levelItemCreator.add(new ObjectPick(editorNode, "MovingRect", new MovingRect(400, 130, 400, 130, 50, 50, BehaviorMode.kinematic, null, 1))); 
 		levelItemCreator.add(new ObjectPick(editorNode, "Kinematic Circle", new Ball(400, 130, 50, 50, BehaviorMode.kinematic, null, 1))); 
 		levelItemCreator.show();
 		
@@ -155,7 +186,7 @@ public class EditorGame extends Game {
 	@Override
 	public void render() {
 		keyListen();
-		Gdx.gl.glClearColor( 0, 0, 0, 1 );
+		Gdx.gl.glClearColor( 1, 0, 0, 1 );
 		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 		batch.begin();
 		//render level
@@ -166,7 +197,7 @@ public class EditorGame extends Game {
 		//render creator
 		renderer.begin(ShapeType.Filled);
 		renderer.setColor(0.2f, 0.2f, 0.3f, 1);
-		renderer.rect(Consts.screenWidth, 0, Consts.editorScreenWidth- Consts.screenWidth, Consts.editorScreenHeight);
+		renderer.rect(Consts.editorGameWidth, 0, Consts.editorScreenWidth- Consts.editorGameWidth, Consts.editorScreenHeight);
 		renderer.end();
 		batch.begin();
 		levelItemPicker.render(batch);

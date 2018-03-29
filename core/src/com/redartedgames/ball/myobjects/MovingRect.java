@@ -12,17 +12,13 @@ public class MovingRect extends Rect{
 	
 	private BigDecimal movingX, movingY;
 	
-	private BigDecimal vX, vY;
-	
-	private boolean isMovingToLast;
+	private boolean isOn;
 	
 	private BigDecimal lastPositionX, lastPositionY;
 	
 	private MovesData movesData;
 	
-	private boolean isLeft;
-	
-	public MovingRect(float x, float y, float x2, float y2, float width, float height, boolean isLeft, BehaviorMode bMode, GameObject parent, int id) {
+	public MovingRect(float x, float y, float x2, float y2, float width, float height, BehaviorMode bMode, GameObject parent, int id) {
 		super(x, y, width, height, bMode, parent, id);
 		centerPositionX = ((ReversableMovement) movement).getPositionX();
 		centerPositionY = ((ReversableMovement) movement).getPositionY();
@@ -32,56 +28,35 @@ public class MovingRect extends Rect{
 		lastPositionY = new BigDecimal("" + y2);
 		rX = lastPositionX.subtract(centerPositionX);
 		rY = lastPositionY.subtract(centerPositionY);
-		if (!isLeft) {
-			((ReversableMovement) movement).setPositionX(centerPositionX.subtract(rX));
-			((ReversableMovement) movement).setPositionY(centerPositionY.subtract(rY));
-			isMovingToLast = true;
-		}	
-		else {
-			((ReversableMovement) movement).setPositionX(centerPositionX.add(rX));
-			((ReversableMovement) movement).setPositionY(centerPositionY.add(rY));
-			isMovingToLast = false;
-		}
 			
 		//((ReversableMovement) movement).setPositionY(centerPositionX.subtract(rY));
 		movesData = new MovesData();
 		gY = BigDecimal.ZERO;
-		isMovingToLast = true;
-		this.isLeft = isLeft;
 	}
 	
-	public void setV(float vx, float vy) {
-		vX = new BigDecimal(""+vx);
-		vY = new BigDecimal(""+vy);
-	}
-	
-	public void startLast() {
-		isMovingToLast = !isLeft;
-	}
-	
-	public void startFirst() {
-		isMovingToLast = isLeft;
-	}
-	
-	public void start(boolean isOn) {
-		if (isOn) startLast();
-		else startFirst();
+	public void setOn(boolean isOn) {
+		this.isOn = isOn;
 	}
 	
 	public void applyPhysicsToAcceleration() {
-		super.applyPhysicsToAcceleration();
 		
-			if (isMovingToLast) {
-				movingX = movingX.add(vX);
-				movingY = movingY.add(vY);	
-			}
-			else {
-				movingX = movingX.subtract(vX);
-				movingY = movingY.subtract(vY);
-			}
+		super.applyPhysicsToAcceleration();
+
+		BigDecimal dx, dy;
+		if (isOn) {
+			dx = new BigDecimal(centerPositionX.subtract(((ReversableMovement) movement).getPositionX()).floatValue());
+			dy = new BigDecimal(centerPositionY.subtract(((ReversableMovement) movement).getPositionY()).floatValue());
+		}
+		else {
+			dx = new BigDecimal(lastPositionX.subtract(((ReversableMovement) movement).getPositionX()).floatValue());
+			dy = new BigDecimal(lastPositionY.subtract(((ReversableMovement) movement).getPositionY()).floatValue());
+		}
+		
+		((ReversableMovement) movement).addCollisionAcc(dx, dy);
+			
 
 		
-		if (movingX.floatValue() > lastPositionX.subtract(centerPositionX).floatValue()) { 
+		/*if (movingX.floatValue() > lastPositionX.subtract(centerPositionX).floatValue()) { 
 			//	movingX.floatValue() > firstPositionX.subtract(lastPositionX).floatValue()) {
 			((ReversableMovement) movement).addCollisionAcc(
 					lastPositionX.subtract(((ReversableMovement) movement).getPositionX()),
@@ -108,7 +83,38 @@ public class MovingRect extends Rect{
 					centerPositionY.subtract(rY).subtract(((ReversableMovement) movement).getPositionY()));
 			movingY = rY.negate();
 		}
+		//Gdx.app.log("asdsa", "asd");
+		*/
+	}
+	
+	
+	@Override
+	public void setSpot(int i) {
 		
+		if (i == 1) {
+			lastPositionX = new BigDecimal("" + position.x);
+			lastPositionY = new BigDecimal("" + position.y);
+		}
+		else if (i == 2){
+			centerPositionX = new BigDecimal("" + position.x);
+			centerPositionY = new BigDecimal("" + position.y);
+		}
+	}
+	
+	@Override
+	public GameObject createCopy() {
+		return new MovingRect(centerPositionX.floatValue(), centerPositionY.floatValue(), lastPositionX.floatValue(), lastPositionY.floatValue(), width, height, hitbox.bMode, parent, 0);
+	}
+	
+	@Override
+	public String label() {
+		// TODO Auto-generated method stub
+		return "MovingRect " + id;
+	}
+	
+	@Override
+	public String newObjectToString() {
+		return "new MovingRect(" + (int)centerPositionX.floatValue() + ", " +(int)centerPositionY.floatValue() + ", " + (int)lastPositionX.floatValue() + ", " + (int)lastPositionY.floatValue() + ", " + (int)width + ", " + (int)height + ", BehaviorMode." + hitbox.bMode + ", " + parent + ", " + 0 + ")";
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.redartedgames.ball.myobjects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.Movement;
@@ -14,10 +15,10 @@ public class StaticImp extends Imp{
 		type = STATIC_TYPE;
 	}
 	
-	public void render(ShapeRenderer sr, int priority) {
-		if (isSpawned) {
-			sr.setColor(20/256f, 20/256f, 120/256f, 1f);
-			sr.circle(position.x, position.y, radius);
+	public void render(SpriteBatch sr, int priority) {
+		if (isSpawned || justToRender) {
+			sr.setColor(0/256f, 162/256f, 156/256f, 1f);
+			sr.draw(tex, position.x-radius, position.y-radius, radius*2, radius*2);
 		}
 	}
 	

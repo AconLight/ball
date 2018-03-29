@@ -10,6 +10,8 @@ public class Imp extends Player{
 	
 	protected boolean isSpawned, isUsed;
 	
+	public boolean justToRender;
+	
 	protected MovesData playerMovesData;
 	
 	public int type;
@@ -22,6 +24,7 @@ public class Imp extends Player{
 		super(x, y, 1, parent, id);
 		isSpawned = false;
 		isUsed = false;
+		justToRender = false;
 		type = 0;
 		playerMovesData = new MovesData();
 	} 

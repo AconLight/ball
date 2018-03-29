@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.redartedgames.ball.consts.PhysicConsts;
@@ -43,9 +44,9 @@ public class Rect extends ReversableObject{
 		int i = 8;
 		int h = 0;
 		//góra
-		while(i < width/2) {
+		while(i < width/2+4) {
 			h += r.nextInt(3)-1;
-			if (h < 0) h = 0;
+			if (h < 0) h = 1;
 			if (h > blossomMaxH1) h = blossomMaxH1;
 			blossom.add(new BlossomRect(position.x + i - width/2-4, position.y + height/2 + 1, 8, 2*(h/2*2), 0, -1, this));
 			h += r.nextInt(3)-1;
@@ -58,16 +59,19 @@ public class Rect extends ReversableObject{
 		h = 0;
 		i = 4;
 		int z = 0;
-		while(i < width-6) {
+		while(i < width/2) {
 			z = r.nextInt(3)-1;
 			h += r.nextInt(3)-1;
 			if (h < 0) h = 2;
 			if (h > blossomMaxH2) h = blossomMaxH2;
+			h = (int)((Math.sin((i+z)/40.0)+1)*blossomMaxH2/2);
 			blossom.add(new BlossomRect(position.x + i - width/2-2, position.y + height/2, 4, 4*((h-z)/2*2), 0, -1, this));
 			z = r.nextInt(3)-1;
+			z *= 2;
 			h += r.nextInt(3)-1;
 			if (h < 0) h = 2;
 			if (h > blossomMaxH2) h = blossomMaxH2;
+			h = (int)((Math.sin((i+z)/40.0)+1)*(Math.sin((i+z)/80.0)+1)*blossomMaxH2/4);
 			blossom.add(new BlossomRect(position.x - i + width/2-2, position.y + height/2, 4, 4*((h-z)/2*2), 0, -1, this));
 			i+=8;
 		}
@@ -109,8 +113,11 @@ public class Rect extends ReversableObject{
 	public void applyPhysicsToAcceleration() {
 		super.applyPhysicsToAcceleration();
 		for(BlossomRect rect: blossom) {
+			rect.checkHideBefore();
 			for(GameObject obj: collidableObjects)
 			rect.checkHide(obj);
+			
+			rect.checkHideAfter();
 		}
 	}
 	
@@ -123,10 +130,10 @@ public class Rect extends ReversableObject{
 	
 	
 	
-	public void render(ShapeRenderer sr, int priority) {
+	public void render(SpriteBatch sr, int priority) {
 		sr.setColor(20/256f, 20/256f, 20/256f, 1f);
-		sr.rect((position.x - width/2+0.5f), position.y - height/2+0.5f, width+0.5f, height+0.5f);
-
+		//sr.rect((position.x - width/2+0.5f), position.y - height/2+0.5f, width+0.5f, height+0.5f);
+		sr.draw(dotTex,(position.x - width/2+0.5f), position.y - height/2+0.5f, width+0.5f, height+0.5f);
 		for(BlossomRect rect: blossom) {
 			rect.render(sr, priority);
 		}

@@ -1,14 +1,19 @@
 package com.redartedgames.ball.myobjects;
 
 import java.math.BigDecimal;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.redartedgames.ball.consts.PlayerConsts;
 import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 import com.redartedgames.ball.objects.ReversableMovement;
 import com.redartedgames.ball.objects.ReversableObject;
+import com.redartedgames.ball.objects.SpriteObject;
 
 public class Player extends Ball{
 
@@ -20,19 +25,97 @@ public class Player extends Ball{
 	
 	private boolean isJumping;
 	
+	public boolean hasAPressed, hasDPressed;
+	
 	private MovesData movesData;
 	
 	private static float jumpBlockTime = PlayerConsts.JUMP_BLOCK_TIME;
 	private float jumpBlockTimer;
 	
+	private SpriteObject playerSprite, playerEyes, playerSmile, playerHat;
+	
+	private RectParticles particles;
+	
+	public boolean isAlive;
+	
+	Random rand;
+	
 	public Player(float x, float y, float m, GameObject parent, int id) {
 		super(x, y, PlayerConsts.PLAYER_HITBOX_R, m, BehaviorMode.dynamic, parent, id);
+		isAlive = true;
+		hasAPressed = false;
+		hasDPressed = false;
+		rand = new Random();
+		particles = new RectParticles(12);
 		isFrozening = true;
 		movesData = new MovesData();
 		xAxis = 0;
 		isJumping = false;
 		jumpBlockTimer = 0;
 		reversedMovesNumb = 0;
+		playerSprite = new SpriteObject(x, y, this, id);
+		playerSprite.addTexture("graphic/player/player0.png");
+		playerSprite.addTexture("graphic/player/player1.png");
+		playerSprite.addTexture("graphic/player/player2.png");
+		playerSprite.addTexture("graphic/player/player3.png");
+		playerSprite.addTexture("graphic/player/player4.png");
+		playerSprite.addTexture("graphic/player/player5.png");
+		playerSprite.addTexture("graphic/player/player6.png");
+		playerSprite.addTexture("graphic/player/player7.png");
+		playerSprite.setFrameTime(0);
+		playerEyes = new SpriteObject(x, y, this, id);
+		playerEyes.addTexture("graphic/player/playereyes.png");
+		playerEyes.addTexture("graphic/player/playereyesup.png");
+		playerSmile = new SpriteObject(x, y, this, id);
+		playerSmile.addTexture("graphic/player/playersmile.png");
+		playerSmile.addTexture("graphic/player/playersmileup.png");
+		playerHat = new SpriteObject(x, y, this, id);
+		playerHat.addTexture("graphic/player/playerhat.png");
+	}
+	
+
+	
+
+	
+	public void render(SpriteBatch sr, int priority) {
+		int i = 0;
+		sr.setColor(0, 0, 0, 1);
+		int a;
+		float dx = 0;
+		for(Vector3 v: particles.rects) {
+			i++;
+			if (v.z > particles.time) {
+				a = (int) Math.signum(((ReversableMovement)movement).getVelocityX().floatValue());
+				if (a == 0) a = 1;
+				v.z = rand.nextInt((int)particles.time*10)/10f;
+				v.x = position.x- a*
+						(float)Math.sin(i*4*Math.PI/50)*20;
+				v.y = position.y + (i-6)*4;
+				
+				
+				
+			}
+			dx = position.x - v.x;
+			dx = Math.abs(dx);
+			dx = (float) ((Math.sin(dx*Math.PI/100f - Math.PI/2) + 1f)/2.5f);
+			dx *= (particles.time-v.z)/particles.time;
+			sr.setColor(0, 0, 0, dx);
+			sr.draw(GameObject.dotTex, v.x, v.y, particles.width, particles.height);
+		}
+		
+		playerSprite.getPosition().set(this.position.x, this.position.y);
+		playerEyes.getPosition().set(this.position.x+side, this.position.y);
+		playerSmile.getPosition().set(this.position.x+side, this.position.y);
+		if(isJumping)
+			playerHat.getPosition().set(this.position.x, this.position.y+48);
+		else
+			playerHat.getPosition().set(this.position.x, this.position.y+48);
+		sr.setColor(20/256f, 20/256f, 20/256f, 1f);
+		//sr.draw(tex, position.x-radius, position.y-radius, radius*2, radius*2);
+		playerSprite.render(sr, priority);
+		playerHat.render(sr, priority);
+		playerSmile.render(sr, priority);
+		playerEyes.render(sr, priority);
 	}
 	
 	public int getReversedMovesNumb() {
@@ -43,8 +126,37 @@ public class Player extends Ball{
 		xAxis += x;
 	}
 	
+	private float side = 7;
+	private float animationSide = 7;
+	private float animationK = 0.1f;
+	
 	public void updateBefore(float delta, float vx, float vy) {
 		super.updateBefore(delta, vx, vy);
+		//particles
+		particles.update(delta);
+		
+		//animation
+		if (((ReversableMovement)movement).getVelocityX().floatValue() > 0) {
+			animationSide = 7;
+		}
+		else if (((ReversableMovement)movement).getVelocityX().floatValue() < 0) {
+			animationSide = 0;
+		}
+		side += animationSide*animationK;
+		side /= (animationK+1);
+		playerSprite.frameNum = (int)(side+0.5f);
+		
+		if (isJumping) {
+			playerEyes.frameNum = 1;
+			playerSmile.frameNum = 1;
+		}
+		else {
+			playerEyes.frameNum = 0;
+			playerSmile.frameNum = 0;
+		}
+		
+		
+		
 		if (isJumping) fuel -= 0.02f;
 	}
 	

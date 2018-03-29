@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -28,6 +29,8 @@ public class GameObject implements Editorable{
 		public boolean isStopped;
 		public boolean isMarked;
 		public int reversingI;
+		public static Texture dotTex = new Texture(Gdx.files.internal("graphic/shape/dot.png"));
+		//public static
 		
 		public Hitbox getHitbox() {
 			return hitbox;

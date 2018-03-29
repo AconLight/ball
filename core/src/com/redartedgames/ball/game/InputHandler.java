@@ -28,10 +28,12 @@ public class InputHandler implements InputProcessor{
 		
 		case Keys.A: {
 			world.player.addXAxis(-PlayerConsts.MOVE_X);
+			world.player.hasAPressed = true;
 			break;
 		}
 		case Keys.D: {
 			world.player.addXAxis(PlayerConsts.MOVE_X);
+			world.player.hasDPressed = true;
 			break;
 		}
 		case Keys.W: {
@@ -48,7 +50,7 @@ public class InputHandler implements InputProcessor{
 			break;
 		}
 		case Keys.ENTER: {
-			world.isPaused = !world.isPaused;
+			world.restartLvl();
 			break;
 		}
 		}
@@ -60,10 +62,12 @@ public class InputHandler implements InputProcessor{
 
 		switch(keycode) {
 		case Keys.A: {
+			if (world.player.hasAPressed)
 			world.player.addXAxis(PlayerConsts.MOVE_X);
 			break;
 		}
 		case Keys.D: {
+			if (world.player.hasDPressed)
 			world.player.addXAxis(-PlayerConsts.MOVE_X);
 			break;
 		}
@@ -76,6 +80,7 @@ public class InputHandler implements InputProcessor{
 			world.impsCollection.spawnNextImpPressUp((world.player));
 			break;
 		}
+
 		} 
 		return false;
 	}

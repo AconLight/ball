@@ -13,7 +13,7 @@ public class ActiveImp extends Imp{
 	}
 	
 	public void render(ShapeRenderer sr, int priority) {
-		if(isSpawned) {
+		if(isSpawned || justToRender) {
 			sr.setColor(120/256f, 20/256f, 20/256f, 1f);
 			sr.circle(position.x, position.y, radius);
 		}

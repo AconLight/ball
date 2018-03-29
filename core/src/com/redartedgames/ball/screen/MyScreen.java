@@ -70,6 +70,10 @@ public class MyScreen {
 	public OrthographicCamera getCamera() {
 		return camera;
 	}
+	
+	public void dispose() {
+		screenRenderer.dispose();
+	}
 
 
 	

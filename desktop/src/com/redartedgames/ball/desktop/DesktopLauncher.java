@@ -8,8 +8,8 @@ import com.redartedgames.ball.screen.Consts;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = Consts.screenWidth;
-		config.height = Consts.screenHeight;
+		config.width = (int) (Consts.screenWidth);
+		config.height = (int) (Consts.screenHeight);
 		config.fullscreen = true;
 		new LwjglApplication(new BallGame(), config);
 	}

@@ -3,16 +3,44 @@ package com.redartedgames.ball.myobjects;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.Movement;
+import com.redartedgames.ball.objects.ReversableObject;
+import com.redartedgames.ball.screen.Consts;
 
-public class ImpsCollection {
+public class ImpsCollection extends ReversableObject{
 	private ArrayList<Imp> imps;
 	private Imp lastUsed;
 	private MovesData playerMovesData;
 	
 	public ImpsCollection() {
+		super(0, 0, null, 0);
 		imps = new ArrayList<Imp>();
 		playerMovesData = new MovesData();
+	}
+	
+	public void render(SpriteBatch batch, int priority) {
+		super.render(batch, priority);
+		batch.setColor(0.7f, 0.7f, 0.7f, 0.1f);
+		batch.draw(GameObject.dotTex, Consts.gameWidth - (imps.size()+1)*100, Consts.gameHeight-100, (imps.size()+1)*100, 100);
+		batch.setColor(1, 1, 1, 1);
+		Vector2 tempPos = new Vector2();
+		boolean tempVisible;
+		int i = 0;
+		for (Imp imp: imps) {
+			if (imp.isUsed) {
+				continue;
+			}
+			i++;
+			imp.justToRender = true;
+			tempPos.set(imp.getPosition());
+			imp.getPosition().set(Consts.gameWidth - i*100 , Consts.gameHeight - 60);
+			imp.render(batch, priority);
+			imp.getPosition().set(tempPos);
+			imp.justToRender = false;
+		}
 	}
 	
 	public Imp getLastUsed() {

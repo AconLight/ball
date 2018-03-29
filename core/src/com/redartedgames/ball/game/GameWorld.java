@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.redartedgames.ball.LevelLoader;
 import com.redartedgames.ball.myobjects.Ball;
@@ -40,25 +41,19 @@ public class GameWorld extends World{
 	public ArrayList <GameObject> collidableObjects;
 	private boolean isForward;
 	public ImpsCollection impsCollection;
+	private float timeNextLvl = 0;
+	private boolean isNextLvl = false;
+	
+	private SpriteObject nextLvlRect;
 	 
 	public float timeTime, timeBar, timeVel, timeAcc;
 	
-	public GameWorld() {
-		super();
-
-		
-		
+	int levelId;
+	
+	public void restart(int levelId) {
+		this.levelId = levelId;
 		time = 0;
 		timeNum = timeNumNormal;
-		
-		impsCollection = new ImpsCollection();
-		impsCollection.addStaticImp();
-		impsCollection.addActiveImp();
-		//impsCollection.addActiveImp();
-		
-		//impsCollection.addStaticImp();
-		//impsCollection.addStaticImp();
-		//impsCollection.addStaticImp();
 		timeBar = 0.1f;
 		timeVel = 0f;
 		timeTime = 0;
@@ -66,15 +61,11 @@ public class GameWorld extends World{
 		t = 1;
 		i = 0;
 		reversableObjects = new ArrayList<ReversableObject>();
-		isForward = true;
-		
-		player = new Player(70, 150, 1f, null, 10);
-		
-		reversableObjects.addAll(LevelLoader.getLevel(1));
+		isForward = true;	
+		player = new Player(0, 250, 1f, null, 10);	
+		impsCollection = new ImpsCollection();
+		reversableObjects.addAll(LevelLoader.getLevel(levelId, player, impsCollection));
 		reversableObjects.add(player);
-		reversableObjects.addAll(impsCollection.getImps());
-		
-		//impsCollection.spawnNextImpPressDown(new ReversableMovement(new Vector2(245, 500)));
 		gameObjects.addAll(reversableObjects);
 		
 		for (GameObject obj : reversableObjects) {
@@ -85,31 +76,66 @@ public class GameWorld extends World{
 			}
 		}
 		player.collidableObjects.removeAll(impsCollection.getImps());
-		//player.collidableObjects.remove(si);
 		for (GameObject obj : impsCollection.getImps()) {
 			obj.collidableObjects.remove(player);
 		}
-		
-		
-		
-		
-		/*ball.collidableObjects.add(ball1);
-		ball.collidableObjects.add(but);
-		ball.collidableObjects.add(rect);
-		ball.collidableObjects.add(ball2);
-		but.collidableObjects.add(ball);
-		but.setTrigger(rect);
-		*/
-		
-		
+	}
+	
+	public GameWorld() {
+		super();
+
+		restart(1);
+		nextLvlRect = new SpriteObject(0, 0, null, 0);
+		Texture t = GameObject.dotTex;
+		nextLvlRect.addTexture(t);
+		nextLvlRect.sclX = Consts.gameWidth;
+		nextLvlRect.sclY = Consts.gameHeight;
+		nextLvlRect.visibility = 1f;
+		nextLvlRect.R = 0.08f;
+		nextLvlRect.G = 0.08f;
+		nextLvlRect.B = 0.08f;
+		gameObjects.add(nextLvlRect);
+	}
+	
+	public void restartLvl() {
+		timeNextLvl = 0;
+		isNextLvl  = true;
 	}
 	
 	@Override
 	public void update(float delta) {
-		timeManagerUpdate(delta);
-		
-		
+		if (!isNextLvl) {
+			nextLvlRect.visibility-=delta/10;
+			if (nextLvlRect.visibility < 0) nextLvlRect.visibility = 0;
 			
+			timeManagerUpdate(delta);
+			if (player.getPosition().x > Consts.gameWidth) {
+				timeNextLvl = 0;
+				isNextLvl  = true;
+				
+			}
+			
+			if (!player.isAlive) {
+				restartLvl();
+			}
+				
+		}
+		else {
+			nextLvlRect.visibility+=delta/10;
+			if (nextLvlRect.visibility > 1) nextLvlRect.visibility = 1;
+			timeNextLvl += delta;
+			if (timeNextLvl > 10) {
+				gameObjects.clear();
+				gameObjects.add(nextLvlRect); ///  +1
+				restart(levelId);
+				gameObjects.remove(nextLvlRect);
+				gameObjects.add(nextLvlRect); 
+				isNextLvl = false;
+			}
+		}
+
+		
+		
 
 			
 			

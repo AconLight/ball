@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 public class SpriteObject extends GameObject {
 	
 	public ArrayList<TextureRegion> regionList;
-	private int frameNum;
+	public int frameNum;
 	private float frameTime;
 	private float frameDt;
 	private boolean isPingPong;
@@ -20,6 +20,7 @@ public class SpriteObject extends GameObject {
 	private float alfa;
 	private boolean isVisible;
 	public float visibility, R = 1, G = 1, B = 1;
+	public float sclX=1, sclY=1;
 	
 	public GameObject parent;
 	
@@ -107,9 +108,10 @@ public class SpriteObject extends GameObject {
 				position.y - regionList.get(frameNum).getRegionHeight()/2,
 				regionList.get(frameNum).getRegionWidth()/2, regionList.get(frameNum).getRegionHeight()/2,
 				regionList.get(frameNum).getRegionWidth(), regionList.get(frameNum).getRegionHeight(),
-				1, 1, alfa);
+				sclX, sclY, alfa);
 			//Gdx.app.log("rendered", "spriteobject");
 		}
+		batch.setColor(1, 1, 1, 1);
 	}
 	
 	@Override

@@ -3,6 +3,8 @@ package com.redartedgames.ball.myobjects;
 import java.math.BigDecimal;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.redartedgames.ball.consts.PhysicConsts;
 import com.redartedgames.ball.objects.ColSpriteObject;
@@ -16,22 +18,23 @@ public class Ball extends ReversableObject{
 
 	protected float radius;
 	private float m;
+	Texture tex = new Texture(Gdx.files.internal("graphic/shape/circle.png"));
 	
 	public Ball(float x, float y, float radius, float m, BehaviorMode bMode, GameObject parent, int id) {
 		super(x, y, parent, id);
 		this.radius = radius;
 		this.m = m;
-		setHitbox(new Hitbox(((ReversableMovement) movement).getPositionX(), ((ReversableMovement) movement).getPositionY(), radius, bMode));
+		setHitbox(new Hitbox(((ReversableMovement) movement).getPositionX(), ((ReversableMovement) movement).getPositionY(), radius-2, bMode));
 		if (bMode == BehaviorMode.dynamic) {
 			gY = new BigDecimal("-200");
 			((ReversableMovement) movement).setGY(new BigDecimal("" + PhysicConsts.G));
 		}
 	}
 	
-	public void render(ShapeRenderer sr, int priority) {
+	public void render(SpriteBatch sr, int priority) {
 
 		sr.setColor(20/256f, 20/256f, 20/256f, 1f);
-		sr.circle(position.x, position.y, radius);
+		sr.draw(tex, position.x-radius, position.y-radius, radius*2, radius*2);
 	}
 	
 	@Override

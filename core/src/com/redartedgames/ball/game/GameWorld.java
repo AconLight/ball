@@ -112,7 +112,7 @@ public class GameWorld extends World{
 			if (player.getPosition().x > Consts.gameWidth) {
 				timeNextLvl = 0;
 				isNextLvl  = true;
-				
+				levelId++;
 			}
 			
 			if (!player.isAlive) {

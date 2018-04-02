@@ -36,12 +36,12 @@ public class BallGame extends Game{
 
 	@Override
 	public void render () {
-		//time += Gdx.graphics.getDeltaTime()*10;
+		time += Gdx.graphics.getDeltaTime()*10;
 		v = ColorGenerator.hsvToRgb((90 + time)%360, 0.8f, 0.1f);
 		Gdx.gl.glClearColor(v.x, v.y, v.z, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		for(int i = 0; i < 20; i++)
-		gameScreen.update(Gdx.graphics.getDeltaTime());
+		for(int i = 0; i < 40; i++)
+		gameScreen.update(0.01f);
 		
 		gameScreen.render();
 		

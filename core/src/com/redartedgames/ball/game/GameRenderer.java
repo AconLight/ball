@@ -24,7 +24,7 @@ import com.redartedgames.ball.screen.World;
 
 public class GameRenderer extends ScreenRenderer{
 	
-	int f = 2;
+	int f = 4;
 	
 	
 	SpriteObject tloswiatlo, desen;
@@ -96,7 +96,7 @@ public class GameRenderer extends ScreenRenderer{
 	public void render() {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		
-		//time += Gdx.graphics.getDeltaTime()*10;
+		time += Gdx.graphics.getDeltaTime()*10;
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		cv1 = ColorGenerator.hsvToRgb((30+time)%360, 0.3f, 0.9f);
 		c1 = new Color(cv1.x, cv1.y, cv1.z, 1);
@@ -145,9 +145,10 @@ public class GameRenderer extends ScreenRenderer{
 			drawShadyRect(sr, 0+i*12, 200, 12, h1[i*2], (int)(c1.r*256), (int)(c1.g*256), (int)(c1.b*256), 100, 70, 70-h1[i*2]/5);
 		}
 		sr.end();
-
+		
 		batch.begin();
-
+		//batch.setColor(0.7f, 0.7f, 0.7f, 1);
+		//batch.draw(GameObject.dotTex, 0, 0, Consts.gameWidth, Consts.gameHeight);
 		for (int i = 0; i < GameObject.priorities; i++) {
 			for (int j = 0; j < world.getGameObjects().size(); j++) {
 				//world.getGameObjects().get(j).render(batch, i);

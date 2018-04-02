@@ -18,6 +18,7 @@ import com.redartedgames.ball.editor.LevelToSave;
 import com.redartedgames.ball.editor.ObjectPick;
 import com.redartedgames.ball.game.GameScreen;
 import com.redartedgames.ball.game.GameWorld;
+import com.redartedgames.ball.game.InputHandler;
 import com.redartedgames.ball.myobjects.Ball;
 import com.redartedgames.ball.myobjects.ButtonRect;
 import com.redartedgames.ball.myobjects.LavaRect;
@@ -164,7 +165,7 @@ public class EditorGame extends Game {
 	public void create () {
 		editorNode = new EditorNode();
 		Gdx.input.setInputProcessor(inputProcessor);
-		gameScreen = new GameScreen(Consts.screenWidth, Consts.screenHeight);
+		gameScreen = new GameScreen(Consts.editorGameWidth, Consts.editorGameHeight);
 		batch = new SpriteBatch();
 		renderer = new ShapeRenderer();
 		
@@ -181,23 +182,33 @@ public class EditorGame extends Game {
 		
 		editorNode.currentEditorable = levelItemCreator;
 		editorNode.escapeEditorable = levelItemCreator;
+		
+		Gdx.gl.glClearColor(240f/256, 240f/256, 240f/256, 1);
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		gameScreen.update(100000f);
 	}
 	
 	@Override
 	public void render() {
 		keyListen();
-		Gdx.gl.glClearColor( 1, 0, 0, 1 );
-		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
-		batch.begin();
+		Gdx.gl.glClearColor( 0.7f, 0.7f, 0.7f, 1 );
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		//gameScreen.update(0f);
+		//batch.begin();
 		//render level
+		for(int i = 0; i < 40; i++) {
+			//gameScreen.update(0.01f);
+		}
+		
 		gameScreen.render();
-		batch.end();
+		//batch.end();
 		
 		//render picker
 		//render creator
 		renderer.begin(ShapeType.Filled);
 		renderer.setColor(0.2f, 0.2f, 0.3f, 1);
-		renderer.rect(Consts.editorGameWidth, 0, Consts.editorScreenWidth- Consts.editorGameWidth, Consts.editorScreenHeight);
+		renderer.rect(Consts.editorScreenWidth-(200), 0, 200, Consts.editorScreenHeight);
 		renderer.end();
 		batch.begin();
 		levelItemPicker.render(batch);

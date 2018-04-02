@@ -15,19 +15,22 @@ public class MovingRect extends Rect{
 	private boolean isOn;
 	
 	private BigDecimal lastPositionX, lastPositionY;
+	private BigDecimal firstPositionX, firstPositionY;
 	
 	private MovesData movesData;
 	
 	public MovingRect(float x, float y, float x2, float y2, float width, float height, BehaviorMode bMode, GameObject parent, int id) {
 		super(x, y, width, height, bMode, parent, id);
-		centerPositionX = ((ReversableMovement) movement).getPositionX();
-		centerPositionY = ((ReversableMovement) movement).getPositionY();
+		firstPositionX = ((ReversableMovement) movement).getPositionX();
+		firstPositionY = ((ReversableMovement) movement).getPositionY();
 		movingX = BigDecimal.ZERO;
 		movingY = BigDecimal.ZERO;
 		lastPositionX = new BigDecimal("" + x2);
 		lastPositionY = new BigDecimal("" + y2);
-		rX = lastPositionX.subtract(centerPositionX);
-		rY = lastPositionY.subtract(centerPositionY);
+		rX = lastPositionX.subtract(firstPositionX);
+		rY = lastPositionY.subtract(firstPositionY);
+		centerPositionX = firstPositionX.add(lastPositionX).divide(new BigDecimal("2"));
+		centerPositionY = firstPositionX.add(lastPositionY).divide(new BigDecimal("2"));
 			
 		//((ReversableMovement) movement).setPositionY(centerPositionX.subtract(rY));
 		movesData = new MovesData();
@@ -42,18 +45,18 @@ public class MovingRect extends Rect{
 		
 		super.applyPhysicsToAcceleration();
 
-		BigDecimal dx, dy;
-		if (isOn) {
-			dx = new BigDecimal(centerPositionX.subtract(((ReversableMovement) movement).getPositionX()).floatValue());
-			dy = new BigDecimal(centerPositionY.subtract(((ReversableMovement) movement).getPositionY()).floatValue());
-		}
-		else {
-			dx = new BigDecimal(lastPositionX.subtract(((ReversableMovement) movement).getPositionX()).floatValue());
-			dy = new BigDecimal(lastPositionY.subtract(((ReversableMovement) movement).getPositionY()).floatValue());
-		}
-		
-		((ReversableMovement) movement).addCollisionAcc(dx, dy);
-			
+		BigDecimal dx, dy, dx2, dy2;
+			dx = new BigDecimal(firstPositionX.subtract(((ReversableMovement) movement).getPositionX()).floatValue());
+			dy = new BigDecimal(firstPositionY.subtract(((ReversableMovement) movement).getPositionY()).floatValue());
+			//dx = dx.abs();
+			//dy = dy.abs();
+			if (isOn) {
+				dx = new BigDecimal(lastPositionX.subtract(((ReversableMovement) movement).getPositionX()).floatValue());
+				dy = new BigDecimal(lastPositionY.subtract(((ReversableMovement) movement).getPositionY()).floatValue());
+			}
+
+			((ReversableMovement) movement).addCollisionAcc(dx, dy);
+
 
 		
 		/*if (movingX.floatValue() > lastPositionX.subtract(centerPositionX).floatValue()) { 

@@ -23,7 +23,7 @@ public class ImpsCollection extends ReversableObject{
 	
 	public void render(SpriteBatch batch, int priority) {
 		super.render(batch, priority);
-		batch.setColor(0.7f, 0.7f, 0.7f, 0.1f);
+		/*batch.setColor(0.7f, 0.7f, 0.7f, 0.1f);
 		batch.draw(GameObject.dotTex, Consts.gameWidth - (imps.size()+1)*100, Consts.gameHeight-100, (imps.size()+1)*100, 100);
 		batch.setColor(1, 1, 1, 1);
 		Vector2 tempPos = new Vector2();
@@ -40,7 +40,7 @@ public class ImpsCollection extends ReversableObject{
 			imp.render(batch, priority);
 			imp.getPosition().set(tempPos);
 			imp.justToRender = false;
-		}
+		}*/
 	}
 	
 	public Imp getLastUsed() {

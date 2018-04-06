@@ -36,7 +36,7 @@ public class GameObject implements Editorable{
 			return hitbox;
 		}
 
-		private GameObject parent;
+		public GameObject parent;
 		
 		
 		public GameObject(float x, float y, int id, GameObject parent) {

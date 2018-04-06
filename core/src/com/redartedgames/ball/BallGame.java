@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.redartedgames.ball.colors.ColorGenerator;
+import com.redartedgames.ball.database.EasterEggsBase;
 import com.redartedgames.ball.game.GameScreen;
 import com.redartedgames.ball.game.GameWorld;
 import com.redartedgames.ball.game.InputHandler;
@@ -24,6 +25,8 @@ public class BallGame extends Game{
 	private float time;
 	@Override
 	public void create () {
+		EasterEggsBase.tryFirstLoad();
+		EasterEggsBase.load();
 		gameScreen = new GameScreen(Consts.gameWidth, Consts.gameHeight);
 		Gdx.input.setInputProcessor(new InputHandler((GameWorld)gameScreen.getWorld()));
 		Gdx.gl.glClearColor(240f/256, 240f/256, 240f/256, 1);
@@ -32,6 +35,8 @@ public class BallGame extends Game{
 		cg = new ColorGenerator(4.5f);
 		bg = new Color(cg.generateNextColor(0.3f, 0.7f, 0));
 		time = 0;
+		
+
 	}
 
 	@Override

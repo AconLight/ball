@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.redartedgames.ball.consts.PlayerConsts;
+import com.redartedgames.ball.database.EasterEggsBase;
+import com.redartedgames.ball.dialog.DialogWindow;
 import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 import com.redartedgames.ball.objects.ReversableMovement;
@@ -39,6 +41,8 @@ public class Player extends Ball{
 	public boolean isAlive;
 	
 	Random rand;
+	
+	private DialogWindow win;
 	
 	public Player(float x, float y, float m, GameObject parent, int id) {
 		super(x, y, PlayerConsts.PLAYER_HITBOX_R, m, BehaviorMode.dynamic, parent, id);
@@ -71,6 +75,17 @@ public class Player extends Ball{
 		playerSmile.addTexture("graphic/player/playersmileup.png");
 		playerHat = new SpriteObject(x, y, this, id);
 		playerHat.addTexture("graphic/player/playerhat.png");
+		
+		
+		win = new DialogWindow();
+		for(EasterEgg egg: EasterEggsBase.easterEggs) {
+			Gdx.app.log("GameWorld", "id: " + egg.id + ", name: " + egg.name + ", isTrue: " + egg.isTrue);
+			if (egg.isTrue)
+				win.addOption(egg.name);
+		}
+		win.show();
+		//(win);
+		//add
 	}
 	
 

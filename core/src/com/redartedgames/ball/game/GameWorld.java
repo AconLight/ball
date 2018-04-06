@@ -7,8 +7,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.redartedgames.ball.LevelLoader;
+import com.redartedgames.ball.database.EasterEggsBase;
+import com.redartedgames.ball.dialog.DialogWindow;
 import com.redartedgames.ball.myobjects.Ball;
 import com.redartedgames.ball.myobjects.ButtonRect;
+import com.redartedgames.ball.myobjects.EasterEgg;
 import com.redartedgames.ball.myobjects.ImpsCollection;
 import com.redartedgames.ball.myobjects.LavaRect;
 import com.redartedgames.ball.myobjects.MovingRect;
@@ -95,6 +98,7 @@ public class GameWorld extends World{
 		nextLvlRect.G = 0.08f;
 		nextLvlRect.B = 0.08f;
 		gameObjects.add(nextLvlRect);
+		
 	}
 	
 	public void restartLvl() {

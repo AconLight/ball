@@ -18,13 +18,14 @@ public class BlossomRect extends Rect{
 	private boolean isHiding, isGrowing, isWaiting;
 	private static float timeToGrow = 0.1f;
 	private float timeToGrowCnt;
-	private Vector2 startPosParent, startPos;
+	private Vector2 startPosParent, startPos, diff;
 	
 	public BlossomRect(float x, float y, float width, float height, int hideX, int hideY, GameObject parent) {
 		super(x, y, width, height, BehaviorMode.none, parent, 0);
 		movement = new Movement(new Vector2(x, y));
 		startPosParent = new Vector2(parent.getPosition());
 		startPos = new Vector2(x, y);
+		diff = new Vector2(x-parent.getPosition().x, y - parent.getPosition().y);
 		this.hideX = hideX;
 		this.hideY = hideY;
 	}
@@ -45,13 +46,15 @@ public class BlossomRect extends Rect{
 	public void checkHideBefore() {
 		position.x += hideX*deltaHideX;
 		position.y += hideY*deltaHideY;
-		hitbox.update(new BigDecimal("" + position.x), new BigDecimal("" + position.y));
+		hitbox.update(new BigDecimal("" + (parent.getPosition().x- startPosParent.x + position.x)), new BigDecimal("" + (parent.getPosition().y- startPosParent.y + position.y)));
 	}
 	
 	public void checkHideAfter() {
+		position.x = parent.getPosition().x- startPosParent.x + position.x;
+		position.y =parent.getPosition().y- startPosParent.y + position.y;
+		hitbox.update(new BigDecimal("" + position.x), new BigDecimal("" + position.y));
 		position.x = startPos.x;
 		position.y = startPos.y;
-		hitbox.update(new BigDecimal("" + position.x), new BigDecimal("" + position.y));
 	}
 	
 	public void updateLast(float delta, float vx, float vy) {
@@ -115,11 +118,11 @@ public class BlossomRect extends Rect{
 	}
 	
 	public void render(SpriteBatch sr, int priority) {
-		sr.setColor(20/256f, 20/256f, 20/256f, 1f);
+		//sr.setColor(20/256f, 20/256f, 20/256f, 1f);
 		//sr.rect((parent.getPosition().x- startPosParent.x + position.x - width/2+0.5f + deltaHideX),
 			//parent.getPosition().y - startPosParent.y +  position.y - height/2+0.5f + deltaHideY, width+0.5f-hideX*deltaHideX, height+0.5f - hideY*deltaHideY);
-		sr.draw(dotTex,(parent.getPosition().x- startPosParent.x + position.x - width/2+0.5f + deltaHideX),
-				parent.getPosition().y - startPosParent.y +  position.y - height/2+0.5f + deltaHideY, width+0.5f-hideX*deltaHideX, height+0.5f - hideY*deltaHideY);
+		sr.draw(dotTex,(parent.getPosition().x- startPosParent.x + position.x - width/2+0.5f + deltaHideX/2),
+				parent.getPosition().y - startPosParent.y +  position.y - height/2+0.5f + deltaHideY/2, width+0.5f-hideX*deltaHideX, height+0.5f - hideY*deltaHideY);
 	}
 
 }

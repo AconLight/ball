@@ -1,32 +1,19 @@
 package com.redartedgames.ball.game;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
 import com.redartedgames.ball.LevelLoader;
-import com.redartedgames.ball.database.EasterEggsBase;
-import com.redartedgames.ball.dialog.DialogWindow;
+import com.redartedgames.ball.consts.LauncherSettings;
+import com.redartedgames.ball.dialog.DialogHero;
 import com.redartedgames.ball.myobjects.Ball;
 import com.redartedgames.ball.myobjects.ButtonRect;
-import com.redartedgames.ball.myobjects.EasterEgg;
 import com.redartedgames.ball.myobjects.ImpsCollection;
-import com.redartedgames.ball.myobjects.LavaRect;
-import com.redartedgames.ball.myobjects.MovingRect;
 import com.redartedgames.ball.myobjects.Player;
-import com.redartedgames.ball.myobjects.Rect;
 import com.redartedgames.ball.myobjects.ShiftedRect;
-import com.redartedgames.ball.myobjects.StaticButton;
-import com.redartedgames.ball.myobjects.StaticImp;
-import com.redartedgames.ball.objects.ColSpriteObject;
 import com.redartedgames.ball.objects.GameObject;
-import com.redartedgames.ball.objects.Hitbox;
 import com.redartedgames.ball.objects.ReversableObject;
 import com.redartedgames.ball.objects.SpriteObject;
-import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
-import com.redartedgames.ball.objects.ReversableMovement;
 import com.redartedgames.ball.screen.Consts;
 import com.redartedgames.ball.screen.World;
 
@@ -42,18 +29,30 @@ public class GameWorld extends World{
 	public Player player;
 	public ArrayList <ReversableObject> reversableObjects;
 	public ArrayList <GameObject> collidableObjects;
-	private boolean isForward;
+	boolean isForward;
+	public static  boolean isForwardStatic;
 	public ImpsCollection impsCollection;
 	private float timeNextLvl = 0;
-	private boolean isNextLvl = false;
+	boolean isNextLvl = true;
 	
-	private SpriteObject nextLvlRect;
+	public DialogHero dialogHero;
+	
+	public float conversationShade;
+	public boolean isConversation;
+	
+	public SpriteObject nextLvlRect;
 	 
 	public float timeTime, timeBar, timeVel, timeAcc;
 	
-	int levelId;
+	int levelId = 1;
+	
+	public void restart() {
+		restart(levelId);
+	}
 	
 	public void restart(int levelId) {
+		isConversation = false;
+		conversationShade = 0.4f;
 		this.levelId = levelId;
 		time = 0;
 		timeNum = timeNumNormal;
@@ -67,7 +66,7 @@ public class GameWorld extends World{
 		isForward = true;	
 		player = new Player(0, 250, 1f, null, 10);	
 		impsCollection = new ImpsCollection();
-		reversableObjects.addAll(LevelLoader.getLevel(levelId, player, impsCollection));
+		reversableObjects.addAll(LevelLoader.getLevel(levelId, player, impsCollection, this));
 		reversableObjects.add(player);
 		gameObjects.addAll(reversableObjects);
 		
@@ -82,12 +81,12 @@ public class GameWorld extends World{
 		for (GameObject obj : impsCollection.getImps()) {
 			obj.collidableObjects.remove(player);
 		}
+		
+		nextLvlRect.visibility = 1f;
 	}
 	
 	public GameWorld() {
-		super();
-
-		restart(1);
+		super(); 
 		nextLvlRect = new SpriteObject(0, 0, null, 0);
 		Texture t = GameObject.dotTex;
 		nextLvlRect.addTexture(t);
@@ -98,6 +97,9 @@ public class GameWorld extends World{
 		nextLvlRect.G = 0.08f;
 		nextLvlRect.B = 0.08f;
 		gameObjects.add(nextLvlRect);
+
+		restart(LauncherSettings.startLvl);
+
 		
 	}
 	
@@ -138,7 +140,14 @@ public class GameWorld extends World{
 			}
 		}
 
-		
+		if (isConversation) {
+			conversationShade += delta/5;
+			if (conversationShade > 1) conversationShade = 1;
+		}
+		else {
+			conversationShade -= delta/5;
+			if (conversationShade < 0.4f) conversationShade = 0.4f;
+		}
 		
 
 			
@@ -170,6 +179,7 @@ public class GameWorld extends World{
 	
 	public void setIsForward(boolean isForward) {
 		this.isForward = isForward;
+		isForwardStatic = isForward;
 		if (!isForward) timeNum = timeNumNormal*8;
 	}
 }

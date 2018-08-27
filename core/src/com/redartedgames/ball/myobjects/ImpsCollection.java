@@ -58,7 +58,7 @@ public class ImpsCollection extends ReversableObject{
 	public void spawnNextImpPressDown(Player player) {
 		boolean flaga = true;
 		for(Imp imp : imps) {
-			Gdx.app.log("ImpsCollection", "imp type: " + imp.type);
+			//Gdx.app.log("ImpsCollection", "imp type: " + imp.type);
 			if(imp.type == Imp.STATIC_TYPE && !imp.isUsed && flaga) {
 				imp.spawn(player.getMovement());
 				imp.deactivate();

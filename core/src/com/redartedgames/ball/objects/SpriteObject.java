@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,7 +19,7 @@ public class SpriteObject extends GameObject {
 	private boolean isPingPong;
 	private boolean isLeft;
 	private float alfa;
-	private boolean isVisible;
+	public boolean isVisible;
 	public float visibility, R = 1, G = 1, B = 1;
 	public float sclX=1, sclY=1;
 	
@@ -86,6 +87,13 @@ public class SpriteObject extends GameObject {
 			
 		}
 		
+	}
+	public void setColor(float r, float g, float b, float alfa) {
+		R = r; G = g; B = b; visibility = alfa;
+	}
+	
+	public void setColor(Color color) {
+		setColor(color.r, color.g, color.b, color.a);
 	}
 	
 	public SpriteObject setIsPingpong(boolean e) {

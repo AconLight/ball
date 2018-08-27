@@ -15,13 +15,16 @@ public class Conversation extends GameObject{
 	String text;
 	private static String defaultText = "sorry.. i can't see anything\nspecial about that";
 	private BitmapFont font;
+	int height, width;
 	
-	public Conversation(float x, float y, int id, GameObject parent) {
+	public Conversation(float x, float y, int width, int height, int id, GameObject parent) {
 		super(x, y, id, parent);
 		load();
-		text = "tell me, what you want to know.\n<mark options>";
+		this.width = width;
+		this.height = height;
+		text = "";
 		font = new BitmapFont();
-		font.setColor(Color.GREEN);
+		font.setColor(0.8f, 0.8f, 0.8f, 1f);
 	}
 
 	
@@ -33,6 +36,18 @@ public class Conversation extends GameObject{
 	
 	public void showCombination(ArrayList<Integer> intList) {
 		text = searchCombinationText(intList);
+		String[] words = text.split(" ");
+		String t = "";
+		int length = 0;
+		for (String word: words) {
+			if (length + " ".length() + word.length() > 60) {
+				t += "\n";
+				length = 0;
+			}
+			t += word + " ";
+			length += " ".length() + word.length();
+		}
+		text = t;
 	}
 	
 	private String searchCombinationText(ArrayList<Integer> intList) {
@@ -46,7 +61,10 @@ public class Conversation extends GameObject{
 	
 	public void render(SpriteBatch batch, int priority) {
 		super.render(batch, priority);
-		font.draw(batch, text, position.x, position.y);
+		font.draw(batch, text, position.x + 80, position.y - 40);
+		batch.setColor(0.1f, 0.1f, 0.1f, 0.7f);
+		batch.draw(GameObject.dotTex, position.x, position.y - height + 10, 10, height/8); 
+		batch.draw(GameObject.dotTex, position.x, position.y - 10 - height/8, 10, height/8);
 	}
 	
 	

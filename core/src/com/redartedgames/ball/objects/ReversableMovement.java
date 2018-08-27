@@ -19,7 +19,7 @@ public class ReversableMovement extends Movement
 	
 	private boolean isForward, isForwardTransaction;
 	
-	private static int replacementI = 20;
+	public int replacementI = 20;
 	private static float dokladnosc = 0.01f;
 	private static float v = 1000, j = 4; // do funkcji sigmoid
 	

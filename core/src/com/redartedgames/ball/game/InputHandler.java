@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
+import com.redartedgames.ball.consts.LauncherSettings;
 import com.redartedgames.ball.consts.PlayerConsts;
 import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
@@ -36,21 +37,54 @@ public class InputHandler implements InputProcessor{
 			world.player.hasDPressed = true;
 			break;
 		}
+		case Keys.S: {
+			if (world.dialogHero != null) world.dialogHero.dialogUp();
+			break;
+		}
 		case Keys.W: {
 			world.player.setIsJumping(true);
+			if (world.dialogHero != null) world.dialogHero.dialogDown();
+			break;
+		}
+		case Keys.O: {
+			world.getGameObjects().clear();
+			world.restart(world.levelId-1);
+			break;
+		}
+		case Keys.P: {
+			world.getGameObjects().clear();
+			world.restart(world.levelId+1);
+			break;
+		}
+		case Keys.K: {
+			LauncherSettings.MakeGIF = !LauncherSettings.MakeGIF;
 			break;
 		}
 		case Keys.SPACE: {
-			world.setIsForward(false);
-			world.impsCollection.spawnNextImpPressDown(world.player);
+			if (!world.isConversation) {
+				world.setIsForward(false);
+				world.impsCollection.spawnNextImpPressDown(world.player);
+			}
+			else {
+				if (world.dialogHero != null) world.dialogHero.dialogMark();
+			}
 			break;
 		}
 		case Keys.F: {
-			world.rect.move();
+			world.isConversation = world.dialogHero.showOrHideWindow();
+			world.player.isConversation = world.isConversation;
+			break;
+		}
+		case Keys.R: {
+			world.restartLvl();
 			break;
 		}
 		case Keys.ENTER: {
-			world.restartLvl();
+			if (world.dialogHero != null) world.dialogHero.acceptDialogOptions();
+			break;
+		}
+		case Keys.ESCAPE: {
+			world.state.setMenu();
 			break;
 		}
 		}
@@ -64,6 +98,7 @@ public class InputHandler implements InputProcessor{
 		case Keys.A: {
 			if (world.player.hasAPressed)
 			world.player.addXAxis(PlayerConsts.MOVE_X);
+			//Gdx.app.log("InputHandler", "A");
 			break;
 		}
 		case Keys.D: {
@@ -76,8 +111,10 @@ public class InputHandler implements InputProcessor{
 			break;
 		}
 		case Keys.SPACE: {
-			world.setIsForward(true);
-			world.impsCollection.spawnNextImpPressUp((world.player));
+			if (!world.isForward) {
+				world.setIsForward(true);
+				world.impsCollection.spawnNextImpPressUp((world.player));
+			}
 			break;
 		}
 

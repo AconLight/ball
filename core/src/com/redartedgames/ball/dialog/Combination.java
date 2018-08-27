@@ -3,6 +3,8 @@ package com.redartedgames.ball.dialog;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import com.badlogic.gdx.Gdx;
+
 public class Combination {
 
 	public ArrayList<Integer> combination;
@@ -14,7 +16,8 @@ public class Combination {
 		String[] values;
 		values = comb.split(" ");
 		for(int i = 0; i < values.length; i++) {
-			combination.add(Integer.parseInt(values[i]));
+			if (comb != "")
+				combination.add(Integer.parseInt(values[i]));
 		}
 		
 		combination.sort(new Comparator<Integer>() {
@@ -31,9 +34,14 @@ public class Combination {
 			}
 		});
 		
+		//Gdx.app.log("combination: ", "l = " + values.length + ", comb = " + combination);
+		
 	}
 	
 	public boolean compare(ArrayList<Integer> combination) {
+		if (this.combination.size() == 0 && combination.size() == 0) {
+			return true;
+		}
 		if(combination.size() == this.combination.size()) {
 			for(int i = 0; i < combination.size(); i++) {
 				if (!(combination.get(i) == this.combination.get(i))) {

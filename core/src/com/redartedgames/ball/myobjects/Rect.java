@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.redartedgames.ball.consts.PhysicConsts;
+import com.redartedgames.ball.game.GameWorld;
 import com.redartedgames.ball.objects.ColSpriteObject;
 import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.Hitbox;
@@ -24,11 +25,16 @@ public class Rect extends ReversableObject{
 	protected float height;
 	private ArrayList<BlossomRect> blossom;
 	Random r = new Random();
+	Freeze freeze;
+	
+	public Bush bush;
 	
 	public Rect(float x, float y, float width, float height, BehaviorMode bMode, GameObject parent, int id) {
 		super(x, y, parent, id);
+		priority = 2;
 		this.width = width;
 		this.height = height;
+		freeze = new Freeze(0 , 0, 0, this, (int)width, (int)height);
 		setHitbox(new Hitbox(positionX, positionY, width, height, bMode));
 		if (bMode == BehaviorMode.dynamic) {
 			gY = new BigDecimal("-200");
@@ -36,6 +42,19 @@ public class Rect extends ReversableObject{
 		}
 		blossom = new ArrayList<BlossomRect>();
 		generateBlossom();
+		
+		if (bMode == BehaviorMode.kinematic) {
+			bush = new Bush(x, y + height/2, 0, null, 50);
+		}
+	}
+	
+	public void generateFreeze() {
+		freeze.generate();
+	}
+	
+	public void setShouldBeStopped(boolean shouldBeStopped) {
+		super.setShouldBeStopped(shouldBeStopped);
+		generateFreeze();
 	}
 	
 	
@@ -120,6 +139,13 @@ public class Rect extends ReversableObject{
 			rect.checkHideAfter();
 		}
 	}
+	public void updateBefore(float delta, float vx, float vy) {
+		super.updateBefore(delta, vx, vy);
+		freeze.updateBefore(delta, vx, vy);
+		if (bush != null) {
+			bush.updateBefore(delta, vx, vy);
+		}
+	}
 	
 	public void updateLast(float delta, float vx, float vy) {
 		super.updateLast(delta, vx, vy);
@@ -131,12 +157,27 @@ public class Rect extends ReversableObject{
 	
 	
 	public void render(SpriteBatch sr, int priority) {
-		sr.setColor(20/256f, 20/256f, 20/256f, 1f);
+		if (priority == 0) {
+		sr.setColor(
+				isForwardFac*forwardColor.r + (1-isForwardFac)*backwardColor.r, 
+				isForwardFac*forwardColor.g + (1-isForwardFac)*backwardColor.g, 
+				isForwardFac*forwardColor.b + (1-isForwardFac)*backwardColor.b, 
+				isForwardFac*forwardColor.a + (1-isForwardFac)*backwardColor.a);
 		//sr.rect((position.x - width/2+0.5f), position.y - height/2+0.5f, width+0.5f, height+0.5f);
 		sr.draw(dotTex,(position.x - width/2+0.5f), position.y - height/2+0.5f, width+0.5f, height+0.5f);
 		for(BlossomRect rect: blossom) {
 			rect.render(sr, priority);
 		}
+		if (bush != null) {
+			bush.render(sr, priority);
+		}
+		}
+		else {
+			freeze.render(sr, priority);
+		}
+
+		
+		
 	}
 	
 	@Override

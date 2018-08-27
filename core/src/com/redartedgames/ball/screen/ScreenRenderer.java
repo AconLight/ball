@@ -31,7 +31,7 @@ public class ScreenRenderer {
 	public void render() {
 		batch.begin();
 		sr.begin(ShapeType.Filled);
-		for (int i = 0; i < GameObject.priorities; i++) {
+		for (int i = 0; i < 1; i++) {
 			for (int j = 0; j < world.getGameObjects().size(); j++) {
 				world.getGameObjects().get(j).render(batch, i);
 				world.getGameObjects().get(j).render(sr, i);

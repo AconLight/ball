@@ -1,15 +1,19 @@
 package com.redartedgames.ball.myobjects;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.redartedgames.ball.consts.PlayerConsts;
 import com.redartedgames.ball.database.EasterEggsBase;
+import com.redartedgames.ball.dialog.Conversation;
+import com.redartedgames.ball.dialog.DialogConversationWindow;
 import com.redartedgames.ball.dialog.DialogWindow;
 import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
@@ -34,7 +38,7 @@ public class Player extends Ball{
 	private static float jumpBlockTime = PlayerConsts.JUMP_BLOCK_TIME;
 	private float jumpBlockTimer;
 	
-	private SpriteObject playerSprite, playerEyes, playerSmile, playerHat;
+	public SpriteObject playerSprite, playerEyes, playerEyesImp, playerSmile, playerHat, playerFrozen;
 	
 	private RectParticles particles;
 	
@@ -42,7 +46,13 @@ public class Player extends Ball{
 	
 	Random rand;
 	
-	private DialogWindow win;
+	public boolean isConversation;
+	
+	protected float frozenAlfa = 0.5f;
+	
+	protected ArrayList<SpriteObject> core, hat, external;
+	
+	public float scl = 1;
 	
 	public Player(float x, float y, float m, GameObject parent, int id) {
 		super(x, y, PlayerConsts.PLAYER_HITBOX_R, m, BehaviorMode.dynamic, parent, id);
@@ -70,31 +80,68 @@ public class Player extends Ball{
 		playerEyes = new SpriteObject(x, y, this, id);
 		playerEyes.addTexture("graphic/player/playereyes.png");
 		playerEyes.addTexture("graphic/player/playereyesup.png");
+		playerEyesImp = new SpriteObject(x, y, this, id);
+		playerEyesImp.addTexture("graphic/player/playereyesblue.png").visibility = 0;
+		playerEyesImp.addTexture("graphic/player/playereyesupblue.png").visibility = 0;
 		playerSmile = new SpriteObject(x, y, this, id);
 		playerSmile.addTexture("graphic/player/playersmile.png");
 		playerSmile.addTexture("graphic/player/playersmileup.png");
 		playerHat = new SpriteObject(x, y, this, id);
 		playerHat.addTexture("graphic/player/playerhat.png");
+		playerFrozen = new SpriteObject(x, y, this, id);
+		playerFrozen.addTexture("graphic/player/player0frozen0.png").visibility = 0f;
+		playerFrozen.addTexture("graphic/player/player0frozen1.png");
+		playerFrozen.addTexture("graphic/player/player0frozen2.png");
+		playerFrozen.addTexture("graphic/player/player0frozen3.png");
+		playerFrozen.addTexture("graphic/player/player0frozen4.png");
+		playerFrozen.addTexture("graphic/player/player0frozen5.png");
+		playerFrozen.addTexture("graphic/player/player0frozen6.png");
+		playerFrozen.addTexture("graphic/player/player0frozen7.png");
+		playerFrozen.addTexture("graphic/player/player0frozen8.png");
+		playerFrozen.addTexture("graphic/player/player0frozen9.png");
+		playerFrozen.addTexture("graphic/player/player0frozen10.png");
+		core = new ArrayList<>();
+		hat = new ArrayList<>();
+		external = new ArrayList<>();
+		core.add(playerEyes);
+		core.add(playerSprite);
+		core.add(playerSmile);
+		hat.add(playerHat);
+		external.add(playerEyesImp);
 		
-		
-		win = new DialogWindow();
-		for(EasterEgg egg: EasterEggsBase.easterEggs) {
-			Gdx.app.log("GameWorld", "id: " + egg.id + ", name: " + egg.name + ", isTrue: " + egg.isTrue);
-			if (egg.isTrue)
-				win.addOption(egg.name);
-		}
-		win.show();
-		//(win);
-		//add
+		updateBefore(0, 0, 0);
+
 	}
 	
-
+	public void setColor(ArrayList<SpriteObject> list, float r, float g, float b, float alfa) {
+		for (SpriteObject obj: list) {
+			obj.setColor(r, g, b, alfa);
+		}
+	}
+	
+	public void setColor(ArrayList<SpriteObject> list, Color color) {
+		for (SpriteObject obj: list) {
+			obj.setColor(color);
+		}
+	}
+	
+	public void setScl(float scl) {
+		this.scl = scl;
+		playerSprite.sclX = scl; playerSprite.sclY = scl;
+		playerEyes.sclX = scl; playerEyes.sclY = scl;
+		playerSmile.sclX = scl; playerSmile.sclY = scl;
+		playerHat.sclX = scl; playerHat.sclY = scl;
+	}
 	
 
 	
 	public void render(SpriteBatch sr, int priority) {
 		int i = 0;
-		sr.setColor(0, 0, 0, 1);
+		sr.setColor(
+				isForwardFac*forwardColor.r + (1-isForwardFac)*backwardColor.r, 
+				isForwardFac*forwardColor.g + (1-isForwardFac)*backwardColor.g, 
+				isForwardFac*forwardColor.b + (1-isForwardFac)*backwardColor.b, 
+				isForwardFac*forwardColor.a + (1-isForwardFac)*backwardColor.a);
 		int a;
 		float dx = 0;
 		for(Vector3 v: particles.rects) {
@@ -114,23 +161,40 @@ public class Player extends Ball{
 			dx = Math.abs(dx);
 			dx = (float) ((Math.sin(dx*Math.PI/100f - Math.PI/2) + 1f)/2.5f);
 			dx *= (particles.time-v.z)/particles.time;
-			sr.setColor(0, 0, 0, dx);
+			sr.setColor(
+					isForwardFac*forwardColor.r + (1-isForwardFac)*backwardColor.r, 
+					isForwardFac*forwardColor.g + (1-isForwardFac)*backwardColor.g, 
+					isForwardFac*forwardColor.b + (1-isForwardFac)*backwardColor.b, 
+					dx);
 			sr.draw(GameObject.dotTex, v.x, v.y, particles.width, particles.height);
 		}
-		
-		playerSprite.getPosition().set(this.position.x, this.position.y);
-		playerEyes.getPosition().set(this.position.x+side, this.position.y);
-		playerSmile.getPosition().set(this.position.x+side, this.position.y);
+		sr.setColor(
+				isForwardFac*forwardColor.r + (1-isForwardFac)*backwardColor.r, 
+				isForwardFac*forwardColor.g + (1-isForwardFac)*backwardColor.g, 
+				isForwardFac*forwardColor.b + (1-isForwardFac)*backwardColor.b, 
+				isForwardFac*forwardColor.a + (1-isForwardFac)*backwardColor.a);
+		playerSprite.getPosition().set(((int)this.position.x), this.position.y);
+		playerEyes.getPosition().set(((int)this.position.x+(int)side*scl), this.position.y);
+		playerEyesImp.getPosition().set(((int)this.position.x+(int)side*scl), this.position.y);
+		playerSmile.getPosition().set(((int)this.position.x+(int)side*scl), this.position.y);
+		playerFrozen.getPosition().set(((int)this.position.x+(int)side*scl), this.position.y);
 		if(isJumping)
-			playerHat.getPosition().set(this.position.x, this.position.y+48);
+			playerHat.getPosition().set(this.position.x, this.position.y+48*scl);
 		else
-			playerHat.getPosition().set(this.position.x, this.position.y+48);
-		sr.setColor(20/256f, 20/256f, 20/256f, 1f);
+			playerHat.getPosition().set(this.position.x, this.position.y+48*scl);
+		//sr.setColor(20/256f, 20/256f, 20/256f, 1f);
 		//sr.draw(tex, position.x-radius, position.y-radius, radius*2, radius*2);
+		playerSprite.setColor(sr.getColor().r, sr.getColor().g, sr.getColor().b, sr.getColor().a);
+		playerHat.setColor(sr.getColor().r, sr.getColor().g, sr.getColor().b, sr.getColor().a);
+		playerSmile.setColor(sr.getColor().r, sr.getColor().g, sr.getColor().b, sr.getColor().a);
+		playerEyes.setColor(sr.getColor().r, sr.getColor().g, sr.getColor().b, sr.getColor().a);
+		
 		playerSprite.render(sr, priority);
 		playerHat.render(sr, priority);
 		playerSmile.render(sr, priority);
+		playerEyesImp.render(sr, priority);		
 		playerEyes.render(sr, priority);
+		playerFrozen.render(sr, priority);
 	}
 	
 	public int getReversedMovesNumb() {
@@ -138,15 +202,21 @@ public class Player extends Ball{
 	}
 	
 	public void addXAxis(float x) {
+		if (!isConversation)
 		xAxis += x;
 	}
 	
-	private float side = 7;
-	private float animationSide = 7;
+	private float side = 7.5f;
+	private float animationSide = 7.5f;
 	private float animationK = 0.1f;
-	
+	public void updateAfter(float delta, float vx, float vy) {
+		if (!isConversation) {
+			super.updateAfter(delta, vx, vy);
+		}
+	}
 	public void updateBefore(float delta, float vx, float vy) {
 		super.updateBefore(delta, vx, vy);
+		
 		//particles
 		particles.update(delta);
 		
@@ -159,7 +229,7 @@ public class Player extends Ball{
 		}
 		side += animationSide*animationK;
 		side /= (animationK+1);
-		playerSprite.frameNum = (int)(side+0.5f);
+		playerSprite.frameNum = (int)(side);
 		
 		if (isJumping) {
 			playerEyes.frameNum = 1;
@@ -173,6 +243,11 @@ public class Player extends Ball{
 		
 		
 		if (isJumping) fuel -= 0.02f;
+		
+		if (((ReversableMovement) movement).isStopped) {
+			playerFrozen.setColor( 125/255f, 230/255f, 255/255f, (playerFrozen.visibility*39 + frozenAlfa)/40f);
+			playerFrozen.frameNum = (int) (playerFrozen.visibility*10.5f*2);
+		}
 	}
 	
 	public void applyPhysicsToAcceleration() {
@@ -210,7 +285,7 @@ public class Player extends Ball{
 	@Override
 	public void collide(GameObject obj) {
 		super.collide(obj);
-		if (c.isTrue) {
+		if (c.isTrue && obj.getHitbox() != null && obj.getHitbox().bMode != BehaviorMode.none) {
 			//Gdx.app.log("Player", "" + c.disY);
 			
 			if (c.disY.floatValue() >= 0 && c.disY.abs().floatValue() > c.disX.abs().floatValue()) fuel = PlayerConsts.JUMP_BLOCK_TIME;
@@ -220,7 +295,10 @@ public class Player extends Ball{
 	}
 	
 	public void setIsJumping(boolean isJumping) {
-		this.isJumping = isJumping;
+		if (!isConversation)
+			this.isJumping = isJumping;
+		else
+			this.isJumping = false;
 	}
 	
 	public MovesData getMovesData() {

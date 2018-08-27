@@ -1,6 +1,7 @@
 package com.redartedgames.ball.myobjects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.redartedgames.ball.objects.GameObject;
@@ -13,14 +14,14 @@ public class StaticImp extends Imp{
 	public StaticImp(float x, float y, float m, GameObject parent, int id) {
 		super(x, y, 1, parent, id);
 		type = STATIC_TYPE;
+		forwardColor = new Color(20/256f, 50/256f, 60/256f, 0.6f);
+		backwardColor = new Color(0/256f, 20/256f, 30/256f, 0.6f);
+		
+		setColor(external, 125/255f, 230/255f, 255/255f, 1f);
+		frozenAlfa = 0f;
 	}
 	
-	public void render(SpriteBatch sr, int priority) {
-		if (isSpawned || justToRender) {
-			sr.setColor(0/256f, 162/256f, 156/256f, 1f);
-			sr.draw(tex, position.x-radius, position.y-radius, radius*2, radius*2);
-		}
-	}
+
 	
 	public void spawn(Movement movement) {
 		super.spawn(movement);
@@ -42,7 +43,7 @@ public class StaticImp extends Imp{
 		if(isSpawned && c.isTrue)  {
 			shouldBeStopped = true;
 			((ReversableObject)obj).setShouldBeStopped(true);
-			Gdx.app.log("StaticImp", "cath ya");
+			//Gdx.app.log("StaticImp", "cath ya");
 		}
 	}
 }

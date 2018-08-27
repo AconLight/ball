@@ -42,6 +42,10 @@ public class MyScreen {
 		
 	}
 	
+	public void restart() {
+		world.restart();
+	}
+	
 	public void render() {
 		screenRenderer.render();
 	}

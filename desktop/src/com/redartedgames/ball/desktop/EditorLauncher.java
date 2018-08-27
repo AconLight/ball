@@ -2,7 +2,6 @@ package com.redartedgames.ball.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.redartedgames.ball.BallGame;
 import com.redartedgames.ball.EditorGame;
 import com.redartedgames.ball.screen.Consts;
 

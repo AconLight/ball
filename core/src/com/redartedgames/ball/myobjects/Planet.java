@@ -13,7 +13,7 @@ import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 import com.redartedgames.ball.screen.Consts;
 
 public class Planet extends GameObject{
-	SpriteObject planet1;
+	public SpriteObject planet1;
 	ColorGenerator cg;
 	int rectNum;
 	SpriteObject[] rects;
@@ -49,18 +49,29 @@ public class Planet extends GameObject{
 	}
 	
 	public void updateLast(float delta, float vx, float vy) {
-		planet1.getPosition().y += -1500*delta/r;
+		planet1.getPosition().y += -1500*delta/Math.sqrt(r*50);
 		float dx;
 		for (int i = 0; i < rectNum; i++) {
 			dx = rects[i].getPosition().x - planet1.getPosition().x;
-			if (rects[i].getPosition().y - planet1.getPosition().y > (2*r + 60 - dx*dx/r)/2) {
-				rects[i].getPosition().y -= (2*r + 60 - dx*dx/r)/2 + rand.nextInt(-i*(i-rectNum)+2)/2;
+			if (delta > 0) {
+				if (rects[i].getPosition().y - planet1.getPosition().y > (2*r + 60 - dx*dx/r)/2) {
+					rects[i].getPosition().y = planet1.getPosition().y + rand.nextInt(rectNum) - rectNum/2;
+				}
+				else {
+					rects[i].visibility = 0.5f - ((rects[i].getPosition().y - planet1.getPosition().y)/((2*r + 60 - dx*dx/r)/2))/2;
+				}
 			}
 			else {
-				rects[i].visibility = 0.5f - ((rects[i].getPosition().y - planet1.getPosition().y)/((2*r + 60 - dx*dx/r)/2))/2;
+				if (rects[i].getPosition().y - planet1.getPosition().y < 0) {
+					rects[i].getPosition().y = planet1.getPosition().y + (2*r + 60 - dx*dx/r)/2;
+				}
+				else {
+					rects[i].visibility = 0.5f - ((rects[i].getPosition().y - planet1.getPosition().y)/((2*r + 60 - dx*dx/r)/2))/2;
+				}
 			}
 			
 		}
+		if (delta > 0)
 		if (planet1.getPosition().y < 300) {
 			
 			for (int i = 0; i < rectNum; i++) {
@@ -72,7 +83,6 @@ public class Planet extends GameObject{
 	
 	public void render(SpriteBatch batch, int priority) {
 		super.render(batch, priority);
-		
 		for (int i = 0; i < rectNum; i++) {
 			rects[i].render(batch, priority);
 		}

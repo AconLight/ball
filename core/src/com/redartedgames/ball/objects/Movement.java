@@ -12,7 +12,9 @@ public class Movement {
 	
 	private Vector2 collisionAcc, g;
 	
-	protected boolean isStopped, isStoppedTransation;
+	public boolean isStopped;
+
+	protected boolean isStoppedTransation;
 
 	public Movement(Vector2 position) {
 		this.position = position;

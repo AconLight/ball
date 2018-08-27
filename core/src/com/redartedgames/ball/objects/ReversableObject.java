@@ -1,5 +1,8 @@
 package com.redartedgames.ball.objects;
 
+import java.math.BigDecimal;
+
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 
@@ -10,11 +13,18 @@ public class ReversableObject extends ColSpriteObject{
 		
 		protected boolean isFrozening; // player will be frozening
 		
+		public float isForwardFac;
+		protected Color forwardColor;
+		protected Color backwardColor;
+		
 		public ReversableObject(float x, float y, GameObject parent, int id) {
 			super(x, y, parent, id);
 			movement = new ReversableMovement(new Vector2(x, y));
 			shouldBeStopped = false;
 			shouldBeStopped2 = false;
+			isForwardFac = 1;
+			forwardColor = new Color(20/256f, 20/256f, 20/256f, 1f);
+			backwardColor = new Color(0/256f, 0/256f, 0/256f, 1f);
 		}		
 		
 		public void updateBefore(float delta, float vx, float vy) {
@@ -27,6 +37,15 @@ public class ReversableObject extends ColSpriteObject{
 			movement.updateBefore(delta);
 			hitbox.update(((ReversableMovement) movement).getPositionX(), ((ReversableMovement) movement).getPositionY());
 			movement.setColToZero();
+			if (!((ReversableMovement) movement).getIsForward()) {
+				isForwardFac -= 20*delta;
+				if (isForwardFac < 0) isForwardFac = 0;
+			}
+			else {
+				isForwardFac += 5*delta;
+				if (isForwardFac > 1) isForwardFac = 1;
+			}
+			
 		}
 		
 		public void applyPhysicsToAcceleration() {
@@ -51,7 +70,7 @@ public class ReversableObject extends ColSpriteObject{
 		@Override
 		public void collide(GameObject obj) {
 			super.collide(obj);
-			if (getHitbox().bMode == BehaviorMode.dynamic) {
+			if (getHitbox().bMode == BehaviorMode.dynamic && obj.hitbox != null && obj.hitbox.bMode != BehaviorMode.none) {
 				if (!((ReversableObject)obj).isFrozening) {
 					((ReversableMovement) movement).addCollisionAcc(c.disX.pow(5), c.disY.pow(5));
 				}
@@ -63,6 +82,12 @@ public class ReversableObject extends ColSpriteObject{
 				
 			
 			}
+		}
+		
+		public void setPosition(Vector2 position) {
+			this.position = position;
+			((ReversableMovement) movement).setPositionX(new BigDecimal("" + position.x));
+			((ReversableMovement) movement).setPositionY(new BigDecimal("" + position.y));
 		}
 		
 		public void setIsForward(boolean isForward) {

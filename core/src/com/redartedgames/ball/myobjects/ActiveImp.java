@@ -1,5 +1,6 @@
 package com.redartedgames.ball.myobjects;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.ReversableMovement;
@@ -10,14 +11,11 @@ public class ActiveImp extends Imp{
 	public ActiveImp(float x, float y, float m, GameObject parent, int id) {
 		super(x, y, m, parent, id);
 		type = ACTIVE_TYPE;
+		forwardColor = new Color(60/256f, 20/256f, 20/256f, 1);
+		backwardColor = new Color(60/256f, 0/256f, 0/256f, 1);
 	}
 	
-	public void render(ShapeRenderer sr, int priority) {
-		if(isSpawned || justToRender) {
-			sr.setColor(120/256f, 20/256f, 20/256f, 1f);
-			sr.circle(position.x, position.y, radius);
-		}
-	}
+
 	
 	public void updateBefore(float delta, float vx, float vy) {
 		super.updateBefore(delta, vx, vy);

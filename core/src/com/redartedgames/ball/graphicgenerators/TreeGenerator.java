@@ -33,7 +33,7 @@ public class TreeGenerator {
 		pixmap.setColor(color);
 		
 		tab = tree(pixmap, width/2, 3*height/4, -(float)Math.PI/3*2, 7
-				, alfaDelta, 14, new ArrayList<Vector2>());
+				, alfaDelta, thickness2, new ArrayList<Vector2>());
 		
 		//drawC(pixmap, new Vector3(150, 150, 30), 0.2f, (float)Math.PI/2, 60, 20);
 		
@@ -42,10 +42,20 @@ public class TreeGenerator {
 		return new Texture(pixmap);
 	}
 	
-	static float radiusScale = 20;
-	static float alfaDelta = 1.3f;
-	static float alfaRate = 1f;
-	static float rozpietosc = 2.5f;
+	
+	
+	
+	static float doGory = 1;
+	static float thickness2 = 10;
+	static float thicknessRate = 0.8f;
+	static float radiusLengthRate = 1.15f; // mnoznik promienia  dla > 1 r maleje   ()
+	static float radiusSmoothRate = 1.8f; // wyg³adzenie skracania - d¹¿y do 1 przy inf, do n przy 1
+	static float radiusScale = 10; //d³ugoœæ ga³êzi (ostatniej)
+	static float alfaDelta = 1f;
+	static float alfaRate = 1.1f;
+	static float wazkosc = 2.2f; //w¹zkoœæ ca³ego drzewa         (2.2 - 3.5)
+	static float losowosc2 = 150f; //rozpiêtoœæ na dole          (5 - 150)
+	static float losowoscDelta = 1.5f; //rozpiêtoœæ na górze   (1.1 - 1.5)
 	
 	static Random rand = new Random();
 	
@@ -55,30 +65,30 @@ public class TreeGenerator {
 		if (n <= 0) return tab;
 		boolean b1 = true;
 		if (n%2 == 0) b1 = false;
-		int r = (int) (n*radiusScale);
-		
+		int r = (int) (Math.pow(n, 1/radiusSmoothRate)*radiusScale * Math.pow(radiusLengthRate, n));
+		float losowosc = (float) (losowosc2*Math.pow(losowoscDelta, 10f/n));
 		float alfa1 = alfa + n%2*alfaDelta;
 		float alfa2 = alfa - n%2*alfaDelta;
 		if (b1) {
-			alfa1 = alfa + alfaDelta*(rand.nextInt(30)/15f+1)/rozpietosc;
-			alfa2 = alfa + alfaDelta*(rand.nextInt(30)/15f+1)/rozpietosc;
+			alfa1 = alfa + alfaDelta*(rand.nextInt((int)losowosc)/(losowosc/2f)+1)/wazkosc;
+			alfa2 = alfa + alfaDelta*(rand.nextInt((int)losowosc)/(losowosc/2f)+1)/wazkosc;
 		}
 		else {
-			alfa1 = alfa - alfaDelta*(rand.nextInt(30)/15f+1)/rozpietosc;
-			alfa2 = alfa - alfaDelta*(rand.nextInt(30)/15f+1)/rozpietosc;
+			alfa1 = alfa - alfaDelta*(rand.nextInt((int)losowosc)/(losowosc/2f)+1)/wazkosc;
+			alfa2 = alfa - alfaDelta*(rand.nextInt((int)losowosc)/(losowosc/2f)+1)/wazkosc;
 		}
 		Pixmap pixmap2 = new Pixmap(width, height, Format.RGBA8888);
 		pixmap2.setBlending(Blending.None);
-		float prevThickness1 = prevThickness*0.8f;// + rand.nextInt(10);
+		float prevThickness1 = prevThickness*thicknessRate;// + rand.nextInt(10);
 
-		Vector3 v = drawC(pixmap2, new Vector3(x, y, prevThickness),alfa, alfa1,  30, prevThickness1, b1);
+		Vector3 v = drawC(pixmap2, new Vector3(x, y, prevThickness),alfa, alfa1,  r, prevThickness1, b1);
 		pixmap2.setBlending(Blending.SourceOver);
 
 		pixmap.drawPixmap(pixmap2, 0, 0);
 		
 		pixmap2.setBlending(Blending.None);
-		float prevThickness2 = prevThickness*0.8f;// + rand.nextInt(10);
-		Vector3 v2 = drawC(pixmap2, new Vector3(x, y, prevThickness),alfa, alfa2, 30, prevThickness2, b1);
+		float prevThickness2 = prevThickness*thicknessRate;// + rand.nextInt(10);
+		Vector3 v2 = drawC(pixmap2, new Vector3(x, y, prevThickness),alfa, alfa2, r, prevThickness2, b1);
 		pixmap2.setBlending(Blending.SourceOver);
 
 		pixmap.drawPixmap(pixmap2, 0, 0);
@@ -179,7 +189,7 @@ public class TreeGenerator {
 		
 		
 		double delta = -ab - (centerAngle + g*Math.PI/2);
-		Gdx.app.log("delta", delta+ "");
+		//Gdx.app.log("delta", delta+ "");
 
 		
 		centerAngle = (float) (-ab - delta - g*Math.PI/2);
@@ -187,8 +197,8 @@ public class TreeGenerator {
 		x1 = (float) (Math.tan(centerAngle));
 		
 		x2 = (float) (Math.tan(centerLastAngle));
-		Gdx.app.log("x1", ""+x1);
-		Gdx.app.log("x2", ""+x2);
+		//Gdx.app.log("x1", ""+x1);
+		//Gdx.app.log("x2", ""+x2);
 		y1 = -1;
 		y2 = -1;
 		b1 = a.y - x1*a.x;
@@ -214,11 +224,11 @@ public class TreeGenerator {
 		float myY = x1*myX+b1;
 		x = myX;
 		y = myY;
-		Gdx.app.log("myX", ""+myX);
-		Gdx.app.log("b1", ""+b1);
-		Gdx.app.log("b2", ""+b2);
-		Gdx.app.log("x", ""+x);
-		Gdx.app.log("y", ""+y);
+		//Gdx.app.log("myX", ""+myX);
+		//Gdx.app.log("b1", ""+b1);
+		//Gdx.app.log("b2", ""+b2);
+		//Gdx.app.log("x", ""+x);
+		//Gdx.app.log("y", ""+y);
 		
 		float dx = a.x - x, dy = a.y - y;
 		

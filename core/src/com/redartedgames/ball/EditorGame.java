@@ -186,7 +186,9 @@ public class EditorGame extends Game {
 		Gdx.gl.glClearColor(240f/256, 240f/256, 240f/256, 1);
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		gameScreen.update(100000f);
+		((GameWorld) gameScreen.getWorld()).restart(-1);
+		for (int i = 0; i < 1000; i++)
+			gameScreen.update(0.1f);
 	}
 	
 	@Override

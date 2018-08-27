@@ -2,14 +2,20 @@ package com.redartedgames.ball.screen;
 
 import java.util.ArrayList;
 
+import com.redartedgames.ball.StateMachine;
 import com.redartedgames.ball.objects.GameObject;
 
 public class World {
 
 	protected ArrayList<GameObject> gameObjects;
+	public StateMachine state;
 	
 	public World() {
 		gameObjects = new ArrayList<GameObject>();
+	}
+	
+	public void restart() {
+		
 	}
 	
 	public void update(float delta) {
@@ -33,6 +39,10 @@ public class World {
 	
 	protected void addGameObject(GameObject obj) {
 		gameObjects.add(obj);
+	}
+	
+	public void setStateMachine(StateMachine state) {
+		this.state = state;
 	}
 	
 	

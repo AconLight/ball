@@ -31,8 +31,8 @@ public class MovingRect extends Rect{
 		rY = lastPositionY.subtract(firstPositionY);
 		centerPositionX = firstPositionX.add(lastPositionX).divide(new BigDecimal("2"));
 		centerPositionY = firstPositionX.add(lastPositionY).divide(new BigDecimal("2"));
-			
-		//((ReversableMovement) movement).setPositionY(centerPositionX.subtract(rY));
+		
+		((ReversableMovement) movement).replacementI = 1;
 		movesData = new MovesData();
 		gY = BigDecimal.ZERO;
 	}
@@ -53,6 +53,11 @@ public class MovingRect extends Rect{
 			if (isOn) {
 				dx = new BigDecimal(lastPositionX.subtract(((ReversableMovement) movement).getPositionX()).floatValue());
 				dy = new BigDecimal(lastPositionY.subtract(((ReversableMovement) movement).getPositionY()).floatValue());
+			}
+			if (!((ReversableMovement) movement).getIsForward()) {
+				//dx = new BigDecimal("" + 0);
+				//dy = new BigDecimal("" + 0);
+				System.out.println("do tylu");
 			}
 
 			((ReversableMovement) movement).addCollisionAcc(dx, dy);

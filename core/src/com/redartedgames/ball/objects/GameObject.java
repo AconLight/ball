@@ -12,16 +12,25 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.redartedgames.ball.editor.Editorable;
+import com.redartedgames.ball.myobjects.Player;
 import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 
 public class GameObject implements Editorable{
-		public static int priorities = 1;
+	
+		public int getPriority() {
+			return priority;
+		}
+		public void setPlayer(Player player) {
+			
+		}
+		public static int priorities = 2;
+		public int priority = 0;
 		public int id;
 		protected Movement movement;
 		protected Vector2 position, velocity, acceleration, oldAcc, oldVel, collisionAcc;
 		public BigDecimal delta2, positionX, velocityX, accelerationX, collisionAccX, positionY, dragK, dragK2, delta21,
 		velocityY, accelerationY, collisionAccY, oldAccX, oldAccY, gX, gY;
-		private ArrayList<GameObject> gameObjects;
+		public ArrayList<GameObject> gameObjects;
 		int objectViewPriority;
 		protected Hitbox hitbox;
 		public ArrayList<GameObject> collidableObjects;
@@ -121,7 +130,7 @@ public class GameObject implements Editorable{
 		}
 		
 		public void applyPhysicsToAcceleration() {
-			if (hitbox.bMode == BehaviorMode.dynamic || hitbox.bMode == BehaviorMode.kinematic) {
+			if (hitbox != null) {
 				
 
 				collisionAccX = BigDecimal.ZERO;
@@ -156,6 +165,7 @@ public class GameObject implements Editorable{
 
 		public void setPosition(Vector2 position) {
 			this.position = position;
+			movement.getPosition().set(position.x, position.y);
 		}
 
 		public GameObject addSprite(SpriteObject e) {

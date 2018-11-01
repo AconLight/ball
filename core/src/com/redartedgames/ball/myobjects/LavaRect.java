@@ -60,8 +60,24 @@ public class LavaRect extends Rect{
 		sr.setColor(114/256f, 19/256f, 0/256f, 1f);
 		sr.draw(dotTex, (position.x - width/2+0.5f), position.y - height/2+0.5f, width+0.5f, height+0.5f);
 		if (isFrozen) {
-			sr.setColor(0/256f, 150/256f, 160/256f, 1f);
 			int idx;
+			sr.setColor(20/256f, 0/256f, 0/256f, 1f);
+			for (int i = 0; i < freeze.length; i++) {
+				idx = i*4;
+				if (freeze[i] > 0)
+					sr.draw(dotTex, (position.x - width/2+0.5f + idx), position.y + height/2+0.5f - freeze[i]*3, 4, freeze[i]*3);
+				idx += 4;
+			}
+			
+			sr.setColor(20/256f, 0/256f, 60/256f, 1f);
+			for (int i = 0; i < freeze.length; i++) {
+				idx = i*4;
+				if (freeze[i] > 0)
+					sr.draw(dotTex, (position.x - width/2+0.5f + idx), position.y + height/2+0.5f - freeze[i]*2, 4, freeze[i]*2);
+				idx += 4;
+			}
+			
+			sr.setColor(0/256f, 150/256f, 160/256f, 1f);
 			for (int i = 0; i < freeze.length; i++) {
 				idx = i*4;
 				if (freeze[i] > 0)

@@ -24,7 +24,7 @@ public class Rect extends ReversableObject{
 	protected float width;
 	protected float height;
 	private ArrayList<BlossomRect> blossom;
-	Random r = new Random();
+	Random r = new Random(2137);
 	Freeze freeze;
 	
 	public Bush bush;
@@ -44,7 +44,9 @@ public class Rect extends ReversableObject{
 		generateBlossom();
 		
 		if (bMode == BehaviorMode.kinematic) {
-			bush = new Bush(x, y + height/2, 0, null, 50);
+			r.nextInt((int) height);
+			if (r.nextInt(2) == 0)
+			bush = new Bush(x - width/2 + r.nextInt((int) width), y + height/2, 0, null, 50, r);
 		}
 	}
 	

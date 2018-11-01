@@ -20,6 +20,7 @@ import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 import com.redartedgames.ball.objects.ReversableMovement;
 import com.redartedgames.ball.objects.ReversableObject;
 import com.redartedgames.ball.objects.SpriteObject;
+import com.redartedgames.ball.sound.SoundHandler;
 
 public class Player extends Ball{
 
@@ -216,7 +217,9 @@ public class Player extends Ball{
 	}
 	public void updateBefore(float delta, float vx, float vy) {
 		super.updateBefore(delta, vx, vy);
-		
+		float vX = ((ReversableMovement)movement).getVelocityX().floatValue();
+		float h = position.y/50f;
+		SoundHandler.szsz.setVolume(SoundHandler.szszId, 1f - 1f / ((vX*vX/10000000f*h)+1f));
 		//particles
 		particles.update(delta);
 		

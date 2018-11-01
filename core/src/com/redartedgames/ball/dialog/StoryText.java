@@ -17,18 +17,41 @@ public class StoryText {
 	private BitmapFont font;
 	GlyphLayout layout = new GlyphLayout();
 	
+	public boolean isOn;
+	int width;
+	
 	public StoryText() {
 		blank = new ArrayList<>();
 		load();
 		initText();
 		font = new BitmapFont();
 		font.setColor(0.8f, 0.8f, 0.8f, 1f);
+		isOn = true;
+		width = 500;
+	}
+	
+
+	
+	public StoryText(int width) {
+		blank = new ArrayList<>();
+		load();
+		initText();
+		font = new BitmapFont();
+		font.setColor(0.8f, 0.8f, 0.8f, 1f);
+		isOn = true;
+		this.width = width;
 	}
 	
 	public void load() {
-		StoryBase.tryFirstLoad();
+		//StoryBase.tryFirstLoad();
 		StoryBase.load();
 		elements = StoryBase.combinations;
+	}
+	
+	public void setAsBreak(int levelId) {
+		StoryBase.loadBreak(levelId);
+		elements = StoryBase.breakCombinations;
+		isOn = false;
 	}
 	
 	private void initText() {
@@ -46,6 +69,9 @@ public class StoryText {
 	}
 	boolean isF = true;
 	public void renderText(SpriteBatch batch) {
+		renderText(batch, Consts.gameWidth - 620, Consts.gameHeight - 200);
+	}
+	public void renderText(SpriteBatch batch, float dx, float dy) {
 		String[] words;
 		String text = "";
 		float length = 0, oldLength = 0;
@@ -53,14 +79,14 @@ public class StoryText {
 		for (int i = 0; i < elements.size(); i++) {
 			words = elements.get(i).text.replace("\n", "").split(" ");
 			for (String word : words) {
-				if (length + word.length() + " ".length() < 500) {
+				if (length + word.length() + " ".length() < width) {
 					layout.setText(font, word + " ");
 					length += layout.width;
 					text += word + " ";
 				}
 				else {
 					if (isOns.get(i))
-						render(batch, Consts.gameWidth - 600 + oldLength, Consts.gameHeight - 200 - 30*line, text);
+						render(batch, dx + oldLength, dy - 30*line, text);
 					oldLength = 0;
 					layout.setText(font, word + " ");
 					length = layout.width;
@@ -70,13 +96,14 @@ public class StoryText {
 				}
 			}
 			if (isOns.get(i))
-				render(batch, Consts.gameWidth - 600 + oldLength, Consts.gameHeight - 200 - 30*line, text);
+				render(batch, dx + oldLength, dy - 30*line, text);
 			oldLength = length;
 			text = "";
 		}
 	}
 	
 	private void render(SpriteBatch batch, float x, float y, String text) {
+		if (isOn)
 		font.draw(batch, text, x, y);
 	}
 }

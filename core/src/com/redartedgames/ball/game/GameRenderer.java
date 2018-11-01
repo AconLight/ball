@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.redartedgames.ball.colors.ColorGenerator;
 import com.redartedgames.ball.consts.LauncherSettings;
 import com.redartedgames.ball.graphicgenerators.TreeGenerator;
+import com.redartedgames.ball.myobjects.Cloud;
 import com.redartedgames.ball.myobjects.Freeze;
 import com.redartedgames.ball.myobjects.Imp;
 import com.redartedgames.ball.myobjects.Planet;
@@ -39,6 +40,7 @@ public class GameRenderer extends ScreenRenderer{
 	
 	SpriteObject tloswiatlo, desen, bgshade;
 	Planet planet, planet2, planet3;
+	Cloud cloud1, cloud2, cloud3;
 	GameObject bg, planet1obj, planet2obj, desenObj;
 	ArrayList<byte[]> pixelslist;
 	byte[][] pixels;
@@ -86,6 +88,8 @@ public class GameRenderer extends ScreenRenderer{
 				world.getGameObjects().get(j).render(batch, i);
 			}
 		}
+		world.breakWindow.storyText.renderText(batch, 100, Consts.gameHeight-100);
+		world.blackScreenAnimation.render(batch);
 		batch.end();
 	}
 	
@@ -128,6 +132,10 @@ public class GameRenderer extends ScreenRenderer{
 		c22 = new Color(cv1.x, cv1.y, cv1.z, 1);
 		cv23 = ColorGenerator.hsvToRgb((180+time)%360, 0.5f, 0.5f);
 		c23 = new Color(cv1.x, cv1.y, cv1.z, 1);
+		
+		cloud1 = new Cloud(Consts.gameWidth/2, Consts.gameHeight/2, 0, null);
+		cloud2 = new Cloud(Consts.gameWidth/2, Consts.gameHeight/2 - 200, 0, null);
+		cloud3 = new Cloud(Consts.gameWidth/2, Consts.gameHeight/2 - 400, 0, null);
 		
 		bgshade = new SpriteObject(Consts.gameWidth/2, Consts.gameHeight/2, null, 0);
 		bgshade.addTexture("graphic/bg/bgshade.png").visibility = 1f;
@@ -177,8 +185,10 @@ public class GameRenderer extends ScreenRenderer{
 		if (world.levelId > currentLevelId && !world.isNextLvl) {
 			loadNextLvl();
 		}
-		
-		time += Gdx.graphics.getDeltaTime()*10;
+		cloud1.getPosition().x = (float) (-world.player.getPosition().x/60 + Consts.gameWidth/2 + 10*Math.sin(world.cloudT/100));
+		cloud2.getPosition().x = (float) (-world.player.getPosition().x/40 + Consts.gameWidth/2 + 20*Math.sin(world.cloudT/100 + 2));
+		cloud3.getPosition().x = (float) (-world.player.getPosition().x/20 + Consts.gameWidth/2 + 30*Math.sin(world.cloudT/100 + 1));
+		//time += Gdx.graphics.getDeltaTime()*10;
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		cv1 = ColorGenerator.hsvToRgb((30+time)%360, 0.3f, 0.9f);
 		c1 = new Color(cv1.x, cv1.y, cv1.z, 1);
@@ -220,6 +230,8 @@ public class GameRenderer extends ScreenRenderer{
 			p.render(batch, 0);
 		}
 		
+		cloud1.render(batch);
+		
 		batch.end();
 
 		sr.begin(ShapeType.Filled);
@@ -246,6 +258,7 @@ public class GameRenderer extends ScreenRenderer{
 		sr.end();
 		
 		batch.begin();
+		
 		float q = 2.5f;
 		batch.setColor(c1.r/q, c1.g/q, c1.b/q, 1);
 		float treeHeight = 0;
@@ -265,8 +278,9 @@ public class GameRenderer extends ScreenRenderer{
 		}
 		
 		
-		
+		cloud2.render(batch);		
 		batch.end();
+
 		
 		sr.begin(ShapeType.Filled);
 		
@@ -274,11 +288,10 @@ public class GameRenderer extends ScreenRenderer{
 		for(int i = 1; i < h1l-dx-1; i++) {
 			drawShadyRect(sr, -20+i*12, 200, 12, (int)(dxf*h1[i + dx] + (1-dxf)*h1[i + dx-1]), (int)(c1.r*256), (int)(c1.g*256), (int)(c1.b*256), 100, 70, (int) (70-(dxf*h1[i + dx] + (1-dxf)*h1[i + dx-1])/5));
 		}
-
 		sr.end();
 		
 		batch.begin();
-		
+		cloud3.render(batch);
 		
 		batch.setColor(1-((GameWorld) world).player.playerSprite.R, 
 				1-((GameWorld) world).player.playerSprite.G, 
@@ -303,6 +316,9 @@ public class GameRenderer extends ScreenRenderer{
 			//batch.draw(impsCollectionTex, Consts.gameWidth- size*108*scl - 100*scl, Consts.gameHeight-200*scl, 650*scl, 200*scl);
 			batch.setColor(1, 1, 1, 1);
 		}
+		batch.setColor(0, 0, 0, 0.5f);
+		batch.draw(GameObject.dotTex, Consts.gameWidth-size*108, Consts.gameHeight-150, size*108, 150);
+		
 		for(Imp imp: ((GameWorld) world).impsCollection.getImps()) {
 			batch.setColor(1f, 1f, 1f, 1f);
 			batch.draw(motylek, Consts.gameWidth-(size*108 + 68 -impsDx)*scl, Consts.gameHeight-(150)*scl, 68*scl, 170*scl);
@@ -316,7 +332,8 @@ public class GameRenderer extends ScreenRenderer{
 		}
 		
 		bgshade.render(batch, 0);
-
+		world.breakWindow.storyText.renderText(batch, 100, Consts.gameHeight-100);
+		world.blackScreenAnimation.render(batch);
 		batch.end();
 		
 		

@@ -10,14 +10,16 @@ import com.redartedgames.ball.consts.PhysicConsts;
 
 public class ReversableMovement extends Movement
 {
-	private long framesI;
+	public long framesI;
 	
 	private ArrayList<ReversableMovement> prevMoves;
 
 	private BigDecimal delta2, positionX, velocityX, accelerationX, collisionAccX, positionY, dragKX, dragKX2, dragKY, dragKY2, delta21,
 	velocityY, accelerationY, collisionAccY, gX, gY;
 	
-	private boolean isForward, isForwardTransaction;
+	public boolean isForward;
+
+	private boolean isForwardTransaction;
 	
 	public int replacementI = 20;
 	private static float dokladnosc = 0.01f;
@@ -43,6 +45,13 @@ public class ReversableMovement extends Movement
 		delta21 = new BigDecimal("100");
 		float dragX = PhysicConsts.DRAG_X;
 		float dragY = PhysicConsts.DRAG_Y;
+		dragKX = new BigDecimal("" + dragX);//18.08");
+		dragKX2 = new BigDecimal("" + (-(100-dragX)));//-0.01220703125");
+		dragKY = new BigDecimal("" + dragY);//18.08");
+		dragKY2 = new BigDecimal("" + (-(100-dragY)));//-0.01220703125");
+	}
+	
+	public void setDrag(float dragX, float dragY) {
 		dragKX = new BigDecimal("" + dragX);//18.08");
 		dragKX2 = new BigDecimal("" + (-(100-dragX)));//-0.01220703125");
 		dragKY = new BigDecimal("" + dragY);//18.08");

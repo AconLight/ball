@@ -19,6 +19,7 @@ import com.redartedgames.ball.menu.MenuInputHandler;
 import com.redartedgames.ball.menu.MenuScreen;
 import com.redartedgames.ball.menu.MenuWorld;
 import com.redartedgames.ball.screen.Consts;
+import com.redartedgames.ball.sound.SoundHandler;
 
 
 public class BallGame extends Game{
@@ -37,8 +38,8 @@ public class BallGame extends Game{
 	private float time;
 	@Override
 	public void create () {
+		SoundHandler.load();
 		EasterEggsBase.tryFirstLoad();
-		EasterEggsBase.load();
 		state = new StateMachine() {
 			@Override public void setMenu() { setMenuMy(); }
 			@Override public void setGame() { setGameMy(); }
@@ -61,7 +62,7 @@ public class BallGame extends Game{
 		cg = new ColorGenerator(4.5f);
 		bg = new Color(cg.generateNextColor(0.3f, 0.7f, 0));
 		time = 0;
-		
+		setMenuMy();
 
 	}
 
@@ -77,7 +78,7 @@ public class BallGame extends Game{
 			break;
 		}
 		case 2: {
-			time += Gdx.graphics.getDeltaTime()*10;
+			//time += Gdx.graphics.getDeltaTime()*10;
 			v = ColorGenerator.hsvToRgb((90 + time)%360, 0.8f, 0.1f);
 			if (LauncherSettings.AdvancedGrapghic) Gdx.gl.glClearColor(v.x, v.y, v.z, 1);
 			else Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -101,6 +102,7 @@ public class BallGame extends Game{
 		screenId = 1;
 		menuScreen.restart();
 		Gdx.input.setInputProcessor(menuHandler);
+		SoundHandler.playMenuSd();
 	}
 	
 	public void setGameMy() {
@@ -109,6 +111,7 @@ public class BallGame extends Game{
 		gameWorld.nextLvlRect.visibility = 1f;
 		Gdx.input.setInputProcessor(gameHandler);
 		time = 0;
+		SoundHandler.playGameSdNostalgic();
 	}
 	
 	@Override

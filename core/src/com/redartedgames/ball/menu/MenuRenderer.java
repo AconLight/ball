@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.redartedgames.ball.game.GameWorld;
+import com.redartedgames.ball.graphicgenerators.Biom;
+import com.redartedgames.ball.graphicgenerators.Mountain;
 import com.redartedgames.ball.graphicgenerators.TreeGenerator;
 import com.redartedgames.ball.myobjects.Planet;
 import com.redartedgames.ball.objects.GameObject;
@@ -27,6 +29,7 @@ public class MenuRenderer extends ScreenRenderer{
 	
 	SpriteObject tloswiatlo, desen, bgshade;
 	GameObject bg, desenObj;
+	Mountain mountain, m2;
 	
 	public MenuRenderer(World world, OrthographicCamera camera) {
 		super(world, camera);
@@ -59,7 +62,9 @@ public class MenuRenderer extends ScreenRenderer{
 			if (z < 0) z = 0;
 			h2[i2] = (int) (Math.sin((i2+rand.nextInt(2)-1)/90f*v)*70 + Math.sin((i2+rand.nextInt(2)-1)/15f*v)*40)  + (int)(Math.sqrt(i2))*8 + z*2 + 110-100;
 		}
+		Biom biom = new Biom();
 	}
+	float position = 0;
 	
 	public void render() {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -89,9 +94,7 @@ public class MenuRenderer extends ScreenRenderer{
 		for(int i = 1; i < h1l-dx-1; i++) {
 			drawShadyRect(sr, -20+i*12, 200, 12, (int)(dxf*h1[i + dx] + (1-dxf)*h1[i + dx-1]), (int)(c1.r*256), (int)(c1.g*256), (int)(c1.b*256), 100, 70, (int) (70-(dxf*h1[i + dx] + (1-dxf)*h1[i + dx-1])/5));
 		}
-
 		sr.end();
-		
 		super.render();
 		
 	}

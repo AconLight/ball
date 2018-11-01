@@ -21,6 +21,7 @@ public class MovingRect extends Rect{
 	
 	public MovingRect(float x, float y, float x2, float y2, float width, float height, BehaviorMode bMode, GameObject parent, int id) {
 		super(x, y, width, height, bMode, parent, id);
+		bush = null;
 		firstPositionX = ((ReversableMovement) movement).getPositionX();
 		firstPositionY = ((ReversableMovement) movement).getPositionY();
 		movingX = BigDecimal.ZERO;

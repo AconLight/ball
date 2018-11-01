@@ -17,11 +17,12 @@ public class Bush extends GameObject{
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
+	Random rand;
 
 	class BushElement {
 		float sizeScl = 1;
 		public Vector2 position1, position2, size;
-		Random rand = new Random();
+		
 		ArrayList<BushElement> nexts;
 		int a;
 		public BushElement(Vector2 position1, float r, int nextsNumber, int nodesLeft) {
@@ -55,8 +56,9 @@ public class Bush extends GameObject{
 	
 	BushElement root;
 	float scl = 1;
-	public Bush(float x, float y, int id, GameObject parent, float r) {
+	public Bush(float x, float y, int id, GameObject parent, float r, Random rand) {
 		super(x, y, id, parent);
+		this.rand = rand;
 		root = new BushElement(new Vector2(x, y), r, 2, 4);
 	}
 	

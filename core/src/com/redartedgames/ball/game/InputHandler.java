@@ -81,6 +81,7 @@ public class InputHandler implements InputProcessor{
 		}
 		case Keys.ENTER: {
 			if (world.dialogHero != null) world.dialogHero.acceptDialogOptions();
+			if (world.isBreak) world.breakContinue = true;
 			break;
 		}
 		case Keys.ESCAPE: {

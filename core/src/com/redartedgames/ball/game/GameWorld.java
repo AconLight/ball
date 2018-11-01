@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.Texture;
 import com.redartedgames.ball.LevelLoader;
 import com.redartedgames.ball.consts.LauncherSettings;
+import com.redartedgames.ball.dialog.BreakWindow;
 import com.redartedgames.ball.dialog.DialogHero;
+import com.redartedgames.ball.graphicgenerators.BlackScreenAnimation;
 import com.redartedgames.ball.myobjects.Ball;
 import com.redartedgames.ball.myobjects.ButtonRect;
 import com.redartedgames.ball.myobjects.ImpsCollection;
@@ -16,6 +18,7 @@ import com.redartedgames.ball.objects.ReversableObject;
 import com.redartedgames.ball.objects.SpriteObject;
 import com.redartedgames.ball.screen.Consts;
 import com.redartedgames.ball.screen.World;
+import com.redartedgames.ball.sound.SoundHandler;
 
 public class GameWorld extends World{
 
@@ -33,7 +36,11 @@ public class GameWorld extends World{
 	public static  boolean isForwardStatic;
 	public ImpsCollection impsCollection;
 	private float timeNextLvl = 0;
-	boolean isNextLvl = true;
+	public boolean isNextLvl = true, isBreak = false, breakContinue = false;
+	float cloudT = 0;
+	public BlackScreenAnimation blackScreenAnimation;
+	
+	public BreakWindow breakWindow;
 	
 	public DialogHero dialogHero;
 	
@@ -51,6 +58,7 @@ public class GameWorld extends World{
 	}
 	
 	public void restart(int levelId) {
+		breakWindow = new BreakWindow(0, 0, 0, null, levelId);
 		isConversation = false;
 		conversationShade = 0.4f;
 		this.levelId = levelId;
@@ -99,7 +107,7 @@ public class GameWorld extends World{
 		gameObjects.add(nextLvlRect);
 
 		restart(LauncherSettings.startLvl);
-
+		blackScreenAnimation = new BlackScreenAnimation();
 		
 	}
 	
@@ -119,6 +127,7 @@ public class GameWorld extends World{
 				timeNextLvl = 0;
 				isNextLvl  = true;
 				levelId++;
+				SoundHandler.nextLvl();
 			}
 			
 			if (!player.isAlive) {
@@ -130,13 +139,27 @@ public class GameWorld extends World{
 			nextLvlRect.visibility+=delta/10;
 			if (nextLvlRect.visibility > 1) nextLvlRect.visibility = 1;
 			timeNextLvl += delta;
-			if (timeNextLvl > 10) {
+			if (timeNextLvl > 10 && !isBreak) {
 				gameObjects.clear();
 				gameObjects.add(nextLvlRect); ///  +1
 				restart(levelId);
 				gameObjects.remove(nextLvlRect);
 				gameObjects.add(nextLvlRect); 
-				isNextLvl = false;
+				//isNextLvl = false;
+				isBreak = true;
+				blackScreenAnimation.reset();
+				breakContinue = false;
+				breakWindow.storyText.isOn = true;
+			}
+			if (isBreak) {
+				blackScreenAnimation.update(delta);
+				if (blackScreenAnimation.hasEnded && blackScreenAnimation.direction < 0 && breakContinue) blackScreenAnimation.animateOn();
+				if (blackScreenAnimation.hasEnded && blackScreenAnimation.direction > 0) {
+					blackScreenAnimation.isOn = false;
+					isBreak = false;
+					isNextLvl = false;
+					breakWindow.storyText.isOn = false;
+				}
 			}
 		}
 
@@ -149,7 +172,7 @@ public class GameWorld extends World{
 			if (conversationShade < 0.4f) conversationShade = 0.4f;
 		}
 		
-
+		cloudT += delta;
 			
 			
 	

@@ -2,7 +2,10 @@ package com.redartedgames.ball;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.redartedgames.ball.database.EasterEggsBase;
+import com.redartedgames.ball.database.StoryBase;
 import com.redartedgames.ball.dialog.DialogHero;
 import com.redartedgames.ball.game.GameWorld;
 import com.redartedgames.ball.myobjects.Ball;
@@ -13,6 +16,7 @@ import com.redartedgames.ball.myobjects.MovingRect;
 import com.redartedgames.ball.myobjects.Player;
 import com.redartedgames.ball.myobjects.Rect;
 import com.redartedgames.ball.myobjects.StaticButton;
+import com.redartedgames.ball.myobjects.TimeBackItem;
 import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 import com.redartedgames.ball.objects.ReversableObject;
 import com.redartedgames.ball.screen.Consts;
@@ -54,6 +58,10 @@ public class LevelLoader {
 		case 1: {
 			objects.add(new Rect(1920/2, 100, 1920, 200, BehaviorMode.kinematic, null, 0));
 			HangingGuy h = new HangingGuy(100, 400, 0, null);
+			//TimeBackItem e = new TimeBackItem(300, 300, null, 0);
+			//e.setItem("graphic/mrchinaman.png", 700, 300);
+			//objects.add(e);
+			Gdx.app.log("lvlLoader", "lvl1 load");
 			player.setPosition(h.getHeadPos());
 			h.setPlayer(player);
 			objects.add(h);
@@ -63,10 +71,13 @@ public class LevelLoader {
 			objects.add(new Rect(1920/2, 100, 1920, 200, BehaviorMode.kinematic, null, 0));
 			objects.add(new Rect(1920/2, 100, 1920/4, 400, BehaviorMode.kinematic, null, 0));
 			objects.add(new Rect(1920/2, 100, 1920/8, 500, BehaviorMode.kinematic, null, 0));
+			StoryBase.StoryId = 0;
+			EasterEggsBase.load(0, 2);
 			DialogHero dh = new DialogHero(600, 290, 0, null, 0);
 			dh.setCollision(player);
 			objects.add(dh);
 			gameWorld.dialogHero = dh;
+
 			break;
 		}
 		case 3: {

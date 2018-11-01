@@ -14,11 +14,12 @@ public class EasterEggsBase {
 	
 	private static int recordNumber = 4;
 	
-	public static void load() {
+	public static void load(int a, int b) {
 		easterEggs = new ArrayList<>();
 		boolean temp;
 		for(int i = 0; i < recordNumber; i++) {
 			//Gdx.app.log("EasterEggsBase", "iteration");
+			if(i >= a && i <= b)
 			if(prefs.contains("" + (i+1) + " isTrue")) {
 				//Gdx.app.log("EasterEggsBase", "contains");
 				if (prefs.getString("" + (i+1) + " isTrue") == "true") {
@@ -46,13 +47,11 @@ public class EasterEggsBase {
 			//Gdx.app.log("EasterEggsBase", "tryFirstLoad");
 			prefs.putString("firstLoad", "true");
 			prefs.putString("1 isTrue", "true");
-			prefs.putString("1 name", "pilka");
+			prefs.putString("1 name", "butelka");
 			prefs.putString("2 isTrue", "true");
-			prefs.putString("2 name", "rozbita szyba");
+			prefs.putString("2 name", "sznur");
 			prefs.putString("3 isTrue", "true");
-			prefs.putString("3 name", "auto");
-			prefs.putString("4 isTrue", "true");
-			prefs.putString("4 name", "drzewo");
+			prefs.putString("3 name", "szafa");
 			
 			prefs.flush();
 		}

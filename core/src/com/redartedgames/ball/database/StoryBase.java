@@ -11,20 +11,57 @@ public class StoryBase {
 
 	public static Preferences prefs = Gdx.app.getPreferences("story");
 	
-	public static ArrayList<Combination> combinations;
+	public static ArrayList<Combination> combinations, breakCombinations;
 	
 	private static int recordNumber = 8;
+	
+	public static void loadBreak(int levelId) {
+		breakCombinations = new ArrayList<>();
+		
+		String breakText;
+		if (levelId < breakExample.length)
+			breakText = breakExample[levelId];
+		else
+			breakText = "";
+		
+		breakText = breakText.replace("œ", "s");
+		breakText = breakText.replace("¹", "a");
+		breakText = breakText.replace("¿", "z");
+		breakText = breakText.replace("ó", "o");
+		breakText = breakText.replace("³", "l");
+		breakText = breakText.replace("ñ", "n");
+		breakText = breakText.replace("æ", "c");
+		breakText = breakText.replace("ê", "e");
+		
+		convertStoryBreak(breakText);
+		
+	}
+	
+	public static int StoryId = 0;
+	
 	public static void load() {
+		load(StoryId);
+	}
+	
+	public static void load(int id) {
 		combinations = new ArrayList<>();
-		example = example.replace("œ", "s");
-		example = example.replace("¹", "a");
-		example = example.replace("¿", "z");
-		example = example.replace("ó", "o");
-		example = example.replace("³", "l");
-		example = example.replace("ñ", "n");
-		example = example.replace("æ", "c");
-		example = example.replace("ê", "e");
-		convertStory(example);
+		String story;
+		if (id < stories.length) story = stories[id];
+		else story = "dddd";
+		
+		Gdx.app.log("StoryBase", "load" + id);
+		story = story.replace("œ", "s");
+		story = story.replace("¹", "a");
+		story = story.replace("¿", "z");
+		story = story.replace("ó", "o");
+		story = story.replace("³", "l");
+		story = story.replace("ñ", "n");
+		story = story.replace("æ", "c");
+		story = story.replace("ê", "e");
+		
+		
+		convertStory(story);
+		
 	}
 	public static void load2() {
 		combinations = new ArrayList<>();
@@ -105,14 +142,85 @@ public class StoryBase {
 		}
 	}
 	
-	static String example = "Szef ze spokojem oznajmi³ ci, ¿e dalsza wspó³praca nie ma sensu. "
-			+ "Z tysi¹cem myœli w g³owie wyszed³eœ szybkim, wzburzonym krokiem. Wsiad³eœ do "
-			+ "samochodu i przekrêci³eœ kluczyk. (3)Auto ruszy³o gwa³townie. Jecha³eœ szybko "
-			+ "i nie zwa¿a³eœ na wilgotn¹ nawierzchniê. @Chcia³eœ jak najszybciej dotrzeæ do domu. "
-			+ "(1)Nagle dostrzeg³eœ pi³kê,która odbiwszy siê od latarni lecia³a prosto na ciebie. @"
-			+ "Spanikowa³eœ, zakrêci³eœ mocno kierownic¹ i wpad³eœ w poœlizg. (1 2)Pi³ka "
-			+ "poszybowa³a wysoko w górê, po czym spad³a na pobliski trawnik, na którym le¿a³y "
-			+ "kawa³ki st³uczonej szyby. (4)Niedaleko rós³ du¿y, okaza³y d¹b, który znacznie "
-			+ "przewy¿sza³ okoliczne domy. (2 4)Znaczna czêœæ kawa³ków by³a wbita w jego grub¹, "
-			+ "star¹ korê.";
+	private static void convertStoryBreak(String s) {
+		s.replace("\n", "");
+		String[] elements = s.split(COMBINATION_START);
+		String[] elementParts;
+		String[] elementParts2;
+		for (String element: elements) {
+			elementParts = element.split(COMBINATION_END);
+			if (elementParts.length > 1) {
+				elementParts2 = elementParts[1].split(END_OF_ELEMENT);
+				breakCombinations.add(new Combination(elementParts[0], elementParts2[0]));
+				if (elementParts2.length > 1) {
+					breakCombinations.add(new Combination("", elementParts2[1]));
+				}
+			}
+			else {
+				breakCombinations.add(new Combination("", element));
+			}
+
+		}
+	}
+	
+	static String[] breakExample = {
+			"",
+			
+			"Erron jest gr¹, która w zamian za pozostawienie swoich wspomnieñ pozwala poznaæ wspomnienia losowego gracza, dziêki czemu ka¿dy gracz doœwiadcza unikalnej zawartoœci. Podczas rozwi¹zywania zagadek czasoprzestrzennych gracz zbiera symbole przesz³oœci, które póŸniej wykorzystuje do odczytania wspomnieñ. Im wiêcej symboli gracz zbiera, tym wiêcej informacji na temat wspomnieñ bêdzie móg³ uzyskaæ. Dla jednych jest to zwyk³y zbiór zagadek logicznych, a dla innych okazja do zg³êbienia ludzkiej natury. Gra pozostawia graczowi wolnoœæ wyboru oraz interpretacji, dlatego zachêcam do wyrobienia sobie swojego w³asnego podejœcia.\r\n" + 
+			" Sterowanie: A - lewo, D - prawo, W - skok, SPACJA - cofanie czasu, R - restart poziomu\n" + 
+			"",
+			
+			"Wszystkie elementy, które zobaczysz, a zw³aszcza symbole przesz³oœci zosta³y wytworzone na podstawie wspomnieñ losowego gracza. Zdobyte wskazówki mog¹ byæ wykorzystane podczas dialogu z Erronianami, mieszkañcami Erron, których stworzono by przechowywaæ informacje. Zostali oni zaprojektowani w taki sposób, by móc przekazywaæ ró¿ne czêœci wspomnienia w zale¿noœci od podanych symboli. Przyk³adowo, podaj¹c czas, dowiesz siê o ogólnych realiach dotycz¹cych tego czasu. Podaj¹c miejsce, poznasz ogólne szczegó³y dotycz¹ce danego miejsca. Natomiast podaj¹c jednoczeœnie czas i miejsce, dowiesz siê, co konkretnie siê wydarzy³o. Dobrze jest zatem mieæ jak najwiêcej symboli, by móc sprawdziæ jak najwiêcej kombinacji, w celu odkrycia, co naprawdê siê sta³o.\r\n" + 
+			"",
+			
+			"Warto zauwa¿yæ, ¿e skok w tej grze nie jest zwyk³ym skokiem... Dzia³a bardziej, jak plecak rakietowy. Oznacza to tyle, ¿e mo¿esz zamiast jednego skoku wykonaæ na przyk³ad dwa ma³e w ramach jednego wzbicia siê w powietrze. Mo¿esz równie¿ wykonaæ skok po zsuniêciu siê z platformy.",
+			
+			"W grze mo¿esz spotkaæ lampy. Kiedy coœ takiej lampy dotknie, wtedy zazwyczaj któraœ z platform siê przesuwa.",
+			
+			"Nie musisz skakaæ na maksymaln¹ wysokoœæ, czasem lepiej jest wykonaæ mniejszy skok, by zyskaæ na czasie.",
+			
+			"Zastanawiam siê, jaki wp³yw na gracza mo¿e mieæ czyjaœ historia... Zazwyczaj skupiamy siê na wielkich, epickich zdarzeniach, które maj¹ jakieœ przes³anie. Ale co siê stanie, kiedy doœwiadczymy czegoœ zwyk³ego? Czy brak wniosków jest a¿ taki z³y?",
+			
+			"No tak, zapomnia³em, ¿e s¹ jeszcze duszki... Je¿eli w prawym górnym rogu ekranu zobaczysz kolejkê duszków, to wiedz, ¿e cofanie czasu zadzia³a trochê inaczej... Na przyk³ad niebieski duszek pojawia siê w miejscu, w którym zaczniesz siê cofaæ, dzia³a tak samo, jak twoja postaæ z jednym wyj¹tkiem: kiedy zetknie siê z jakimœ obiektem, zatrzymuje jego czas i swój... Sprowadza siê to do tego, ¿e mo¿esz tym duszkiem dotkn¹æ lampy, albo zatrzymaæ jak¹œ platformê. S¹ te¿ inne duszki: czerwony, zielony... Ale to kiedy indziej o nich pogadamy.",
+			
+			"Pamiêtaj, ¿eby cofn¹æ siê w jakieœ miejsce, musisz tam najpierw byæ.",
+			
+			"Pewnie ju¿ zapomnia³eœ o graczu i jego wspomnieniach... W takim razie czujê siê w obowi¹zku poci¹gn¹æ trochê fabu³ê do przodu. No wiêc myœlê, ¿e mogê powiedzieæ, ¿e by³a to osoba niewyró¿niaj¹ca siê. Lubi³a graæ w rzadkie, niezale¿ne gry, zreszt¹ dlatego pewnie wogóle zagra³a w t¹ grê. W dniu, którego wieczór uda³o ci siê ju¿ czêœciowo poznaæ, mia³a swoje urodziny, jednak nie mogê powiedzieæ które. Jak siê pewnie domyœlasz, lubi³a sobie wypiæ, ale nie zawsze tak by³o... Wczeœniej wypicie jednego czy dwóch piw na spotkaniu ze znajomymi by³o maksimum. Jednak pewnego dnia... CIEKAWI CIÊ, CO BY£O DALEJ? JU¯ TERAZ WYKUP WERSJÊ PREMIUM!",
+			
+			"Ju¿ wykupi³eœ wersjê premium? Cieszê siê, bêdê mia³, co jeœæ. Wdziêcznoœæ jest spoko, ale ma zero kalorii - to trochê k³opotliwe... ¿artujê, nie wezmê ani grosza za t¹ grê. potrzebowa³em jakiejœ deus ex machiny.",
+			
+			""
+			+ "You can hold W to jump 11.",
+			
+			""
+			+ "You can hold W to jump 12.",
+			
+			""
+			+ "You can hold W to jump 13.",
+			
+			""
+			+ "You can hold W to jump 14.",
+			
+			""
+			+ "You can hold W to jump 15.",
+			
+			""
+			+ "You can hold W to jump 16.",
+			
+	};
+	
+	static String[] stories2 = {
+			"first conv",
+			"sec conv"
+			
+					
+	};
+	
+	static String[] stories = {
+			"To wspomnienie dotyczy ostatniego wieczoru. (1)Jak zwykle w pi¹tek oko³o godziny osiemnastej pi³eœ piwo i gra³eœ na komputerze. @"
+			+ "Trwa³o to mniej wiêcej cztery godziny. (1 2 3)Po skoñczeniu 7 butelki nie wytrzyma³eœ i zacz¹³eœ siê kreciæ po pokoju. W koñcu stan¹³eœ przed szaf¹. @"
+			+ " (2 3)Otworzy³eœ szafê i skierowa³eœ swój pijany wzrok na sznur. @(2)Zawi¹zanie wêz³a by³o zaskakuj¹co proste. @(3) Spojrza³eœ na szafê, wydawa³a siê doœc wysoka, ale miêdzy ni¹ a sufitem by³o du¿o miejsca. @"
+			+ "Chcia³eœ po sobie coœ zostawiæ... Niestety nic ci nie przychodzi³o do g³owy, wiêc napisa³eœ tylko: g³upia gra.",
+					
+	};
 }

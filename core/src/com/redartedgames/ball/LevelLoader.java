@@ -58,9 +58,10 @@ public class LevelLoader {
 		case 1: {
 			objects.add(new Rect(1920/2, 100, 1920, 200, BehaviorMode.kinematic, null, 0));
 			HangingGuy h = new HangingGuy(100, 400, 0, null);
-			//TimeBackItem e = new TimeBackItem(300, 300, null, 0);
-			//e.setItem("graphic/mrchinaman.png", 700, 300);
-			//objects.add(e);
+			TimeBackItem e = new TimeBackItem(700, 300, null, 0);
+			e.setItem("graphic/sznur.png", 700, 300, 2);
+			player.easterEggs.add(e);
+			objects.add(e);
 			Gdx.app.log("lvlLoader", "lvl1 load");
 			player.setPosition(h.getHeadPos());
 			h.setPlayer(player);
@@ -71,6 +72,14 @@ public class LevelLoader {
 			objects.add(new Rect(1920/2, 100, 1920, 200, BehaviorMode.kinematic, null, 0));
 			objects.add(new Rect(1920/2, 100, 1920/4, 400, BehaviorMode.kinematic, null, 0));
 			objects.add(new Rect(1920/2, 100, 1920/8, 500, BehaviorMode.kinematic, null, 0));
+			TimeBackItem e = new TimeBackItem(200, 200, null, 0);
+			e.setItem("graphic/bottle.png", 200, 200, 1);
+			player.easterEggs.add(e);
+			objects.add(e);
+			TimeBackItem e2 = new TimeBackItem(1200, 300, null, 0);
+			e2.setItem("graphic/bottle.png", 1200, 300, 1);
+			player.easterEggs.add(e2);
+			objects.add(e2);
 			StoryBase.StoryId = 0;
 			EasterEggsBase.load(0, 2);
 			DialogHero dh = new DialogHero(600, 290, 0, null, 0);
@@ -336,6 +345,35 @@ public class LevelLoader {
 			impsCollection.addStaticImp();
 			objects.addAll(impsCollection.getImps());
 			objects.add(impsCollection);
+			
+			break;
+		}
+		case 16: {
+			objects.add(new Rect(75, 55, 240, 220, BehaviorMode.kinematic, null, 0));
+			objects.add(new Rect(200, 55, 50, 50, BehaviorMode.kinematic, null, 0));
+			objects.add(new Rect(275, 67, 110, 100, BehaviorMode.kinematic, null, 0));
+			objects.add(new Rect(424, 72, 190, 50, BehaviorMode.kinematic, null, 0));
+			objects.add(new Rect(600, 105, 170, 150, BehaviorMode.kinematic, null, 0));
+			objects.add(new Rect(625, 205, 60, 170, BehaviorMode.kinematic, null, 0));
+			objects.add(new Rect(650, 280, 150, 80, BehaviorMode.kinematic, null, 0));
+			objects.add(new Rect(800, 80, 230, 80, BehaviorMode.kinematic, null, 0));
+			objects.add(new Rect(975, 80, 240, 130, BehaviorMode.kinematic, null, 0));
+			objects.add(new Rect(1200, 80, 240, 130, BehaviorMode.kinematic, null, 0));
+			objects.add(new Rect(1375, 154, 206, 179, BehaviorMode.kinematic, null, 0));
+			objects.add(new Rect(1700, 154, 616, 109, BehaviorMode.kinematic, null, 0));
+			objects.add(new Rect(275, -21, 46, 189, BehaviorMode.kinematic, null, 0));
+			objects.add(new Rect(1700, 54, 66, 189, BehaviorMode.kinematic, null, 0));
+			objects.add(new Rect(1075, -21, 66, 189, BehaviorMode.kinematic, null, 0));
+			objects.add(new Rect(575, -21, 66, 189, BehaviorMode.kinematic, null, 0));
+			
+			StoryBase.StoryId = 1;
+			EasterEggsBase.load(1, 5);
+			
+			DialogHero dh = new DialogHero(660, 400, 0, null, 1);
+			dh.setCollision(player);
+			objects.add(dh);
+			gameWorld.dialogHero = dh;
+			
 			
 			break;
 		}

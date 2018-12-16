@@ -215,8 +215,23 @@ public class Player extends Ball{
 			super.updateAfter(delta, vx, vy);
 		}
 	}
+	
+	public ArrayList<TimeBackItem> easterEggs = new ArrayList<TimeBackItem>();
+	
 	public void updateBefore(float delta, float vx, float vy) {
 		super.updateBefore(delta, vx, vy);
+		
+		for (TimeBackItem easterEgg: easterEggs) {
+			float dx = position.x - easterEgg.position.x-50;
+			float dy = position.y - easterEgg.position.y-50;
+			//Gdx.app.log("Player", "dx: " + dx + " ,dy: "+ dy);
+			if (dx*dx + dy*dy < 76*76 && !easterEgg.fadeAway) {
+				
+				easterEgg.fadeAway(-dx*2, -dy*2);
+				EasterEggsBase.enableEgg(easterEgg.eggId);
+			}
+		}
+		
 		float vX = ((ReversableMovement)movement).getVelocityX().floatValue();
 		float h = position.y/50f;
 		SoundHandler.szsz.setVolume(SoundHandler.szszId, 1f - 1f / ((vX*vX/10000000f*h)+1f));

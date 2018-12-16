@@ -317,7 +317,7 @@ public class GameRenderer extends ScreenRenderer{
 			batch.setColor(1, 1, 1, 1);
 		}
 		batch.setColor(0, 0, 0, 0.5f);
-		batch.draw(GameObject.dotTex, Consts.gameWidth-size*108, Consts.gameHeight-150, size*108, 150);
+		//batch.draw(GameObject.dotTex, Consts.gameWidth-size*108, Consts.gameHeight-150, size*108, 150);
 		
 		for(Imp imp: ((GameWorld) world).impsCollection.getImps()) {
 			batch.setColor(1f, 1f, 1f, 1f);

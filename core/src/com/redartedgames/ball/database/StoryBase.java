@@ -16,6 +16,7 @@ public class StoryBase {
 	private static int recordNumber = 8;
 	
 	public static void loadBreak(int levelId) {
+		if (levelId < 0) return;
 		breakCombinations = new ArrayList<>();
 		
 		String breakText;
@@ -166,8 +167,8 @@ public class StoryBase {
 	static String[] breakExample = {
 			"",
 			
-			"Erron jest gr¹, która w zamian za pozostawienie swoich wspomnieñ pozwala poznaæ wspomnienia losowego gracza, dziêki czemu ka¿dy gracz doœwiadcza unikalnej zawartoœci. Podczas rozwi¹zywania zagadek czasoprzestrzennych gracz zbiera symbole przesz³oœci, które póŸniej wykorzystuje do odczytania wspomnieñ. Im wiêcej symboli gracz zbiera, tym wiêcej informacji na temat wspomnieñ bêdzie móg³ uzyskaæ. Dla jednych jest to zwyk³y zbiór zagadek logicznych, a dla innych okazja do zg³êbienia ludzkiej natury. Gra pozostawia graczowi wolnoœæ wyboru oraz interpretacji, dlatego zachêcam do wyrobienia sobie swojego w³asnego podejœcia.\r\n" + 
-			" Sterowanie: A - lewo, D - prawo, W - skok, SPACJA - cofanie czasu, R - restart poziomu\n" + 
+			"Erron jest gr¹, która w zamian za pozostawienie swoich wspomnieñ pozwala poznaæ wspomnienia losowego gracza, dziêki czemu ka¿dy gracz doœwiadcza unikalnej zawartoœci. Podczas rozwi¹zywania zagadek czasoprzestrzennych gracz zbiera symbole przesz³oœci, które póŸniej wykorzystuje do odczytania wspomnieñ. Im wiêcej symboli gracz zbiera, tym wiêcej informacji na temat wspomnieñ bêdzie móg³ uzyskaæ. Gra pozostawia graczowi wolnoœæ wyboru oraz interpretacji, dlatego zachêcam do wyrobienia sobie swojego w³asnego podejœcia.\r\n" + 
+			" Sterowanie: A - lewo, D - prawo, W - skok, SPACJA - cofanie czasu, R - restart poziomu, ENTER - rozpoczêcie poziomu\n" + 
 			"",
 			
 			"Wszystkie elementy, które zobaczysz, a zw³aszcza symbole przesz³oœci zosta³y wytworzone na podstawie wspomnieñ losowego gracza. Zdobyte wskazówki mog¹ byæ wykorzystane podczas dialogu z Erronianami, mieszkañcami Erron, których stworzono by przechowywaæ informacje. Zostali oni zaprojektowani w taki sposób, by móc przekazywaæ ró¿ne czêœci wspomnienia w zale¿noœci od podanych symboli. Przyk³adowo, podaj¹c czas, dowiesz siê o ogólnych realiach dotycz¹cych tego czasu. Podaj¹c miejsce, poznasz ogólne szczegó³y dotycz¹ce danego miejsca. Natomiast podaj¹c jednoczeœnie czas i miejsce, dowiesz siê, co konkretnie siê wydarzy³o. Dobrze jest zatem mieæ jak najwiêcej symboli, by móc sprawdziæ jak najwiêcej kombinacji, w celu odkrycia, co naprawdê siê sta³o.\r\n" + 
@@ -179,33 +180,27 @@ public class StoryBase {
 			
 			"Nie musisz skakaæ na maksymaln¹ wysokoœæ, czasem lepiej jest wykonaæ mniejszy skok, by zyskaæ na czasie.",
 			
-			"Zastanawiam siê, jaki wp³yw na gracza mo¿e mieæ czyjaœ historia... Zazwyczaj skupiamy siê na wielkich, epickich zdarzeniach, które maj¹ jakieœ przes³anie. Ale co siê stanie, kiedy doœwiadczymy czegoœ zwyk³ego? Czy brak wniosków jest a¿ taki z³y?",
+			"Uda³o ci siê ju¿ czegoœ dowiedzieæ o poprzednim graczu, który zostawi³ tu swoje wspomnienia?",
 			
 			"No tak, zapomnia³em, ¿e s¹ jeszcze duszki... Je¿eli w prawym górnym rogu ekranu zobaczysz kolejkê duszków, to wiedz, ¿e cofanie czasu zadzia³a trochê inaczej... Na przyk³ad niebieski duszek pojawia siê w miejscu, w którym zaczniesz siê cofaæ, dzia³a tak samo, jak twoja postaæ z jednym wyj¹tkiem: kiedy zetknie siê z jakimœ obiektem, zatrzymuje jego czas i swój... Sprowadza siê to do tego, ¿e mo¿esz tym duszkiem dotkn¹æ lampy, albo zatrzymaæ jak¹œ platformê. S¹ te¿ inne duszki: czerwony, zielony... Ale to kiedy indziej o nich pogadamy.",
 			
 			"Pamiêtaj, ¿eby cofn¹æ siê w jakieœ miejsce, musisz tam najpierw byæ.",
 			
-			"Pewnie ju¿ zapomnia³eœ o graczu i jego wspomnieniach... W takim razie czujê siê w obowi¹zku poci¹gn¹æ trochê fabu³ê do przodu. No wiêc myœlê, ¿e mogê powiedzieæ, ¿e by³a to osoba niewyró¿niaj¹ca siê. Lubi³a graæ w rzadkie, niezale¿ne gry, zreszt¹ dlatego pewnie wogóle zagra³a w t¹ grê. W dniu, którego wieczór uda³o ci siê ju¿ czêœciowo poznaæ, mia³a swoje urodziny, jednak nie mogê powiedzieæ które. Jak siê pewnie domyœlasz, lubi³a sobie wypiæ, ale nie zawsze tak by³o... Wczeœniej wypicie jednego czy dwóch piw na spotkaniu ze znajomymi by³o maksimum. Jednak pewnego dnia... CIEKAWI CIÊ, CO BY£O DALEJ? JU¯ TERAZ WYKUP WERSJÊ PREMIUM!",
+			"Nie wszystko wydaje siê oczywiste. Czasem trzeba wpaœæ na rozwi¹zanie przypadkiem.",
 			
-			"Ju¿ wykupi³eœ wersjê premium? Cieszê siê, bêdê mia³, co jeœæ. Wdziêcznoœæ jest spoko, ale ma zero kalorii - to trochê k³opotliwe... ¿artujê, nie wezmê ani grosza za t¹ grê. potrzebowa³em jakiejœ deus ex machiny.",
+			"Wszystko ju¿ by³o tylko w innej formie.",
 			
-			""
-			+ "You can hold W to jump 11.",
+			"Mam nadziejê, ¿e pamiêtasz, ¿e niebieski duszek zatrzymuje czas obiektu, którego dotknie.",
 			
-			""
-			+ "You can hold W to jump 12.",
+			"Z jednym te¿ sobie poradzisz.",
 			
-			""
-			+ "You can hold W to jump 13.",
+			"Jak daleko jesteœ w stanie siê cofn¹æ, aby osi¹gn¹æ swój cel?",
 			
-			""
-			+ "You can hold W to jump 14.",
+			"Niektóre lampy zatrzymuj¹ czas tak samo, jak niebieski duszek.",
 			
-			""
-			+ "You can hold W to jump 15.",
+			"Umiesz popsuæ czas?",
 			
-			""
-			+ "You can hold W to jump 16.",
+			"",
 			
 	};
 	
@@ -221,6 +216,11 @@ public class StoryBase {
 			+ "Trwa³o to mniej wiêcej cztery godziny. (1 2 3)Po skoñczeniu 7 butelki nie wytrzyma³eœ i zacz¹³eœ siê kreciæ po pokoju. W koñcu stan¹³eœ przed szaf¹. @"
 			+ " (2 3)Otworzy³eœ szafê i skierowa³eœ swój pijany wzrok na sznur. @(2)Zawi¹zanie wêz³a by³o zaskakuj¹co proste. @(3) Spojrza³eœ na szafê, wydawa³a siê doœc wysoka, ale miêdzy ni¹ a sufitem by³o du¿o miejsca. @"
 			+ "Chcia³eœ po sobie coœ zostawiæ... Niestety nic ci nie przychodzi³o do g³owy, wiêc napisa³eœ tylko: g³upia gra.",
+			
+			"(2)W³aœnie skoñczy³eœ grê. (5)Nie by³o to nic specjalnego, ale trochê czasu nad tym spêdzi³eœ. (6)Wspomnienia gracza, które pozna³eœ, by³y zadziwiaj¹co znajome. @Tak jakby by³a to osoba, któr¹ zna³eœ. "
+			+ "(2 6)Co wiêcej nie by³y to zabawne wspomnienia, a gracz skoñczy³ doœæ nieciekawie. (4 6)Jednak najbardziej ciekawi³ ciê fakt, ¿e gracz wspomnia³, ¿e nie jest mo¿liwe, aby gra udostêpnia³a czyjeœ wspomnienia, bo gdyby tak by³o, to i tak pierwszy gracz nie mia³by od kogo tych wspomnieñ uzyskaæ i zosta³o by to w jego wspomnieniach zaznaczone, a kolejni gracze z pewnoœci¹ by przekazywali ten fakt dalej. @"
+			+ "No chyba, ¿e pierwszy gracz uzyska³ by wspomnienia ostatniego gracza.... (5 6)Ale wtedy musia³by przenieœæ siê w czasie, co nie jest mo¿liwe... Musia³by tak¿e wiedzieæ, kto zostanie ostatnim graczem.. @"
+			+ "W ka¿dym razie czu³eœ siê mocno zagubiony i nie by³o to wcale przyjemne, raczej do³uj¹ce."
 					
 	};
 }

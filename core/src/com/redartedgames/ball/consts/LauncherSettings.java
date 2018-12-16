@@ -6,4 +6,5 @@ public class LauncherSettings {
 	public static boolean FullScreen = true;
 	public static boolean AdvancedGrapghic = true;
 	public static int startLvl = 1;
+	public static boolean isEditor = false;
 }

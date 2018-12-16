@@ -27,7 +27,12 @@ public class GameObject implements Editorable{
 		public int priority = 0;
 		public int id;
 		protected Movement movement;
-		protected Vector2 position, velocity, acceleration, oldAcc, oldVel, collisionAcc;
+		public Vector2 position;
+		protected Vector2 velocity;
+		protected Vector2 acceleration;
+		protected Vector2 oldAcc;
+		protected Vector2 oldVel;
+		protected Vector2 collisionAcc;
 		public BigDecimal delta2, positionX, velocityX, accelerationX, collisionAccX, positionY, dragK, dragK2, delta21,
 		velocityY, accelerationY, collisionAccY, oldAccX, oldAccY, gX, gY;
 		public ArrayList<GameObject> gameObjects;

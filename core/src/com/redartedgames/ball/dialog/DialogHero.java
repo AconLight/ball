@@ -24,7 +24,7 @@ public class DialogHero extends ReversableObject{
 	
 	Player player;
 	
-	public DialogHero(float x, float y, int id, GameObject parent, int DialogHeroType) {
+	public DialogHero(float x, float y, int id, GameObject parent, int dialogHeroType) {
 		super(x, y, parent, id);
 		this.dialogHeroType = dialogHeroType;
 		dialogHeroSprite = new DialogHeroSprite(x, y, this, 0, dialogHeroType);

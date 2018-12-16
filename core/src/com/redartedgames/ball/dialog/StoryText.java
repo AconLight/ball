@@ -76,6 +76,7 @@ public class StoryText {
 		String text = "";
 		float length = 0, oldLength = 0;
 		int line = 0;
+		if (elements != null)
 		for (int i = 0; i < elements.size(); i++) {
 			words = elements.get(i).text.replace("\n", "").split(" ");
 			for (String word : words) {

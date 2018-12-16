@@ -28,6 +28,7 @@ import com.redartedgames.ball.myobjects.StaticButton;
 import com.redartedgames.ball.objects.GameObject;
 import com.redartedgames.ball.objects.Hitbox.BehaviorMode;
 import com.redartedgames.ball.screen.Consts;
+import com.redartedgames.ball.sound.SoundHandler;
 
 public class EditorGame extends Game {
 	
@@ -163,6 +164,8 @@ public class EditorGame extends Game {
 	
 	@Override
 	public void create () {
+		SoundHandler.load();
+		
 		editorNode = new EditorNode();
 		Gdx.input.setInputProcessor(inputProcessor);
 		gameScreen = new GameScreen(Consts.editorGameWidth, Consts.editorGameHeight);
@@ -187,6 +190,9 @@ public class EditorGame extends Game {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		((GameWorld) gameScreen.getWorld()).restart(-1);
+		for (int i = 0; i < 1000; i++)
+			gameScreen.update(0.1f);
+		((GameWorld) gameScreen.getWorld()).breakContinue = true;
 		for (int i = 0; i < 1000; i++)
 			gameScreen.update(0.1f);
 	}
